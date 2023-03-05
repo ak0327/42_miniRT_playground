@@ -1,3 +1,5 @@
+#####################################################
+# COMPILE
 CC				= cc
 CFLAGS			= -Wall -Wextra -Werror -MMD -MP
 
@@ -5,49 +7,65 @@ ifdef WITH_TEST
 	CFLAGS 		+= -D LEAKS
 endif
 
+
+#####################################################
+# PROGRAM NAME
 NAME			= miniRT
 
+
+#####################################################
+# SRC FILE
 VPATH			= $(SRC_DIR) $(INCLUDE_DIR)
 
-SRC_DIR			= ./srcs
+SRC_DIR			= srcs
 SRC				= main.c
 
 SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))
 
 
-OBJ_DIR			= ./objs
+#####################################################
+# OBJECT FILE
+OBJ_DIR			= objs
 OBJ				= $(SRC:%.c=%.o)
 OBJS			= $(addprefix $(OBJ_DIR)/, $(OBJ))
 DEPS			= $(OBJS:%.o=%:d)
 
-INCLUDE_DIR		= ./includes
-IFLAGS			= $(addprefix -I, $(INCLUDE_DIR))
 
-LIBFT_DIR		= ./libs
-LIBFT_NAME		= libft.a
-LIBFT			= $(addprefix $(LIBFT_DIR)/, $(LIBFT_NAME))
+#####################################################
+# INCLUDE and LIBRARY FILE
+INCLUDE_DIR		= includes
 
-MLX_DIR			= ./minilibx-linux
+LIBFT_DIR		= libs
+MLX_DIR			= minilibx-linux
 X11_DIR			= /usr/X11
+X11_INCLUDE		= /usr/X11/include
+X11_LIB			= /usr/X11/lib
 
-INCLUDES		= -I $(INCLUDE_DIR) -I $(LIBFT_DIR) -I $(MLX_DIR) -I $(X11_DIR)/include
-LIBS_DIR 		= -L $(LIBFT_DIR) -L $(MLX_DIR) -L $(X11_DIR)/lib -L $(X11_DIR)
-LIBS 			= $(LIBFT) -lmlx -lX11 -lXext
+INCLUDE_DIRS	= $(INCLUDE_DIR) $(X11_INCLUDE)
+LIBS_DIR 		= $(LIBFT_DIR) $(MLX_DIR) $(X11_DIR) $(X11_LIB)
 
+INCLUDES		= $(addprefix -I, $(INCLUDE_DIRS))
+LFLAGS			= $(addprefix -L, $(LIBS_DIR))
+LIBS 			= -lft -lmlx -lX11 -lXext
+
+
+#####################################################
 # OS Check
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
-	LIBS_DIR 	+= -L /usr/X11R6/lib
+	LIBS_DIR 	+= /usr/X11R6/lib
 	LIBS 		+= -lmlx_Darwin -framework OpenGL -framework AppKit
 else
 	LIBS 		+= -lmlx_Linux
 endif
 
 
+#####################################################
+# RULES
 $(NAME) : $(OBJS)
 	@make -C $(LIBFT_DIR)
 	@make -C $(MLX_DIR)
-	$(CC) $(CFLAGS) $^ $(LIBFT_DIR) $(LIBS) -o $@
+	$(CC) $(CFLAGS) $^ $(LFLAGS) $(LIBS) -o $@
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $$(dirname $@)
