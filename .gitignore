@@ -1,0 +1,15 @@
+*
+
+.gitignore
+!/srcs
+!/libs
+!/includes
+!/minilibx-linux
+!*.c
+!*.h
+!README.md
+!Makefile
+!Makefile.gen
+
+.idea
+/objs
