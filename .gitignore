@@ -11,6 +11,6 @@
 !Makefile
 !Makefile.gen
 
-.idea
+.idea/
 objs/
 libs/.idea

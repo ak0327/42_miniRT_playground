@@ -1,37 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/06 15:35:09 by takira           ###   ########.fr       */
+/*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
+/*   Updated: 2023/03/05 22:43:22 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#ifndef MINIRT_H
+# define MINIRT_H
 
-int	main(void)
-{
-	int		x;
-	int		y;
-	int		r, g, b;
+# include <stdio.h>
 
-	y = HEIGHT;
-	while (y > 0)
-	{
-		x = 0;
-		while (x < WIDTH)
-		{
-			r = 256 * x / (WIDTH - 1);
-			g = 256 * y / (HEIGHT - 1);
-			b = 256 * 0.25;
-			printf("%d, %d, %d\n", r, g, b);
-			x++;
-		}
-		y--;
-	}
+# define WIDTH	256
+# define HEIGHT	256
 
-	return (0);
-}
+
+#endif //MINIRT_H
