@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/06 16:12:02 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/06 17:38:30 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ void	put_square(int s_x, int s_y, int g_x, int g_y, int color, t_data *data)
 
 int	main(void)
 {
-//	int		x;
-//	int		y;
-//	int		r, g, b;
+	int		x;
+	int		y;
+	int		r, g, b;
+	int		color;
 	t_data	data;
 
 	data.mlx = mlx_init();
@@ -47,8 +48,23 @@ int	main(void)
 		return (EXIT_FAILURE);
 
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
-	put_square(5, 5, 100, 100,0x00FFFFFF, &data);
-	put_square(100, 100, 200, 200,0x0000FF00, &data);
+
+	y = 0;
+	while (y < HEIGHT)
+	{
+		x = 0;
+		while (x < WIDTH)
+		{
+			r = 256 * x / (WIDTH);
+			g = 256 * y / (HEIGHT);
+			b = 256 * 0.25;
+			color = r << 16 | g << 8 | b;
+			my_mlx_pixel_put(&data, x, y, color);
+			x++;
+		}
+		y++;
+	}
+
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 
 	mlx_loop(data.mlx);
