@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/06 16:08:12 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/06 20:38:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@
 
 # include "../minilibx-linux/mlx.h"
 
-# define WIDTH	500
-# define HEIGHT	500
-# define TITLE	"miniRT"
+# define WIN_WIDTH	384
+# define WIN_TITLE	"miniRT"
 
 typedef struct	s_data
 {
