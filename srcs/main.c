@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/07 17:09:56 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/07 17:29:50 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	init_data(t_data *data)
 	return (SUCCESS);
 }
 
-t_vector	tr_screen(int x, int y, int w, int h)
+t_vector	tr_dimension_local_to_world(int x, int y, int w, int h)
 {
 	t_vector	vec;
 
