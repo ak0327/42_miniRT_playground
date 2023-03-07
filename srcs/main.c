@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/07 17:30:24 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/07 17:32:56 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,6 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
-}
-
-void	init_vector(t_vector *vec, float x, float y, float z)
-{
-	vec->x = x;
-	vec->y = y;
-	vec->z = z;
 }
 
 int	get_color(t_vector vec)
@@ -59,15 +52,6 @@ int	init_data(t_data *data)
 	return (SUCCESS);
 }
 
-t_vector	tr_screen_dimension_local_to_world(int x, int y, int w, int h)
-{
-	t_vector	vec;
-
-	vec.x = (float)2 * (float)x / (float)(w - 1) - 1;
-	vec.y = (float) -2 * (float)y / (float)(h - 1) + 1;
-	vec.z = 0;
-	return (vec);
-}
 
 int	main(void)
 {

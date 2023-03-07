@@ -12,6 +12,13 @@
 
 #include "minirt.h"
 
+void	init_vector(t_vector *vec, float x, float y, float z)
+{
+	vec->x = x;
+	vec->y = y;
+	vec->z = z;
+}
+
 float	dot(const t_vector *a, const t_vector *b)
 {
 	return (a->x * b->x + a->y * b->y + a->z + b->z);

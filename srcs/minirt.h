@@ -66,10 +66,18 @@ typedef struct	s_vector
 }	t_vector;
 
 /********** vector **********/
+void	init_vector(t_vector *vec, float x, float y, float z);
 float	dot(const t_vector *a, const t_vector *b);
 float	normalize(t_vector *vec);
 void	cross(t_vector *o, t_vector *a, t_vector *b);
 const char	*vector_str(const t_vector *vec);
+
+
+/********** screen **********/
+t_vector	tr_screen_dimension_local_to_world(int x, int y, int w, int h);
+
+/********** sphere **********/
+
 
 /********** mlx_keyhooks **********/
 void	mlx_hooks(t_data data);
