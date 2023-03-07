@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/07 13:25:37 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/07 17:09:56 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,16 @@ int	init_data(t_data *data)
 	return (SUCCESS);
 }
 
+t_vector	tr_screen(int x, int y, int w, int h)
+{
+	t_vector	vec;
+
+	vec.x = (float)2 * (float)x / (float)(w - 1) - 1;
+	vec.y = (float) -2 * (float)y / (float)(h - 1) + 1;
+	vec.z = 0;
+	return (vec);
+}
+
 int	main(void)
 {
 	int		x;
@@ -67,7 +77,7 @@ int	main(void)
 	t_data	data;
 
 	t_vector	vec3;
-	t_vector	pixel_color;
+	t_vector	eye = {0.0f, 0.0f, -5.0f};
 
 
 	if (init_data(&data) == FAILURE)
@@ -80,7 +90,7 @@ int	main(void)
 		x = 0;
 		while (x < data.win_width)
 		{
-			init_vector(&pixel_color, (float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25);
+			t_vector pixel_color = {(float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25};
 			color = get_color(pixel_color);
 			my_mlx_pixel_put(&data, x, y, color);
 			x++;
