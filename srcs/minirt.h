@@ -18,6 +18,8 @@
 
 # include "../minilibx-linux/mlx.h"
 
+# define AR_WIDTH	16
+# define AR_HEIGHT	9
 # define WIN_WIDTH	384
 # define WIN_TITLE	"miniRT"
 
@@ -33,5 +35,12 @@ typedef struct	s_data
 	int		endian;
 }			t_data;
 
+
+typedef struct	s_vector
+{
+	double	x;
+	double	y;
+	double	z;
+}	t_vector;
 
 #endif //MINIRT_H

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/06 20:40:21 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/07 12:14:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,41 @@ void	put_square(int s_x, int s_y, int g_x, int g_y, int color, t_data *data)
 		}
 }
 
+void	init_vector(t_vector *vec, double x, double y, double z)
+{
+	vec->x = x;
+	vec->y = y;
+	vec->z = z;
+}
+
+int	get_color(t_vector vec)
+{
+	int r;
+	int g;
+	int b;
+	int	color;
+
+	r = (int)(256 * vec.x);
+	g = (int)(256 * vec.y);
+	b = (int)(256 * vec.z);
+	color = r << 16 | g << 8 | b;
+	return (color);
+}
+
 int	main(void)
 {
 	int		x;
 	int		y;
-	int		r, g, b;
 	int		color;
 	t_data	data;
 	int		win_width;
 	int		win_height;
 
+	t_vector	vec3;
+	t_vector	pixel_color;
+
 	win_width = WIN_WIDTH;
-	win_height = win_width * 9 / 16;
-	printf("w:%03d, h:%03d\n", win_width, win_height);
+	win_height = win_width * AR_HEIGHT / AR_WIDTH;
 	data.mlx = mlx_init();
 	if (!data.mlx)
 		return (EXIT_FAILURE);
@@ -60,10 +82,8 @@ int	main(void)
 		x = 0;
 		while (x < win_width)
 		{
-			r = 256 * x / (win_width);
-			g = 256 * y / (win_height);
-			b = 256 * 0.25;
-			color = r << 16 | g << 8 | b;
+			init_vector(&pixel_color, (double)x / win_width, (double)y / win_height, 0.25);
+			color = get_color(pixel_color);
 			my_mlx_pixel_put(&data, x, y, color);
 			x++;
 		}
