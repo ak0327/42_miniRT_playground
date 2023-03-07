@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/07 13:15:31 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/07 13:23:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@
 /********** Macro **********/
 
 #define SQR(x) ((x) * (x))
-#define MIN(a, b) (a < b ? a : b)
-#define MAX(a, b) (a > b ? a : b)
+#define MIN(a, b) (a <= b ? a : b)
+#define MAX(a, b) (a >= b ? a : b)
 #define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
 
 /********** struct **********/
@@ -60,14 +60,14 @@ typedef struct	s_data
 
 typedef struct	s_vector
 {
-	double	x;
-	double	y;
-	double	z;
+	float	x;
+	float	y;
+	float	z;
 }	t_vector;
 
 /********** vector **********/
-double	dot(const t_vector *a, const t_vector *b);
-double	normalize(t_vector *vec);
+float	dot(const t_vector *a, const t_vector *b);
+float	normalize(t_vector *vec);
 void	cross(t_vector *o, t_vector *a, t_vector *b);
 const char	*vector_str(const t_vector *vec);
 

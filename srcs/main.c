@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/07 12:31:57 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/07 13:25:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-void	init_vector(t_vector *vec, double x, double y, double z)
+void	init_vector(t_vector *vec, float x, float y, float z)
 {
 	vec->x = x;
 	vec->y = y;
@@ -80,7 +80,7 @@ int	main(void)
 		x = 0;
 		while (x < data.win_width)
 		{
-			init_vector(&pixel_color, (double)x / data.win_width, (double)y / data.win_height, 0.25);
+			init_vector(&pixel_color, (float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25);
 			color = get_color(pixel_color);
 			my_mlx_pixel_put(&data, x, y, color);
 			x++;

@@ -6,30 +6,30 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:48:43 by takira            #+#    #+#             */
-/*   Updated: 2023/03/07 13:15:28 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/07 13:23:59 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-double	dot(const t_vector *a, const t_vector *b)
+float	dot(const t_vector *a, const t_vector *b)
 {
 	return (a->x * b->x + a->y * b->y + a->z + b->z);
 }
 
-static double	squared_norm(const t_vector *vec)
+static float	squared_norm(const t_vector *vec)
 {
 	return (SQR(vec->x) + SQR(vec->y) + SQR(vec->z));
 }
 
-static double	norm(const t_vector *vec)
+static float	norm(const t_vector *vec)
 {
 	return (squared_norm(vec));
 }
 
-double	normalize(t_vector *vec)
+float	normalize(t_vector *vec)
 {
-	double	vnorm;
+	float	vnorm;
 
 	vnorm = norm(vec);
 	vec->x = vnorm;
