@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/07 13:23:06 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/08 12:14:52 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,12 @@
 
 
 /********** window **********/
-# define AR_WIDTH	16
-# define AR_HEIGHT	9
-# define WIN_WIDTH	384
+//# define AR_WIDTH	16
+//# define AR_HEIGHT	9
+//# define WIN_WIDTH	384
+# define AR_WIDTH	1
+# define AR_HEIGHT	1
+# define WIN_WIDTH	5
 # define WIN_TITLE	"miniRT"
 
 /********** key hook **********/
@@ -65,10 +68,14 @@ typedef struct	s_vector
 }	t_vector;
 
 /********** vector **********/
-void	init_vector(t_vector *vec, float x, float y, float z);
-float	dot(const t_vector *a, const t_vector *b);
-float	normalize(t_vector *vec);
-void	cross(t_vector *o, t_vector *a, t_vector *b);
+void		init_vector(t_vector *vec, float x, float y, float z);
+float		dot(const t_vector *a, const t_vector *b);
+t_vector	add(const t_vector *a, const t_vector *b);
+t_vector	sub(const t_vector *a, const t_vector *b);
+t_vector	mult(float k, const t_vector *a);
+t_vector	sigma_sum(int num, ...);
+float		normalize(t_vector *vec);
+void		cross(t_vector *o, t_vector *a, t_vector *b);
 const char	*vector_str(const t_vector *vec);
 
 
