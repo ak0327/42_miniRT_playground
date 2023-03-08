@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/08 12:14:52 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/08 19:04:16 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@
 /********** window **********/
 //# define AR_WIDTH	16
 //# define AR_HEIGHT	9
-//# define WIN_WIDTH	384
-# define AR_WIDTH	1
-# define AR_HEIGHT	1
-# define WIN_WIDTH	5
-# define WIN_TITLE	"miniRT"
+//# define WINDOW_WIDTH	384
+# define AR_WIDTH		1
+# define AR_HEIGHT		1
+# define WINDOW_WIDTH	5
+# define WINDOW_TITLE	"miniRT"
+# define SCREEN_WIDTH	2
+# define SCREEN_HEIGHT	2
 
 /********** key hook **********/
 # define EVENT_DESTROY		33
@@ -67,8 +69,26 @@ typedef struct	s_vector
 	float	z;
 }	t_vector;
 
+typedef struct	s_screen
+{
+	float	cx;
+	float	cy;
+	float	cz;
+	float	width;
+	float	height;
+}	t_screen;
+
+typedef struct	s_sphere
+{
+	float	cx;
+	float	cy;
+	float	cz;
+	float	r;
+}	t_sphere;
+
+
 /********** vector **********/
-void		init_vector(t_vector *vec, float x, float y, float z);
+t_vector	init_vector(float x, float y, float z);
 float		dot(const t_vector *a, const t_vector *b);
 t_vector	add(const t_vector *a, const t_vector *b);
 t_vector	sub(const t_vector *a, const t_vector *b);
@@ -77,12 +97,16 @@ t_vector	sigma_sum(int num, ...);
 float		normalize(t_vector *vec);
 void		cross(t_vector *o, t_vector *a, t_vector *b);
 const char	*vector_str(const t_vector *vec);
+t_vector	copy_vec(const t_vector *a);
 
 
 /********** screen **********/
 t_vector	tr_screen_dimension_local_to_world(int x, int y, int w, int h);
 
+
 /********** sphere **********/
+t_sphere	init_sphere(float x, float y, float z, float r);
+bool		is_intersect_to_sphere(t_sphere sphere, t_vector eye_vec, t_vector vec_screen);
 
 
 /********** mlx_keyhooks **********/

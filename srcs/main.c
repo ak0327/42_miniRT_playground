@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/08 10:14:13 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/08 20:08:32 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ int	get_color(t_vector vec)
 int	init_data(t_data *data)
 {
 
-	data->win_width = WIN_WIDTH;
+	data->win_width = WINDOW_WIDTH;
 	data->win_height = data->win_width * AR_HEIGHT / AR_WIDTH;
 
 	data->mlx = mlx_init();
 	if (!data->mlx)
 		return (FAILURE);
-	data->win = mlx_new_window(data->mlx, data->win_width, data->win_height, WIN_TITLE);
+	data->win = mlx_new_window(data->mlx, data->win_width, data->win_height, WINDOW_TITLE);
 	if (!data->win)
 		return (FAILURE);
 	data->img = mlx_new_image(data->mlx, data->win_width, data->win_height);
@@ -62,19 +62,31 @@ void	free_data(t_data *data)
 	free(data->mlx);
 }
 
-
 int	main(void)
 {
-	int		x;
-	int		y;
-	t_data	data;
+	t_data		data;
+
+	t_vector	vec_eye;
+	t_vector	vec_screen;
+//	t_vector	vec_eye2screen;
+	t_sphere	sphere;
+
+	int			color;
+
+	int			red = 256 << 16;
+	int			blue = 256;
+
+
+	int			x;
+	int			y;
 
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
-	// 視点を決める
-	t_vector	eye = {0.0f, 0.0f, -5.0f};
+	/* 視点を決める */
+	vec_eye = init_vector(0, 0, -5);
+	sphere = init_sphere(0, 0, 5, 1);
 
 	y = 0;
 	while (y < data.win_height)
@@ -82,11 +94,21 @@ int	main(void)
 		x = 0;
 		while (x < data.win_width)
 		{
-			// 視点位置から(x, y)に向かう半直線と球の交差判定
+			/* スクリーンのlocal座標(x, y)をworld座標(xw, yw, zw)に変換する */
+			vec_screen = tr_screen_dimension_local_to_world(x, y, data.win_width, data.win_height);
+//			printf("local2world: (x,y)=(%d,%d), vec:%s\n", x, y, vector_str(&vec_screen));
 
+			/* 視点位置から(xw, yw)に向かう半直線を求める */
+//			vec_eye2screen = sub(&vec_screen, &vec_eye);
+//			vec_eye2screen = sigma_sum(2, 1, vec_screen, -1, vec_eye); 怪しい
+//			printf("vec_eye2screen: (x,y)=(%d,%d), vec:%s\n\n", x, y, vector_str(&vec_eye2screen));
 
-			// 球と交差する場合	-> Red
-			// そうでない場合 	-> Blue
+			/* 視点位置から(xw, yw)に向かう半直線と球の交差判定を行う */
+			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen) == true)
+				color = red;
+			else
+				color = blue;
+			my_mlx_pixel_put(&data, x, y, color);
 
 
 //			t_vector pixel_color = {(float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25};

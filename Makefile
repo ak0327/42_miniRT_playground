@@ -20,6 +20,7 @@ VPATH			= $(SRC_DIR) $(INCLUDE_DIR)
 SRC_DIR			= srcs
 SRC				= main.c \
 				  vector.c \
+				  screen.c \
 				  sphere.c \
 				  mlx_keyhooks.c \
 
