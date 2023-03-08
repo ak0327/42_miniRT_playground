@@ -36,7 +36,6 @@
 # define KEY_ESC			0xff1b
 
 /********** Macro **********/
-
 #define SQR(x) ((x) * (x))
 #define MIN(a, b) (a <= b ? a : b)
 #define MAX(a, b) (a >= b ? a : b)

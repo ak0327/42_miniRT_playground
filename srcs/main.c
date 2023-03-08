@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/07 17:32:56 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/08 10:14:13 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,29 @@ int	init_data(t_data *data)
 	return (SUCCESS);
 }
 
+void	free_data(t_data *data)
+{
+	if (!data)
+		return ;
+	mlx_destroy_image(data->mlx, data->img);
+	mlx_destroy_window(data->mlx, data->win);
+	mlx_destroy_display(data->mlx);
+	free(data->mlx);
+}
+
 
 int	main(void)
 {
 	int		x;
 	int		y;
-	int		color;
 	t_data	data;
-
-	t_vector	vec3;
-	t_vector	eye = {0.0f, 0.0f, -5.0f};
-
 
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+
+	// 視点を決める
+	t_vector	eye = {0.0f, 0.0f, -5.0f};
 
 	y = 0;
 	while (y < data.win_height)
@@ -74,9 +82,15 @@ int	main(void)
 		x = 0;
 		while (x < data.win_width)
 		{
-			t_vector pixel_color = {(float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25};
-			color = get_color(pixel_color);
-			my_mlx_pixel_put(&data, x, y, color);
+			// 視点位置から(x, y)に向かう半直線と球の交差判定
+
+
+			// 球と交差する場合	-> Red
+			// そうでない場合 	-> Blue
+
+
+//			t_vector pixel_color = {(float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25};
+//			my_mlx_pixel_put(&data, x, y, get_color(pixel_color));
 			x++;
 		}
 		y++;
@@ -85,6 +99,12 @@ int	main(void)
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hooks(data);
 	mlx_loop(data.mlx);
-
+	free_data(&data);
 	return (0);
+}
+
+__attribute__((destructor))
+static void	destructor(void)
+{
+	system("leaks -q miniRT");
 }
