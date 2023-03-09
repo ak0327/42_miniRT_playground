@@ -99,7 +99,7 @@ float	dot(const t_vector *a, const t_vector *b)
 	return (a->x * b->x + a->y * b->y + a->z * b->z);
 }
 
-static float	squared_norm(const t_vector *vec)
+float	squared_norm(const t_vector *vec)
 {
 	return (SQR(vec->x) + SQR(vec->y) + SQR(vec->z));
 }

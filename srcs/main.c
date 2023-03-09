@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/09 10:42:37 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/09 11:39:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,8 @@ int	main(void)
 
 	int			color;
 
-	int			red = 256 << 16;
-	int			blue = 256;
-
+	int			red = 0xFF0000;
+	int			blue = 0x0000FF;
 
 	int			x;
 	int			y;
@@ -88,11 +87,6 @@ int	main(void)
 	vec_eye = init_vector(0, 0, -5);
 	sphere = init_sphere(0, 0, 5, 1);
 
-//	x = 382;
-//	y = 255;
-//	vec_screen = tr_screen_dimension_local_to_world(x, y);
-//	printf("local2world: (x,y)=(%d,%d), vec:%s\n", x, y, vector_str(&vec_screen));
-
 	y = 0;
 	while (y < data.win_height)
 	{
@@ -101,20 +95,14 @@ int	main(void)
 		{
 			/* スクリーンのlocal座標(x, y)をworld座標(xw, yw, zw)に変換する */
 			vec_screen = tr_screen_dimension_local_to_world(x, y);
-//			printf("local2world: (x,y)=(%d,%d), vec:%s\n", x, y, vector_str(&vec_screen));
-
-			/* 視点位置から(xw, yw)に向かう半直線を求める */
-//			vec_eye2screen = sub(&vec_screen, &vec_eye);
-//			vec_eye2screen = sigma_sum(2, 1, vec_screen, -1, vec_eye); 怪しい
-//			printf("vec_eye2screen: (x,y)=(%d,%d), vec:%s\n\n", x, y, vector_str(&vec_eye2screen));
+//			printf("local2world: (x,y)=(%d,%d), vec:%s\qn", x, y, vector_str(&vec_screen));
 
 			/* 視点位置から(xw, yw)に向かう半直線と球の交差判定を行う */
-//			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen) == true)
-//				color = red;
-//			else
-//				color = blue;
-//			my_mlx_pixel_put(&data, x, y, color);
-
+			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen) == true)
+				color = red;
+			else
+				color = blue;
+			my_mlx_pixel_put(&data, x, y, color);
 
 //			t_vector pixel_color = {(float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25};
 //			my_mlx_pixel_put(&data, x, y, get_color(pixel_color));

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/09 10:38:28 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/09 11:37:38 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 //# define WINDOW_WIDTH	384
 # define AR_WIDTH		1
 # define AR_HEIGHT		1
-# define WINDOW_WIDTH	5
+# define WINDOW_WIDTH	512
 # define WINDOW_TITLE	"miniRT"
 # define SCREEN_WIDTH	2
 # define SCREEN_HEIGHT	2
@@ -81,10 +81,11 @@ typedef struct	s_screen
 
 typedef struct	s_sphere
 {
-	float	cx;
-	float	cy;
-	float	cz;
-	float	r;
+	float		cx;
+	float		cy;
+	float		cz;
+	float		r;
+	t_vector	vev_c;
 }	t_sphere;
 
 
@@ -95,6 +96,7 @@ t_vector	add(const t_vector *a, const t_vector *b);
 t_vector	sub(const t_vector *a, const t_vector *b);
 t_vector	mult(float k, const t_vector *a);
 t_vector	sigma_sum(int num, ...);
+float		squared_norm(const t_vector *vec);
 float		normalize(t_vector *vec);
 void		cross(t_vector *o, t_vector *a, t_vector *b);
 const char	*vector_str(const t_vector *vec);
@@ -107,7 +109,7 @@ t_vector	tr_screen_dimension_local_to_world(int x, int y);
 
 /********** sphere **********/
 t_sphere	init_sphere(float x, float y, float z, float r);
-//bool		is_intersect_to_sphere(t_sphere sphere, t_vector eye_vec, t_vector vec_screen);
+bool		is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen);
 
 
 /********** mlx_keyhooks **********/
