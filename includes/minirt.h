@@ -24,6 +24,10 @@
 /********** return value **********/
 
 
+/********** color **********/
+# define RED	0xFF0000
+# define BLUE	0x0000FF
+
 /********** window **********/
 //# define AR_WIDTH	16
 //# define AR_HEIGHT	9

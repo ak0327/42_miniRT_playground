@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/09 11:39:23 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/09 12:00:33 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,30 +62,12 @@ void	free_data(t_data *data)
 	free(data->mlx);
 }
 
-int	main(void)
+void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere)
 {
-	t_data		data;
-
-	t_vector	vec_eye;
-	t_vector	vec_screen;
-//	t_vector	vec_eye2screen;
-	t_sphere	sphere;
-
-	int			color;
-
-	int			red = 0xFF0000;
-	int			blue = 0x0000FF;
-
 	int			x;
 	int			y;
-
-	if (init_data(&data) == FAILURE)
-		return (EXIT_FAILURE);
-	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
-
-	/* 視点を決める */
-	vec_eye = init_vector(0, 0, -5);
-	sphere = init_sphere(0, 0, 5, 1);
+	int			color;
+	t_vector	vec_screen;
 
 	y = 0;
 	while (y < data.win_height)
@@ -95,13 +77,12 @@ int	main(void)
 		{
 			/* スクリーンのlocal座標(x, y)をworld座標(xw, yw, zw)に変換する */
 			vec_screen = tr_screen_dimension_local_to_world(x, y);
-//			printf("local2world: (x,y)=(%d,%d), vec:%s\qn", x, y, vector_str(&vec_screen));
 
 			/* 視点位置から(xw, yw)に向かう半直線と球の交差判定を行う */
 			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen) == true)
-				color = red;
+				color = RED;
 			else
-				color = blue;
+				color = BLUE;
 			my_mlx_pixel_put(&data, x, y, color);
 
 //			t_vector pixel_color = {(float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25};
@@ -110,10 +91,30 @@ int	main(void)
 		}
 		y++;
 	}
+}
+
+int	main(void)
+{
+	t_data		data;
+
+	t_vector	vec_eye;
+	t_sphere	sphere;
+
+	if (init_data(&data) == FAILURE)
+		return (EXIT_FAILURE);
+	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+
+	/* init eye & sphere */
+	vec_eye = init_vector(0, 0, -5);
+	sphere = init_sphere(0, 0, 5, 1);
+
+	/* draw */
+	draw_sphere(data, vec_eye, sphere);
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hooks(data);
 	mlx_loop(data.mlx);
+
 	free_data(&data);
 	return (0);
 }
