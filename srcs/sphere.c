@@ -23,10 +23,11 @@ t_sphere	init_sphere(float x, float y, float z, float r)
 	return (sphere);
 }
 
+/*
 bool	is_intersect_to_sphere(t_sphere sphere, t_vector eye_vec, t_vector vec_screen)
 {
 
 	// D = B ** 2 -4 * A * C
-	// if D < 0 return (false
+	// if D < 0 return (false)
 	return (true);
-}
+}*/

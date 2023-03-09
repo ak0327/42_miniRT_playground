@@ -6,18 +6,22 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:30:56 by takira            #+#    #+#             */
-/*   Updated: 2023/03/08 18:14:22 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/09 10:42:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_vector	tr_screen_dimension_local_to_world(int x, int y, int w, int h)
+t_vector	tr_screen_dimension_local_to_world(int x, int y)
 {
 	t_vector	vec;
+	float		screen_w = 2;
+	float		screen_h = 2;
+	float		window_w = 512;
+	float		window_h = 512;
 
-	vec.x = (float)SCREEN_WIDTH * (float)x / (float)(w - 1) - 1;
-	vec.y = -1 * (float)SCREEN_HEIGHT * (float)y / (float)(h - 1) + 1;
+	vec.x = screen_w * (float)x / (window_w - 1) - 1;
+	vec.y = -screen_h * (float)y / (window_h - 1) + 1;
 	vec.z = 0;
 	return (vec);
 }

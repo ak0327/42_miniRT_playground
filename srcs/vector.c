@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:48:43 by takira            #+#    #+#             */
-/*   Updated: 2023/03/08 19:00:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/09 10:39:22 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_vector	sigma_sum(int num, ...)
 	t_vector	vi;
 	int			i;
 
-	init_vector(&vec, 0, 0, 0);
+	init_vector(0, 0, 0);
 	i = 0;
 	va_start(ap, num);
 	va_arg(ap, int);

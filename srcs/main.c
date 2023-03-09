@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/08 20:08:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/09 10:42:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ int	main(void)
 	vec_eye = init_vector(0, 0, -5);
 	sphere = init_sphere(0, 0, 5, 1);
 
+//	x = 382;
+//	y = 255;
+//	vec_screen = tr_screen_dimension_local_to_world(x, y);
+//	printf("local2world: (x,y)=(%d,%d), vec:%s\n", x, y, vector_str(&vec_screen));
+
 	y = 0;
 	while (y < data.win_height)
 	{
@@ -95,7 +100,7 @@ int	main(void)
 		while (x < data.win_width)
 		{
 			/* スクリーンのlocal座標(x, y)をworld座標(xw, yw, zw)に変換する */
-			vec_screen = tr_screen_dimension_local_to_world(x, y, data.win_width, data.win_height);
+			vec_screen = tr_screen_dimension_local_to_world(x, y);
 //			printf("local2world: (x,y)=(%d,%d), vec:%s\n", x, y, vector_str(&vec_screen));
 
 			/* 視点位置から(xw, yw)に向かう半直線を求める */
@@ -104,11 +109,11 @@ int	main(void)
 //			printf("vec_eye2screen: (x,y)=(%d,%d), vec:%s\n\n", x, y, vector_str(&vec_eye2screen));
 
 			/* 視点位置から(xw, yw)に向かう半直線と球の交差判定を行う */
-			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen) == true)
-				color = red;
-			else
-				color = blue;
-			my_mlx_pixel_put(&data, x, y, color);
+//			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen) == true)
+//				color = red;
+//			else
+//				color = blue;
+//			my_mlx_pixel_put(&data, x, y, color);
 
 
 //			t_vector pixel_color = {(float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25};

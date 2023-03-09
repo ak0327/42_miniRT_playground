@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/08 19:04:16 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/09 10:38:28 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,12 @@ typedef struct	s_vector
 
 typedef struct	s_screen
 {
-	float	cx;
-	float	cy;
-	float	cz;
-	float	width;
-	float	height;
+	float		cx;
+	float		cy;
+	float		cz;
+	float		screen_width;
+	float		screen_height;
+	t_vector	normal_vec;
 }	t_screen;
 
 typedef struct	s_sphere
@@ -101,12 +102,12 @@ t_vector	copy_vec(const t_vector *a);
 
 
 /********** screen **********/
-t_vector	tr_screen_dimension_local_to_world(int x, int y, int w, int h);
+t_vector	tr_screen_dimension_local_to_world(int x, int y);
 
 
 /********** sphere **********/
 t_sphere	init_sphere(float x, float y, float z, float r);
-bool		is_intersect_to_sphere(t_sphere sphere, t_vector eye_vec, t_vector vec_screen);
+//bool		is_intersect_to_sphere(t_sphere sphere, t_vector eye_vec, t_vector vec_screen);
 
 
 /********** mlx_keyhooks **********/
