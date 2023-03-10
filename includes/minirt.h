@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/09 11:37:38 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/09 12:03:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,17 @@
 
 
 /********** color **********/
-# define RED	0xFF0000
-# define BLUE	0x0000FF
+# define RED			0xFF0000
+# define BLUE			0x0000FF
+# define CORNFLOWERBLUE	0x6495ED
+# define GRAY			0x808080
 
 /********** window **********/
-//# define AR_WIDTH	16
-//# define AR_HEIGHT	9
+//# define ASPECT_WIDTH	16
+//# define ASPECT_HEIGHT	9
 //# define WINDOW_WIDTH	384
-# define AR_WIDTH		1
-# define AR_HEIGHT		1
+# define ASPECT_WIDTH	1
+# define ASPECT_HEIGHT	1
 # define WINDOW_WIDTH	512
 # define WINDOW_TITLE	"miniRT"
 # define SCREEN_WIDTH	2
@@ -64,33 +66,34 @@ typedef struct	s_data
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}			t_data;
+} t_data;
 
 typedef struct	s_vector
 {
 	float	x;
 	float	y;
 	float	z;
-}	t_vector;
+} t_vector;
 
 typedef struct	s_screen
 {
-	float		cx;
-	float		cy;
-	float		cz;
 	float		screen_width;
 	float		screen_height;
+	t_vector	vec_center;
 	t_vector	normal_vec;
-}	t_screen;
+} t_screen;
 
 typedef struct	s_sphere
 {
-	float		cx;
-	float		cy;
-	float		cz;
-	float		r;
-	t_vector	vev_c;
-}	t_sphere;
+	float		radius;
+	t_vector	vec_center;
+} t_sphere;
+
+typedef struct	s_light
+{
+	t_vector	vec_center;
+
+} t_light;
 
 
 /********** vector **********/
@@ -107,6 +110,7 @@ const char	*vector_str(const t_vector *vec);
 t_vector	copy_vec(const t_vector *a);
 
 
+
 /********** screen **********/
 t_vector	tr_screen_dimension_local_to_world(int x, int y);
 
@@ -114,6 +118,10 @@ t_vector	tr_screen_dimension_local_to_world(int x, int y);
 /********** sphere **********/
 t_sphere	init_sphere(float x, float y, float z, float r);
 bool		is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen);
+
+/********** light **********/
+t_light	init_light(float x, float y, float z);
+
 
 
 /********** mlx_keyhooks **********/

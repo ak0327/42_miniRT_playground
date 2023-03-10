@@ -38,7 +38,7 @@ int	init_data(t_data *data)
 {
 
 	data->win_width = WINDOW_WIDTH;
-	data->win_height = data->win_width * AR_HEIGHT / AR_WIDTH;
+	data->win_height = data->win_width * ASPECT_HEIGHT / ASPECT_WIDTH;
 
 	data->mlx = mlx_init();
 	if (!data->mlx)
@@ -82,7 +82,7 @@ void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere)
 			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen) == true)
 				color = RED;
 			else
-				color = BLUE;
+				color = CORNFLOWERBLUE;
 			my_mlx_pixel_put(&data, x, y, color);
 
 //			t_vector pixel_color = {(float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25};
@@ -99,6 +99,7 @@ int	main(void)
 
 	t_vector	vec_eye;
 	t_sphere	sphere;
+	t_light		light;
 
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);
@@ -107,6 +108,7 @@ int	main(void)
 	/* init eye & sphere */
 	vec_eye = init_vector(0, 0, -5);
 	sphere = init_sphere(0, 0, 5, 1);
+	light = init_light(-5, 5, -1);
 
 	/* draw */
 	draw_sphere(data, vec_eye, sphere);
