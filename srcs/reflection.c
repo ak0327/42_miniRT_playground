@@ -24,8 +24,7 @@ t_light	init_light(float x, float y, float z)
 
 int	diffuse_reflect(t_vector vec_screen, t_light light, t_sphere sphere)
 {
-	int	color;
-
+	int		color;
 
 
 	return (color);

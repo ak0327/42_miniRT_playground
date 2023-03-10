@@ -62,12 +62,13 @@ void	free_data(t_data *data)
 	free(data->mlx);
 }
 
-void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere)
+void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere, t_light light)
 {
 	int			x;
 	int			y;
 	int			color;
 	t_vector	vec_screen;
+	float		t;
 
 	y = 0;
 	while (y < data.win_height)
@@ -79,8 +80,8 @@ void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere)
 			vec_screen = tr_screen_dimension_local_to_world(x, y);
 
 			/* 視点位置から(xw, yw)に向かう半直線と球の交差判定を行う */
-			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen) == true)
-				color = RED;
+			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen, &t) == true)
+				color = diffuse_reflect(vec_screen, light, sphere);
 			else
 				color = CORNFLOWERBLUE;
 			my_mlx_pixel_put(&data, x, y, color);
@@ -111,7 +112,7 @@ int	main(void)
 	light = init_light(-5, 5, -1);
 
 	/* draw */
-	draw_sphere(data, vec_eye, sphere);
+	draw_sphere(data, vec_eye, sphere, light);
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hooks(data);

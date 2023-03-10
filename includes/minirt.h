@@ -117,10 +117,11 @@ t_vector	tr_screen_dimension_local_to_world(int x, int y);
 
 /********** sphere **********/
 t_sphere	init_sphere(float x, float y, float z, float r);
-bool		is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen);
+bool		is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float *t);
 
 /********** light **********/
-t_light	init_light(float x, float y, float z);
+t_light		init_light(float x, float y, float z);
+int			diffuse_reflect(t_vector vec_screen, t_light light, t_sphere sphere);
 
 
 

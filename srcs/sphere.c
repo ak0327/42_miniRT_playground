@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:01:27 by takira            #+#    #+#             */
-/*   Updated: 2023/03/09 11:56:55 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/10 20:05:07 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,39 @@ t_sphere	init_sphere(float x, float y, float z, float r)
 	return (sphere);
 }
 
-float	discriminant(t_sphere sphere, t_vector vec_eye, t_vector vec_screen)
+float	discriminant(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float *t)
 {
 	float		A, B, C, D;
-	t_vector	d_vec_eye;
-	t_vector	vec_sc;
+	float		t1, t2;
+	t_vector	directional_vec_eye;
+	t_vector	vec_pi;
 
-	d_vec_eye = sub(&vec_screen, &vec_eye);
-	vec_sc = sub(&sphere.vec_center, &vec_eye);
-	A = squared_norm(&d_vec_eye);
-	B = 2 * dot(&d_vec_eye, &vec_sc);
-	C = squared_norm(&vec_sc) - SQR(sphere.radius);
+	*t = 0;
+	directional_vec_eye = sub(&vec_screen, &vec_eye);
+	vec_pi = sub(&sphere.vec_center, &vec_eye);
+	A = squared_norm(&directional_vec_eye);
+	B = 2 * dot(&directional_vec_eye, &vec_pi);
+	C = squared_norm(&vec_pi) - SQR(sphere.radius);
 	D = SQR(B) - 4 * A * C;
+	if (D == 0)
+		*t = (-B + sqrtf(D)) / (2 * A);
+	if (D > 0)
+	{
+		t1 = (-B + sqrtf(D)) / (2 * A);
+		t2 = (-B - sqrtf(D)) / (2 * A);
+		if (t1 > 0 && t2 > 0)
+			*t = MIN(t1, t2);
+	}
 	return (D);
 }
 
 //TODO; tの判定
-bool	is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen)
+bool	is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float *t)
 {
-	if (discriminant(sphere, vec_eye, vec_screen) < 0)
+	float	D;
+
+	D = discriminant(sphere, vec_eye, vec_screen, t);
+	if (D < 0 || t <= 0)
 		return (false);
 
 	return (true);
