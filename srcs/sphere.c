@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:01:27 by takira            #+#    #+#             */
-/*   Updated: 2023/03/10 20:08:02 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/11 15:55:57 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ float	discriminant(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float
 	C = squared_norm(&vec_pi) - SQR(sphere.radius);
 	D = SQR(B) - 4 * A * C;
 	if (D == 0)
-		*t = (-B + sqrtf(D)) / (2 * A);
+		*t = -B / (2 * A);
 	if (D > 0)
 	{
 		t1 = (-B + sqrtf(D)) / (2 * A);

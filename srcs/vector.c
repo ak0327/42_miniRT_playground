@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:48:43 by takira            #+#    #+#             */
-/*   Updated: 2023/03/09 10:39:22 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/11 16:03:05 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,9 @@ float	normalize(t_vector *vec)
 	float	vnorm;
 
 	vnorm = norm(vec);
-	vec->x = vnorm;
-	vec->y = vnorm;
-	vec->z = vnorm;
+	vec->x /= vnorm;
+	vec->y /= vnorm;
+	vec->z /= vnorm;
 	return (vnorm);
 }
 

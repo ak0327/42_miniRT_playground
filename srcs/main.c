@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/09 12:00:33 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/11 15:52:24 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	main(void)
 	/* init eye & sphere */
 	vec_eye = init_vector(0, 0, -5);
 	sphere = init_sphere(0, 0, 5, 1);
-	light = init_light(-5, 5, -1);
+	light = init_light(-5, 5, -5);
 
 	/* draw */
 	draw_sphere(data, vec_eye, sphere, light);

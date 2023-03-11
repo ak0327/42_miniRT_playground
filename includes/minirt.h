@@ -95,6 +95,13 @@ typedef struct	s_light
 
 } t_light;
 
+typedef struct s_color
+{
+	int	r;
+	int g;
+	int b;
+} t_color;
+
 
 /********** vector **********/
 t_vector	init_vector(float x, float y, float z);

@@ -26,6 +26,7 @@ SRC				= main.c \
 				  reflection.c \
 				  mlx_keyhooks.c \
 
+
 SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))
 
 
@@ -34,7 +35,7 @@ SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))
 OBJ_DIR			= objs
 OBJ				= $(SRC:%.c=%.o)
 OBJS			= $(addprefix $(OBJ_DIR)/, $(OBJ))
-DEPS			= $(OBJS:%.o=%:d)
+DEPS			= $(SRCS:%.c=%:d)
 
 
 #####################################################
@@ -85,7 +86,7 @@ clean			:
 	@#make clean -C $(MLX_DIR)
 
 fclean			: clean
-	rm -rf $(NAME)
+	rm -f $(NAME)
 	@make fclean -C $(LIBFT_DIR)
 	@#make fclean -C $(MLX_DIR)
 
@@ -102,3 +103,4 @@ norm			:
 
 .PHONY			: all clean fclean re test norm bonus
 
+-include	$(DEPS)
