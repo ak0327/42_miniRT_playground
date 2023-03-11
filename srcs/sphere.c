@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:01:27 by takira            #+#    #+#             */
-/*   Updated: 2023/03/11 15:55:57 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/11 16:49:42 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,28 @@ float	discriminant(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float
 	float		A, B, C, D;
 	float		t1, t2;
 	t_vector	directional_vec_eye;
-	t_vector	vec_pi;
+	t_vector	vec_center_to_eye;
 
-	*t = 0;
+	*t = -1;
 	directional_vec_eye = sub(&vec_screen, &vec_eye);
-	vec_pi = sub(&sphere.vec_center, &vec_eye);
+	vec_center_to_eye = sub(&vec_eye, &sphere.vec_center);
 	A = squared_norm(&directional_vec_eye);
-	B = 2 * dot(&directional_vec_eye, &vec_pi);
-	C = squared_norm(&vec_pi) - SQR(sphere.radius);
+	B = 2 * dot(&directional_vec_eye, &vec_center_to_eye);
+	C = squared_norm(&vec_center_to_eye) - SQR(sphere.radius);
 	D = SQR(B) - 4 * A * C;
 	if (D == 0)
+	{
 		*t = -B / (2 * A);
-	if (D > 0)
+//		printf("D=0, t=%f\n", *t);
+	}
+	else if (D > 0)
 	{
 		t1 = (-B + sqrtf(D)) / (2 * A);
 		t2 = (-B - sqrtf(D)) / (2 * A);
-		if (t1 > 0 && t2 > 0)
-			*t = MIN(t1, t2);
+		if (t1 > 0)
+			*t = t1;
+		if (t2 > 0 && t2 < *t)
+			*t = t2;
 	}
 	return (D);
 }
@@ -54,7 +59,7 @@ bool	is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_scre
 	float		D;
 
 	D = discriminant(sphere, vec_eye, vec_screen, t);
-	if (D < 0 || t <= 0)
+	if (D < 0 || *t <= 0)
 		return (false);
 	return (true);
 }

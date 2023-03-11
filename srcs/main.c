@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/11 15:52:24 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/11 16:43:45 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere, t_light light)
 
 			/* 視点位置から(xw, yw)に向かう半直線と球の交差判定を行う */
 			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen, &t) == true)
+			{
+//				printf("(x,y)=(%d,%d), t:%f\n", x, y, t);
 				color = diffuse_reflect(vec_eye, vec_screen, light, sphere, t);
+			}
 			else
 				color = CORNFLOWERBLUE;
 			my_mlx_pixel_put(&data, x, y, color);

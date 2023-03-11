@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/09 12:03:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/11 16:49:54 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@
 # define KEY_ESC			0xff1b
 
 /********** Macro **********/
-#define SQR(x) ((x) * (x))
-#define MIN(a, b) (a <= b ? a : b)
-#define MAX(a, b) (a >= b ? a : b)
-#define CLAMP(v,minv,maxv) MIN(MAX(v,minv),maxv)
+#define SQR(x)						((x) * (x))
+#define MIN(a, b)					(a <= b ? a : b)
+#define MAX(a, b)					(a >= b ? a : b)
+#define CLAMP(val, minval, maxval)	MIN(MAX(val, minval), maxval)
 
 /********** struct **********/
 typedef struct	s_data
