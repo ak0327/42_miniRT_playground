@@ -81,7 +81,7 @@ void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere, t_light light)
 
 			/* 視点位置から(xw, yw)に向かう半直線と球の交差判定を行う */
 			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen, &t) == true)
-				color = diffuse_reflect(vec_screen, light, sphere);
+				color = diffuse_reflect(vec_eye, vec_screen, light, sphere, t);
 			else
 				color = CORNFLOWERBLUE;
 			my_mlx_pixel_put(&data, x, y, color);

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:01:27 by takira            #+#    #+#             */
-/*   Updated: 2023/03/10 20:05:07 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/10 20:08:02 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,10 @@ float	discriminant(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float
 //TODO; tの判定
 bool	is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float *t)
 {
-	float	D;
+	float		D;
 
 	D = discriminant(sphere, vec_eye, vec_screen, t);
 	if (D < 0 || t <= 0)
 		return (false);
-
 	return (true);
 }

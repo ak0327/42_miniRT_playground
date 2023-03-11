@@ -22,6 +22,7 @@ SRC				= main.c \
 				  vector.c \
 				  screen.c \
 				  sphere.c \
+				  color.c \
 				  reflection.c \
 				  mlx_keyhooks.c \
 

@@ -121,7 +121,7 @@ bool		is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_scr
 
 /********** light **********/
 t_light		init_light(float x, float y, float z);
-int			diffuse_reflect(t_vector vec_screen, t_light light, t_sphere sphere);
+int			diffuse_reflect(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sphere, float t);
 
 
 

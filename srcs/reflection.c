@@ -22,10 +22,19 @@ t_light	init_light(float x, float y, float z)
 	return (light);
 }
 
-int	diffuse_reflect(t_vector vec_screen, t_light light, t_sphere sphere)
+int	diffuse_reflect(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sphere, float t)
 {
 	int		color;
+	t_vector	directional_vec_eye;
+	t_vector	vec_pi;
+	t_vector	vec_center_to_pi;
+	t_vector	unit_normal_vec_pi;
 
+	directional_vec_eye = sub(&vec_screen, &vec_eye);
+	directional_vec_eye = mult(t, &directional_vec_eye);
+	vec_pi = add(&vec_eye, &directional_vec_eye);
+	vec_center_to_pi = sub(&vec_pi, &sphere.vec_center);
+	unit_normal_vec_pi = mult(1 / normalize(&vec_center_to_pi), &vec_center_to_pi);
 
 	return (color);
 }
