@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 19:13:24 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/12 21:02:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <limits.h>
+# include <float.h>
 
 # include "./../minilibx-linux/mlx.h"
 # include "./../libs/include/libft.h"
+# include "raycasting.h"
+# include "vector.h"
 
 /********** return value **********/
 
@@ -191,7 +195,6 @@ const char	*vector_str(const t_vector *vec);
 t_vector	copy_vec(const t_vector *a);
 
 
-
 /********** screen **********/
 t_vector	tr_screen_dimension_local_to_world(int x, int y);
 
@@ -200,30 +203,32 @@ t_vector	tr_screen_dimension_local_to_world(int x, int y);
 t_sphere	init_sphere(float x, float y, float z, float r);
 bool		is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float *t);
 
+
 /********** reflection **********/
 //t_light		init_light(float x, float y, float z);
 int			shading(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sphere, float t);
 
+
 /********** color **********/
 t_colorf	init_color(float r, float g, float b);
-
-
-/********** init **********/
-void		scene_setting(t_scene *scene);
 
 
 /********** mlx_keyhooks **********/
 void		mlx_hooks(t_data data);
 
 
-
-
+/********** intersection **********/
 int intersection_test(const t_shape *shape, const t_ray * ray, t_intersection_point * out_intp);
 int get_nearest_shape(const t_scene *scene, const t_ray *ray, float max_dist, int exit_once_found,
 					  t_shape **out_shape, t_intersection_point *out_intp);
+
+/********** ray **********/
 int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col);
 
-void init_shape(t_shape *shape, t_shape_type st, ...);
+
+/********** init **********/
+void		scene_setting(t_scene *scene);
+void		init_shape(t_shape *shape, t_shape_type st, ...);
 void init_material(t_material *mat,
 				   float ambR, float ambG, float ambB,
 				   float difR, float difG, float difB,

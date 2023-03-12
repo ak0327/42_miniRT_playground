@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 19:13:19 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/12 20:36:19 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void scene_setting(t_scene *scene)
 	*/
 	/* 補足：vector_t構造体に値を設定する場合は以下のように，SET_VECTORマクロを使うことができる． */
 	/* SET_VECTOR(scene->shapes[0].data.sphere.center, 0, 5, 5); */
-
 
 
 	/* マテリアルの初期化 ... init_material()関数を使う．*/

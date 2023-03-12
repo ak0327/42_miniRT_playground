@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 17:33:14 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/12 20:34:44 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,13 +146,13 @@ int	main(void)
 		y++;
 	}
 
-//	draw_sphere(data, eye_pos, sphere, light);
-
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hooks(data);
 	mlx_loop(data.mlx);
 
 	free_data(&data);
+	free(scene.lights);
+	free(scene.shapes);
 	return (0);
 }
 
