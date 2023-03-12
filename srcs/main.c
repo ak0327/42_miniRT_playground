@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 10:28:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/12 17:33:14 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,21 +101,52 @@ int	main(void)
 {
 	t_data		data;
 
-	t_vector	vec_eye;
-	t_sphere	sphere;
-	t_light		light;
+	t_vector	eye_pos;
+	t_vector	screen_dim;
+
+	t_ray		eye_ray;
+	t_colorf	color;
+
+	t_scene		scene;
+
+	int			x, y;
+	int			r, g, b;
 
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	/* init eye & sphere */
-	vec_eye = init_vector(0, 0, -5);
-	sphere = init_sphere(0, 0, 5, 1);
-	light = init_light(-5, 5, -5);
+	eye_pos = init_vector(0, 0, -5);
+	scene_setting(&scene);
 
 	/* draw */
-	draw_sphere(data, vec_eye, sphere, light);
+	y = 0;
+	while (y < data.win_height)
+	{
+		x = 0;
+		while (x < data.win_width)
+		{
+			screen_dim = tr_screen_dimension_local_to_world(x, y);
+			color = init_color((float)(100/255.0), (float)(149/255.0), (float)(237/255.0));
+
+			eye_ray.start = eye_pos;
+			eye_ray.direction = sub(&screen_dim, &eye_pos);
+
+			raytrace(&scene, &eye_ray, &color);
+
+			r = (int)(255 * CLAMP(color.r, 0, 1));
+			g = (int)(255 * CLAMP(color.g, 0, 1));
+			b = (int)(255 * CLAMP(color.b, 0, 1));
+
+			my_mlx_pixel_put(&data, x, y, r << 16 | g << 8 | b);
+
+			x++;
+		}
+		y++;
+	}
+
+//	draw_sphere(data, eye_pos, sphere, light);
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hooks(data);

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 10:34:12 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/12 19:13:24 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@
 #define MIN(a, b)					(a <= b ? a : b)
 #define MAX(a, b)					(a >= b ? a : b)
 #define CLAMP(val, minval, maxval)	MIN(MAX(val, minval), maxval)
+
+#define SET_COLOR(col, r_, g_, b_) { col.r = r_; col.g = g_; col.b = b_; }
+#define SET_VECTOR(vec, x_, y_, z_) { vec.x = x_; vec.y = y_; vec.z = z_; }
+
 
 /********** enum **********/
 typedef enum	e_shape_type
@@ -156,7 +160,7 @@ typedef struct	s_light
 
 typedef struct	s_scene
 {
-	t_sphere	*shapes;				// 物体リストへのポインタ
+	t_shape		*shapes;				// 物体リストへのポインタ
 	size_t		num_shapes_capacity;	// 物体リストの最大格納数
 	size_t		num_shapes;				// 物体リストに格納されている数
 	t_light		*lights;				// 光源リストへのポインタ
@@ -197,11 +201,38 @@ t_sphere	init_sphere(float x, float y, float z, float r);
 bool		is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float *t);
 
 /********** reflection **********/
-t_light		init_light(float x, float y, float z);
+//t_light		init_light(float x, float y, float z);
 int			shading(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sphere, float t);
+
+/********** color **********/
+t_colorf	init_color(float r, float g, float b);
+
+
+/********** init **********/
+void		scene_setting(t_scene *scene);
+
 
 /********** mlx_keyhooks **********/
 void		mlx_hooks(t_data data);
+
+
+
+
+int intersection_test(const t_shape *shape, const t_ray * ray, t_intersection_point * out_intp);
+int get_nearest_shape(const t_scene *scene, const t_ray *ray, float max_dist, int exit_once_found,
+					  t_shape **out_shape, t_intersection_point *out_intp);
+int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col);
+
+void init_shape(t_shape *shape, t_shape_type st, ...);
+void init_material(t_material *mat,
+				   float ambR, float ambG, float ambB,
+				   float difR, float difG, float difB,
+				   float speR, float speG, float speB,
+				   float shns);
+
+void init_light(t_light *light, t_light_type lt,
+				float vx, float vy, float vz,
+				float illR, float illG, float illB);
 
 
 #endif //MINIRT_H
