@@ -16,9 +16,9 @@ t_light	init_light(float x, float y, float z)
 {
 	t_light	light;
 
-	light.vec_center.x = x;
-	light.vec_center.y = y;
-	light.vec_center.z = z;
+	light.vector.x = x;
+	light.vector.y = y;
+	light.vector.z = z;
 	return (light);
 }
 
@@ -37,7 +37,7 @@ float	calc_nl_dot(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere
 	vec_sphere_n = sub(&vec_pi, &sphere.vec_center);
 	normalize(&vec_sphere_n);
 
-	vec_light_dir = sub(&light.vec_center, &vec_pi);
+	vec_light_dir = sub(&light.vector, &vec_pi);
 	normalize(&vec_light_dir);
 
 	return (CLAMP(dot(&vec_sphere_n, &vec_light_dir), 0, 1));
@@ -89,7 +89,7 @@ float	specular(float nl_dot, t_vector vec_eye, t_vector vec_screen, t_light ligh
 	vec_sphere_n = sub(&vec_pi, &sphere.vec_center);
 	normalize(&vec_sphere_n);
 
-	vec_light_dir = sub(&light.vec_center, &vec_pi);
+	vec_light_dir = sub(&light.vector, &vec_pi);
 	normalize(&vec_light_dir);
 
 	vec_r_tmp = mult(2 * nl_dot, &vec_sphere_n);

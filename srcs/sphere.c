@@ -18,7 +18,7 @@ t_sphere	init_sphere(float x, float y, float z, float r)
 
 	sphere.radius = r;
 	sphere.vec_center = init_vector(x, y, z);
-//	printf("sphere vec_c:%s, sqn:%f\n", vector_str(&sphere.vec_center), squared_norm(&sphere.vec_center));
+//	printf("sphere vec_c:%s, sqn:%f\n", vector_str(&sphere.vector), squared_norm(&sphere.vector));
 	return (sphere);
 }
 

@@ -52,6 +52,14 @@
 #define MAX(a, b)					(a >= b ? a : b)
 #define CLAMP(val, minval, maxval)	MIN(MAX(val, minval), maxval)
 
+/********** enum **********/
+typedef enum	e_shape_type
+{
+	ST_SPHERE,
+	ST_PLANE,
+} t_shape_type;
+
+
 /********** struct **********/
 typedef struct	s_data
 {
@@ -83,24 +91,69 @@ typedef struct	s_screen
 	t_vector	normal_vec;
 } t_screen;
 
+typedef struct	s_colorf
+{
+	float	r;
+	float	g;
+	float	b;
+} t_colorf;
+
+typedef struct	s_ray
+{
+	t_vector	start;		// 始点
+	t_vector	direction;	// 方向ベクトル（単位？）
+} t_ray;
+
+
 typedef struct	s_sphere
 {
-	float		radius;
-	t_vector	vec_center;
+	float		radius;		// 半径
+	t_vector	vec_center;	// 中心
 } t_sphere;
+
+typedef struct	s_plane
+{
+	t_vector	normal;		// 単位法線ベクトル
+	t_vector	position;	// planeが通る点の位置ベクトル
+} t_plane;
+
+
+typedef union	u_shape_data // sphere or plane
+{
+	t_sphere	sphere;
+	t_plane		plane;
+} t_shape_data;
+
+typedef struct	s_material
+{
+	t_colorf	ambient_ref;	// 環境光反射率RGB
+	t_colorf	diffuse_ref;	// 拡散反射率RGB
+	t_colorf	specular_ref;	// 鏡面反射率RGB
+	float		shininess;		// 光沢度
+} t_material;
+
+
+typedef struct	s_shape
+{
+	t_shape_type	type;		// sphere or plane
+	t_shape_data	data;		// sphere or plane の情報
+	t_material		material;	// 物体表面の質感
+} t_shape;
+
+
+typedef enum	e_light_type
+{
+	LT_POINT,		// 点光源
+	LT_DIRECTIONAL,	// 平行光源
+} t_light_type;
 
 typedef struct	s_light
 {
-	t_vector	vec_center;
-
+	t_light_type	type;		// 点光源 or 平行光源
+	t_vector		vector;		// 光源位置 or 光線方向
+	t_colorf		illuminance;// 照度RGB
 } t_light;
 
-typedef struct s_color
-{
-	int	r;
-	int g;
-	int b;
-} t_color;
 
 
 /********** vector **********/
