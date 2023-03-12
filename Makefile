@@ -24,7 +24,9 @@ SRC				= main.c \
 				  sphere.c \
 				  color.c \
 				  reflection.c \
+				  intersection.c \
 				  mlx_keyhooks.c \
+
 
 
 SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))

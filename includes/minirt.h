@@ -154,6 +154,23 @@ typedef struct	s_light
 	t_colorf		illuminance;// 照度RGB
 } t_light;
 
+typedef struct	s_scene
+{
+	t_sphere	*shapes;				// 物体リストへのポインタ
+	size_t		num_shapes_capacity;	// 物体リストの最大格納数
+	size_t		num_shapes;				// 物体リストに格納されている数
+	t_light		*lights;				// 光源リストへのポインタ
+	size_t		num_lights_capacity;	// 光源リストの最大格納数
+	size_t		num_lights;				// 光源リストに格納されている数
+	t_colorf	ambient_illuminance;	// 環境光の強さRGB
+} t_scene;
+
+typedef struct	s_intersection_point
+{
+	float		distance;	// 交点までの距離
+	t_vector	position;	// 交点の位置ベクトル
+	t_vector	normal;		// 交点における物体表面の法線ベクトル
+} t_intersection_point;
 
 
 /********** vector **********/
