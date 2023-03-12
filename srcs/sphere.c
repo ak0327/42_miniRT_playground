@@ -17,7 +17,7 @@ t_sphere	init_sphere(float x, float y, float z, float r)
 	t_sphere	sphere;
 
 	sphere.radius = r;
-	sphere.vec_center = init_vector(x, y, z);
+	sphere.center = init_vector(x, y, z);
 //	printf("sphere vec_c:%s, sqn:%f\n", vector_str(&sphere.vector), squared_norm(&sphere.vector));
 	return (sphere);
 }
@@ -31,7 +31,7 @@ float	discriminant(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float
 
 	*t = -1;
 	directional_vec_eye = sub(&vec_screen, &vec_eye);
-	vec_center_to_eye = sub(&vec_eye, &sphere.vec_center);
+	vec_center_to_eye = sub(&vec_eye, &sphere.center);
 	A = squared_norm(&directional_vec_eye);
 	B = 2 * dot(&directional_vec_eye, &vec_center_to_eye);
 	C = squared_norm(&vec_center_to_eye) - SQR(sphere.radius);

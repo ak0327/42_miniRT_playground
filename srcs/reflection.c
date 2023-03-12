@@ -34,7 +34,7 @@ float	calc_nl_dot(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere
 	vec_eye_to_screen = sub(&vec_screen, &vec_eye);
 	vec_eye_to_pi = mult(t, &vec_eye_to_screen);
 	vec_pi = add(&vec_eye, &vec_eye_to_pi);
-	vec_sphere_n = sub(&vec_pi, &sphere.vec_center);
+	vec_sphere_n = sub(&vec_pi, &sphere.center);
 	normalize(&vec_sphere_n);
 
 	vec_light_dir = sub(&light.vector, &vec_pi);
@@ -86,7 +86,7 @@ float	specular(float nl_dot, t_vector vec_eye, t_vector vec_screen, t_light ligh
 	vec_eye_to_screen = sub(&vec_screen, &vec_eye);
 	vec_eye_to_pi = mult(t, &vec_eye_to_screen);
 	vec_pi = add(&vec_eye, &vec_eye_to_pi);
-	vec_sphere_n = sub(&vec_pi, &sphere.vec_center);
+	vec_sphere_n = sub(&vec_pi, &sphere.center);
 	normalize(&vec_sphere_n);
 
 	vec_light_dir = sub(&light.vector, &vec_pi);

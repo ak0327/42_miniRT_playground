@@ -17,27 +17,6 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col)
 
 }
 
-void init_light(t_light *light, t_light_type lt,
-				float vx, float vy, float vz,
-				float illR, float illG, float illB)
-{
-
-}
-
-void init_shape(t_shape *shape, t_shape_type st, ...)
-{
-
-}
-
-void init_material(t_material *mat,
-				   float ambR, float ambG, float ambB,
-				   float difR, float difG, float difB,
-				   float speR, float speG, float speB,
-				   float shns)
-{
-
-}
-
 int intersection_test(const t_shape *shape, const t_ray * ray, t_intersection_point * out_intp)
 {
 

@@ -112,7 +112,7 @@ typedef struct	s_ray
 typedef struct	s_sphere
 {
 	float		radius;		// 半径
-	t_vector	vec_center;	// 中心
+	t_vector	center;	// 中心
 } t_sphere;
 
 typedef struct	s_plane
