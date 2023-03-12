@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 21:02:37 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/12 21:37:32 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ typedef struct	s_ray
 
 typedef struct	s_sphere
 {
-	float		radius;		// 半径
+	float		radius;	// 半径
 	t_vector	center;	// 中心
 } t_sphere;
 
@@ -134,10 +134,10 @@ typedef union	u_shape_data // sphere or plane
 
 typedef struct	s_material
 {
-	t_colorf	ambient_ref;	// 環境光反射率RGB
-	t_colorf	diffuse_ref;	// 拡散反射率RGB
-	t_colorf	specular_ref;	// 鏡面反射率RGB
-	float		shininess;		// 光沢度
+	t_colorf	ambient_ref;	// ka 環境光反射率RGB
+	t_colorf	diffuse_ref;	// kd 拡散反射率RGB
+	t_colorf	specular_ref;	// ks 鏡面反射率RGB
+	float		shininess;		// alpha 光沢度
 } t_material;
 
 
