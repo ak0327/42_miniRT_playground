@@ -6,12 +6,13 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:32:22 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 11:32:07 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/12 22:22:49 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
+/*
 t_light	init_light(float x, float y, float z)
 {
 	t_light	light;
@@ -21,6 +22,7 @@ t_light	init_light(float x, float y, float z)
 	light.vector.z = z;
 	return (light);
 }
+ */
 
 float	calc_nl_dot(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sphere, float t)
 {
@@ -43,6 +45,13 @@ float	calc_nl_dot(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere
 	return (CLAMP(dot(&vec_sphere_n, &vec_light_dir), 0, 1));
 }
 
+float	ambient(void)
+{
+	const float	ka = 0.01f;
+	const float	Ia = 0.1f;
+	return (ka * Ia);
+}
+
 float	diffuse(float nl_dot)
 {
 	const float	kd = 0.69f;
@@ -51,13 +60,6 @@ float	diffuse(float nl_dot)
 
 	r_diffuse = kd * Ii * nl_dot;
 	return (r_diffuse);
-}
-
-float	ambient(void)
-{
-	const float	ka = 0.01f;
-	const float	Ia = 0.1f;
-	return (ka * Ia);
 }
 
 float	specular(float nl_dot, t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sphere, float t)
@@ -114,8 +116,9 @@ int	shading(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere spher
 
 	nl_dot = calc_nl_dot(vec_eye, vec_screen, light, sphere, t);
 
-	r_diffuse = diffuse(nl_dot);
 	r_ambient = ambient();
+
+	r_diffuse = diffuse(nl_dot);
 	r_specular = specular(nl_dot, vec_eye, vec_screen, light, sphere, t);
 	r_luminance = r_diffuse + r_ambient + r_specular;
 	r_luminance = 256 * CLAMP(r_luminance, 0, 1);
