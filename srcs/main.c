@@ -83,7 +83,7 @@ void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere, t_light light)
 			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen, &t) == true)
 			{
 //				printf("(x,y)=(%d,%d), t:%f, ", x, y, t);
-				color = diffuse_reflect(vec_eye, vec_screen, light, sphere, t);
+				color = shading(vec_eye, vec_screen, light, sphere, t);
 			}
 			else
 				color = CORNFLOWERBLUE;

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/11 16:49:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/12 10:34:12 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,14 +126,12 @@ t_vector	tr_screen_dimension_local_to_world(int x, int y);
 t_sphere	init_sphere(float x, float y, float z, float r);
 bool		is_intersect_to_sphere(t_sphere sphere, t_vector vec_eye, t_vector vec_screen, float *t);
 
-/********** light **********/
+/********** reflection **********/
 t_light		init_light(float x, float y, float z);
-int			diffuse_reflect(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sphere, float t);
-
-
+int			shading(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sphere, float t);
 
 /********** mlx_keyhooks **********/
-void	mlx_hooks(t_data data);
+void		mlx_hooks(t_data data);
 
 
 #endif //MINIRT_H
