@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:48:43 by takira            #+#    #+#             */
-/*   Updated: 2023/03/11 16:03:05 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/12 10:28:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ float	squared_norm(const t_vector *vec)
 
 static float	norm(const t_vector *vec)
 {
-	return (squared_norm(vec));
+	return (sqrtf(squared_norm(vec)));
 }
 
 float	normalize(t_vector *vec)
