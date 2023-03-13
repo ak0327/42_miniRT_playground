@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 22:57:39 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 10:35:31 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col)
 {
 	/*1. 視線方向(eye_ray)の方向でもっとも近い物体を探す。*/
-	int						res;
-	t_shape					*shape;
-	t_intersection_point	intp;
+	int						res;	// 交差判定の結果
+	t_shape					*shape;	// 交差した物体へのポインタ
+	t_intersection_point	intp;	// 交点
+
 	size_t					i;
 	t_colorf				color;
 
@@ -36,6 +37,7 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col)
 	{
 		/*1. 環境光Laを計算 */
 		/*2. 環境光の強さを計算してcolに入れる。 */
+		SET_COLOR(color, 0.0, 0.0, 0.0);
 		color.r = scene->ambient_illuminance.r * shape->material.ambient_ref.r;
 		color.g = scene->ambient_illuminance.g * shape->material.ambient_ref.g;
 		color.b = scene->ambient_illuminance.b * shape->material.ambient_ref.b;
@@ -46,19 +48,12 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col)
 		{
 			/*4. 入射ベクトル light_dir を計算する（点光源の場合と平行光源の場合）。*/
 			light = &scene->lights[i];
-			if (light->type == LT_POINT)
-			{
-				// 入射ベクトルの計算
+			if (light->type == LT_POINT)	// 点光源
 				light_dir = sub(&light->vector, &intp.position);
-				normalize(&light_dir);
-			}
-			else if (light->type == LT_DIRECTIONAL)
-			{
-				// 入射ベクトルの計算
-				light_dir = light->vector; //これでOK？
-				normalize(&light_dir);
-			}
+			else
+				light_dir = light->vector;	// 平行光源
 
+			normalize(&light_dir);
 			nl_dot = CLAMP(dot(&intp.normal, &light_dir), 0, 1);
 
 			/*5. 拡散反射光 diffuse を計算してcolに足し合わせる。*/
@@ -88,9 +83,7 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col)
 			}
 			i++;
 		}
-
 		*out_col = color;
-
 		return (1);
 	}
 	return (0);

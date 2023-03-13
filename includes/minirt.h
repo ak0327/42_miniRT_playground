@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 21:37:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 10:08:53 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ typedef union	u_shape_data // sphere or plane
 
 typedef struct	s_material
 {
-	t_colorf	ambient_ref;	// ka 環境光反射率RGB
+	t_colorf	ambient_ref;	// ka j環境光反射率RGB
 	t_colorf	diffuse_ref;	// kd 拡散反射率RGB
 	t_colorf	specular_ref;	// ks 鏡面反射率RGB
 	float		shininess;		// alpha 光沢度
@@ -158,8 +158,8 @@ typedef enum	e_light_type
 typedef struct	s_light
 {
 	t_light_type	type;		// 点光源 or 平行光源
-	t_vector		vector;		// 光源位置 or 光線方向
-	t_colorf		illuminance;// 照度RGB
+	t_vector		vector;		// 光源位置 or 光線方向（*光線への方向？光線からの方向？）
+	t_colorf		illuminance;// 光源の照度 Ii RGB
 } t_light;
 
 typedef struct	s_scene
@@ -170,7 +170,7 @@ typedef struct	s_scene
 	t_light		*lights;				// 光源リストへのポインタ
 	size_t		num_lights_capacity;	// 光源リストの最大格納数
 	size_t		num_lights;				// 光源リストに格納されている数
-	t_colorf	ambient_illuminance;	// 環境光の強さRGB
+	t_colorf	ambient_illuminance;	// 環境光の強さIa RGB
 } t_scene;
 
 typedef struct	s_intersection_point
