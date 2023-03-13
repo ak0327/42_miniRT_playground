@@ -61,6 +61,7 @@
 
 
 #define EPSILON (1.0f/512)
+#define MAX_RECURSION 8
 
 /********** enum **********/
 typedef enum	e_shape_type
