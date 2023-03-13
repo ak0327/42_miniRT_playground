@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 10:08:53 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 13:33:12 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@
 #define SET_COLOR(col, r_, g_, b_) { col.r = r_; col.g = g_; col.b = b_; }
 #define SET_VECTOR(vec, x_, y_, z_) { vec.x = x_; vec.y = y_; vec.z = z_; }
 
+
+#define EPSILON (1.0f/512)
 
 /********** enum **********/
 typedef enum	e_shape_type
@@ -189,6 +191,7 @@ t_vector	sub(const t_vector *a, const t_vector *b);
 t_vector	mult(float k, const t_vector *a);
 t_vector	sigma_sum(int num, ...);
 float		squared_norm(const t_vector *vec);
+float		norm(const t_vector *vec);
 float		normalize(t_vector *vec);
 void		cross(t_vector *o, t_vector *a, t_vector *b);
 const char	*vector_str(const t_vector *vec);

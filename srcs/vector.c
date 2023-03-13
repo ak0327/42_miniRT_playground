@@ -104,7 +104,7 @@ float	squared_norm(const t_vector *vec)
 	return (SQR(vec->x) + SQR(vec->y) + SQR(vec->z));
 }
 
-static float	norm(const t_vector *vec)
+float	norm(const t_vector *vec)
 {
 	return (sqrtf(squared_norm(vec)));
 }
