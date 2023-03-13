@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 15:54:35 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 22:25:19 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,11 @@
 # define KEY_ESC			0xff1b
 
 /********** Macro **********/
-#define SQR(x)						((x) * (x))
-#define MIN(a, b)					(a <= b ? a : b)
-#define MAX(a, b)					(a >= b ? a : b)
+#define SQR(x)		((x) * (x))
+#define MIN(a, b)	(a <= b ? a : b)
+#define MAX(a, b)	(a >= b ? a : b)
+#define ABS(x)		(x >= 0 ? x : -1 * x)
+
 #define CLAMP(val, minval, maxval)	MIN(MAX(val, minval), maxval)
 
 #define SET_COLOR(col, r_, g_, b_) { col.r = r_; col.g = g_; col.b = b_; }
@@ -81,7 +83,6 @@ typedef enum	e_material_type
 	MT_DEFAULT,		// 通常の質感
 	MT_PERFECT_REF,	// 完全鏡面反射
 } t_material_type;
-
 
 /********** struct **********/
 typedef struct	s_data
@@ -206,6 +207,7 @@ float		normalize(t_vector *vec);
 void		cross(t_vector *o, t_vector *a, t_vector *b);
 const char	*vector_str(const t_vector *vec);
 t_vector	copy_vec(const t_vector *a);
+t_vector	vec_calc(float k1, t_vector *a, float k2, t_vector *b);
 
 
 /********** screen **********/
@@ -224,6 +226,9 @@ int			shading(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sph
 
 /********** color **********/
 t_colorf	init_color(float r, float g, float b);
+//t_colorf	colorf_mul(t_colorf c, float k1, t_colorf c1, float k2, t_colorf c2);
+//t_colorf	colorf_mul(t_colorf *c, float k1, t_colorf *c1, float k2, t_colorf *c2);
+t_colorf	colorf_mul(const t_colorf *c, float k1, const t_colorf *c1, float k2, const t_colorf *c2);
 
 
 /********** mlx_keyhooks **********/

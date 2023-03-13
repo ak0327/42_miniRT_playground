@@ -23,7 +23,19 @@ t_vector	init_vector(float x, float y, float z)
 	return (vec);
 }
 
-t_vector copy_vec(const t_vector *a)
+t_vector	vec_calc(float k1, t_vector *a, float k2, t_vector *b)
+{
+	t_vector	k1a;
+	t_vector	k2b;
+
+	k1a = mult(k1, a);
+	k2b = mult(ABS(k2), b);
+	if (k2 >= 0)
+		return (add(&k1a , &k2b));
+	return (sub(&k1a, &k2b));
+}
+
+t_vector	copy_vec(const t_vector *a)
 {
 	t_vector	vec;
 
@@ -33,7 +45,7 @@ t_vector copy_vec(const t_vector *a)
 	return (vec);
 }
 
-t_vector mult(float k, const t_vector *a)
+t_vector	mult(float k, const t_vector *a)
 {
 	t_vector	vec;
 
