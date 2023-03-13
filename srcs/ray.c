@@ -68,7 +68,7 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col)
 			if (light->type == LT_POINT)
 			{
 				vec_pi_to_light = sub(&light->vector, &intp.position);
-				dist = norm(&vec_pi_to_light);
+				dist = norm(&vec_pi_to_light) - EPSILON;
 			}
 			else
 				dist = FLT_MAX;
