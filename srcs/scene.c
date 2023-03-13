@@ -6,51 +6,64 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 10:31:48 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 10:54:52 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+float	rand_f(float under, float upper)
+{
+	return (under + (upper - under) * (float)rand()/RAND_MAX);
+}
+
 
 void scene_setting(t_scene *scene)
 {
 	/* ************************************************** */
 	/*                    物体の設定                       */
 	/* ************************************************** */
-	scene->num_shapes_capacity = 16; /* 物体リストの最大格納数(自由に変更して良い) */
+	scene->num_shapes_capacity = 100; /* 物体リストの最大格納数(自由に変更して良い) */
+	scene->num_shapes = scene->num_shapes_capacity;	/* 物体リストに，実際に格納した物体の数 */
 
 	scene->shapes = (t_shape *)malloc(sizeof(t_shape) * scene->num_shapes_capacity); /* メモリ確保 */
 
-
-	/* 物体の初期化 ... init_shape()関数を使う．第一引数は初期化するshape_t構造体のポインタ．*/
-	/* 球の場合：第二引数にST_SHAPEを渡す．この場合，追加で4つの実数を渡す． */
-	init_shape(&scene->shapes[0], ST_SPHERE,
-			   0.0, 0.0, 5.0,	/* 球の中心位置 */
-			   1.0);			/* 球の半径 */
-
 	/* 平面の場合：第二引数にST_PLANEを渡す．この場合，追加で6つの実数を渡す． */
-	init_shape(&scene->shapes[1], ST_PLANE,
+	init_shape(&scene->shapes[0], ST_PLANE,
 		   0.0, -1.0, 0.0,		/* 平面が通る点の位置 */
 		   0.0, 1.0, 0.0);		/* 平面の法線ベクトル */
 
-	/* 補足：vector_t構造体に値を設定する場合は以下のように，SET_VECTORマクロを使うことができる． */
-	/* SET_VECTOR(scene->shapes[0].data.sphere.center, 0, 5, 5); */
-
-	/* マテリアルの初期化 ... init_material()関数を使う．*/
-	/* 第一引数は初期化するmaterial_t構造体のポインタ． */
 	init_material(&scene->shapes[0].material,
-				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
-				  0.69f, 0.00f, 0.00f,		/* 拡散反射係数(RGB) */
-				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
-				  8.0f);								/* 光沢度 */
-
-	init_material(&scene->shapes[1].material,
 				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
 				  0.69f, 0.69f, 0.69f,		/* 拡散反射係数(RGB) */
 				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
 				  8.0f);								/* 光沢度 */
 
-	scene->num_shapes = 2;	/* 物体リストに，実際に格納した物体の数 */
+//	init_shape(&scene->shapes[1], ST_SPHERE,
+//			   0.0f, 0.0f, 5.0f, /* 球の中心位置 */
+//			   1.0f);    	/* 球の半径 */
+//
+//	init_material(&scene->shapes[1].material,
+//				  0.01f, 0.01f, 0.01f,  /* 環境光係数(RGB)   */
+//				  0.69f, 0.00f, 0.00f,  /* 拡散反射係数(RGB) */
+//				  0.30f, 0.30f, 0.30f,  /* 鏡面反射率(RGB)   */
+//				  8.0f); /* 光沢度 */				/* 光沢度 */
+
+	size_t	i = 1;
+	while (i < scene->num_shapes_capacity)
+	{
+		init_shape(&scene->shapes[i], ST_SPHERE,
+				   rand_f(-2.5f, 2.5f), rand_f(0.0f, 2.0f), rand_f(0.0f, 20.0f),	/* 球の中心位置 */
+				   rand_f(0.25f, 0.5f));			/* 球の半径 */
+
+		init_material(&scene->shapes[i].material,
+					  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
+					  rand_f(0.5f, 1.0f), rand_f(0.5f, 1.0f), rand_f(0.5f, 1.0f),		/* 拡散反射係数(RGB) */
+					  rand_f(0.3f, 0.5f), rand_f(0.3f, 0.5f), rand_f(0.3f, 0.5f),		/* 鏡面反射率(RGB)   */
+					  8.0f);								/* 光沢度 */
+
+		i++;
+	}
 
 
 	/* ************************************************** */
