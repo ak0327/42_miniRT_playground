@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 10:54:52 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 10:57:59 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ float	rand_f(float under, float upper)
 {
 	return (under + (upper - under) * (float)rand()/RAND_MAX);
 }
-
 
 void scene_setting(t_scene *scene)
 {
@@ -61,7 +60,6 @@ void scene_setting(t_scene *scene)
 					  rand_f(0.5f, 1.0f), rand_f(0.5f, 1.0f), rand_f(0.5f, 1.0f),		/* 拡散反射係数(RGB) */
 					  rand_f(0.3f, 0.5f), rand_f(0.3f, 0.5f), rand_f(0.3f, 0.5f),		/* 鏡面反射率(RGB)   */
 					  8.0f);								/* 光沢度 */
-
 		i++;
 	}
 
