@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 22:26:40 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 22:28:35 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level)
 {
 	int						int_res;	// 交差判定の結果
-	t_shape					*shape;	// 交差した物体へのポインタ
-	t_intersection_point	intp;	// 交点
+	t_shape					*shape;		// 交差した物体へのポインタ
+	t_intersection_point	intp;		// 交点
 
 	size_t					i;
 	t_colorf				color;

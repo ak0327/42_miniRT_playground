@@ -31,7 +31,6 @@ SRC				= main.c \
 				  init.c \
 
 
-
 SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))
 
 
@@ -74,6 +73,8 @@ endif
 
 #####################################################
 # RULES
+all				: $(NAME)
+
 $(NAME) : $(OBJS)
 	@make -C $(LIBFT_DIR)
 	@make -C $(MLX_DIR)
@@ -83,7 +84,6 @@ $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $$(dirname $@)
 	$(CC) $(INCLUDES) -c $< -o $@
 
-all				: $(NAME)
 
 clean			:
 	rm -rf $(OBJ_DIR)
