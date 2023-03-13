@@ -112,6 +112,9 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 
 			}
 		}
+
+		
+
 		i++;
 	}
 	*out_col = color;

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 14:17:50 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 15:54:35 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ typedef struct	s_material
 
 	t_material_type	type;			// default or 完全鏡面反射
 	t_colorf		reflect_ref;	// kf 完全鏡面反射係数RGB
+
 } t_material;
 
 
@@ -245,7 +246,8 @@ void init_material(t_material *mat,
 				   float ambR, float ambG, float ambB,
 				   float difR, float difG, float difB,
 				   float speR, float speG, float speB,
-				   float shns);
+				   float shns,
+				   t_material_type type);
 
 void init_light(t_light *light, t_light_type lt,
 				float vx, float vy, float vz,
