@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 16:17:44 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 21:58:07 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,64 +28,59 @@ void scene_setting(t_scene *scene)
 	scene->shapes = (t_shape *)malloc(sizeof(t_shape) * scene->num_shapes_capacity);
 
 	/* 球 完全鏡面反射 */
-	size_t i = 0;
-	init_shape(&scene->shapes[i], ST_SPHERE,
+	init_shape(&scene->shapes[0], ST_SPHERE,
 			   -0.25f, -0.5f, 3.0f,	/* 球の中心位置 */
 			   0.5f);    			/* 球の半径 */
 
-	init_material(&scene->shapes[i].material,
+	init_material(&scene->shapes[0].material,
 				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
 				  0.0f, 0.00f, 0.00f,		/* 拡散反射係数(RGB) */
-				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
-				  0.0f,							/* 光沢度 */
+				  1.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
+				  8.0f,							/* 光沢度 */
 				  MT_PERFECT_REF);					/* マテリアルタイプ */
 
 	/* 白い床 */
-	i++;
-	init_shape(&scene->shapes[i], ST_PLANE,
+	init_shape(&scene->shapes[1], ST_PLANE,
 			   0.0f, -1.0f, 0.0f,		/* 平面が通る点の位置 */
 			   0.0f, 1.0f, 0.0f);		/* 平面の法線ベクトル */
 
-	init_material(&scene->shapes[i].material,
+	init_material(&scene->shapes[1].material,
 				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
-				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+				  1.0f, 1.0f, 1.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.0f,							/* 光沢度 */
 				  MT_DEFAULT);
 
 	/* 白い天井 */
-	i++;
-	init_shape(&scene->shapes[i], ST_PLANE,
+	init_shape(&scene->shapes[2], ST_PLANE,
 			   0.0f, 1.0f, 0.0f,		/* 平面が通る点の位置 */
 			   0.0f, -1.0f, 0.0f);		/* 平面の法線ベクトル */
 
-	init_material(&scene->shapes[i].material,
+	init_material(&scene->shapes[2].material,
 				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
-				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+				  1.0f, 1.0f, 1.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.0f,							/* 光沢度 */
 				  MT_DEFAULT);
 
 	/* 白い壁 */
-	i++;
-	init_shape(&scene->shapes[i], ST_PLANE,
+	init_shape(&scene->shapes[3], ST_PLANE,
 			   0.0f, 0.0f, 5.0f,		/* 平面が通る点の位置 */
 			   0.0f, 0.0f, -1.0f);		/* 平面の法線ベクトル */
 
-	init_material(&scene->shapes[i].material,
+	init_material(&scene->shapes[3].material,
 				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
-				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+				  1.0f, 1.0f, 1.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.0f,							/* 光沢度 */
 				  MT_DEFAULT);
 
 	/* 赤い壁 */
-	i++;
-	init_shape(&scene->shapes[i], ST_PLANE,
+	init_shape(&scene->shapes[4], ST_PLANE,
 			   -1.0f, 0.0f, 0.0f,		/* 平面が通る点の位置 */
 			   1.0f, 0.0f, 0.0f);		/* 平面の法線ベクトル */
 
-	init_material(&scene->shapes[i].material,
+	init_material(&scene->shapes[4].material,
 				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
 				  1.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
@@ -93,12 +88,11 @@ void scene_setting(t_scene *scene)
 				  MT_DEFAULT);
 
 	/* 緑の壁 */
-	i++;
-	init_shape(&scene->shapes[i], ST_PLANE,
+	init_shape(&scene->shapes[5], ST_PLANE,
 			   1.0f, 0.0f, 0.0f,		/* 平面が通る点の位置 */
 			   -1.0f, 0.0f, 0.0f);		/* 平面の法線ベクトル */
 
-	init_material(&scene->shapes[i].material,
+	init_material(&scene->shapes[5].material,
 				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
 				  0.0f, 1.0f, 0.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
@@ -114,17 +108,19 @@ void scene_setting(t_scene *scene)
 //				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
 //				  0.69f, 0.69f, 0.69f,		/* 拡散反射係数(RGB) */
 //				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
-//				  8.0f);								/* 光沢度 */
-//
+//				  8.0f,								/* 光沢度 */
+//				  MT_DEFAULT);
+
 //	init_shape(&scene->shapes[1], ST_SPHERE,
 //			   0.0f, 0.0f, 5.0f, /* 球の中心位置 */
 //			   1.0f);    	/* 球の半径 */
 //
 //	init_material(&scene->shapes[1].material,
-//				  0.01f, 0.01f, 0.01f,  /* 環境光係数(RGB)   */
-//				  0.69f, 0.00f, 0.00f,  /* 拡散反射係数(RGB) */
-//				  0.30f, 0.30f, 0.30f,  /* 鏡面反射率(RGB)   */
-//				  8.0f); /* 光沢度 */				/* 光沢度 */
+//				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
+//				  0.69f, 0.00f, 0.00f,		/* 拡散反射係数(RGB) */
+//				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
+//				  8.0f,
+//				  MT_DEFAULT);
 
 //	size_t	i = 1;
 //	while (i < scene->num_shapes_capacity)
@@ -137,7 +133,8 @@ void scene_setting(t_scene *scene)
 //					  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
 //					  rand_f(0.5f, 1.0f), rand_f(0.5f, 1.0f), rand_f(0.5f, 1.0f),		/* 拡散反射係数(RGB) */
 //					  rand_f(0.3f, 0.5f), rand_f(0.3f, 0.5f), rand_f(0.3f, 0.5f),		/* 鏡面反射率(RGB)   */
-//					  8.0f);								/* 光沢度 */
+//					  8.0f,								/* 光沢度 */
+//					  MT_DEFAULT);
 //		i++;
 //	}
 
@@ -153,13 +150,15 @@ void scene_setting(t_scene *scene)
 	scene->num_lights = scene->num_lights_capacity;
 	scene->lights = (t_light *)malloc(sizeof(t_light) * scene->num_lights_capacity);
 
+//	init_light(&scene->lights[0], LT_POINT,
+//			   -5.0f, 5.0f, -5.0f, /* 点光源の位置 */
+//			   1.0f, 1.0f, 1.0f);   /* 点光源の照度(色) */
+
+
 	init_light(&scene->lights[0], LT_POINT,
 			   0.0f, 0.9f, 2.5f, /* 点光源の位置 */
 			   1.0f, 1.0f, 1.0f);   /* 点光源の照度(色) */
 
-	//	init_light(&scene->lights[0], LT_POINT,
-//			   -5.0f, 5.0f, -5.0f, /* 点光源の位置 */
-//			   1.0f, 1.0f, 1.0f);   /* 点光源の照度(色) */
 
 	/* 平行光源の場合 */
 	/*

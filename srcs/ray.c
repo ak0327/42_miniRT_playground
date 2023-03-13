@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 15:47:03 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 21:45:57 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		/* shadow_rayが物体に遮られなかった場合 */
 		if (!shadow_int_res)
 		{
-
 			/* 拡散反射光 diffuse を計算してcolに足し合わせる */
 			color.r += shape->material.diffuse_ref.r * light->illuminance.r * nl_dot;
 			color.g += shape->material.diffuse_ref.g * light->illuminance.g * nl_dot;
@@ -112,8 +111,6 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 
 			}
 		}
-
-		
 
 		i++;
 	}
