@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 13:33:12 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/13 14:17:50 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,18 @@ typedef enum	e_shape_type
 	ST_SPHERE,
 	ST_PLANE,
 } t_shape_type;
+
+typedef enum	e_light_type
+{
+	LT_POINT,		// 点光源
+	LT_DIRECTIONAL,	// 平行光源
+} t_light_type;
+
+typedef enum	e_material_type
+{
+	MT_DEFAULT,		// 通常の質感
+	MT_PERFECT_REF,	// 完全鏡面反射
+} t_material_type;
 
 
 /********** struct **********/
@@ -136,10 +148,13 @@ typedef union	u_shape_data // sphere or plane
 
 typedef struct	s_material
 {
-	t_colorf	ambient_ref;	// ka j環境光反射率RGB
-	t_colorf	diffuse_ref;	// kd 拡散反射率RGB
-	t_colorf	specular_ref;	// ks 鏡面反射率RGB
-	float		shininess;		// alpha 光沢度
+	t_colorf		ambient_ref;	// ka j環境光反射率RGB
+	t_colorf		diffuse_ref;	// kd 拡散反射率RGB
+	t_colorf		specular_ref;	// ks 鏡面反射率RGB
+	float			shininess;		// alpha 光沢度
+
+	t_material_type	type;			// default or 完全鏡面反射
+	t_colorf		reflect_ref;	// kf 完全鏡面反射係数RGB
 } t_material;
 
 
@@ -149,13 +164,6 @@ typedef struct	s_shape
 	t_shape_data	data;		// sphere or plane の情報
 	t_material		material;	// 物体表面の質感
 } t_shape;
-
-
-typedef enum	e_light_type
-{
-	LT_POINT,		// 点光源
-	LT_DIRECTIONAL,	// 平行光源
-} t_light_type;
 
 typedef struct	s_light
 {
