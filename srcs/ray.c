@@ -114,6 +114,7 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		else
 			dist = FLT_MAX;
 
+
 		shadow_int_res = get_nearest_shape(scene, &shadow_ray, dist, 1, NULL, NULL);
 
 		/* shadow_rayが物体に遮られなかった場合 */

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/14 09:59:08 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/14 10:38:59 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef enum	e_material_type
 {
 	MT_DEFAULT,		// 通常の質感
 	MT_PERFECT_REF,	// 完全鏡面反射
+	MT_REFRACTION,	// 完全鏡面反射・屈折
 } t_material_type;
 
 /********** struct **********/
@@ -157,6 +158,7 @@ typedef struct	s_material
 
 	t_material_type	type;			// default or 完全鏡面反射
 	t_colorf		reflect_ref;	// kf 完全鏡面反射係数RGB
+	float			refraction_index;	// 絶対屈折率
 
 } t_material;
 
@@ -184,6 +186,7 @@ typedef struct	s_scene
 	size_t		num_lights_capacity;	// 光源リストの最大格納数
 	size_t		num_lights;				// 光源リストに格納されている数
 	t_colorf	ambient_illuminance;	// 環境光の強さIa RGB
+	float		global_refraction_index;// 大気の絶対屈折率
 } t_scene;
 
 typedef struct	s_intersection_point
@@ -253,7 +256,8 @@ void init_material(t_material *mat,
 				   float speR, float speG, float speB,
 				   float shns,
 				   t_material_type type,
-				   float refR, float refG, float refB);
+				   float refR, float refG, float refB,
+				   float refraction_index);
 
 void init_light(t_light *light, t_light_type lt,
 				float vx, float vy, float vz,
