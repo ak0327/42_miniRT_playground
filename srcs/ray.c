@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 22:28:35 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/14 10:01:25 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	float					dist;
 	t_vector				vec_pi_to_light;
 
+	float					vn_dot;
+
 	/* 再帰呼び出し回数が制限回数以上の場合は終了 */
 	if (recursion_level > MAX_RECURSION)
 		return (0);
@@ -44,12 +46,48 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	/*視線方向に物体がなかった場合*/
 	if (!int_res)
 		return (0);
-
 	/* 視線方向に物体があった場合 */
 
-	/* 1. 環境光Laを計算しcolに入れる */
+	/* 環境光Laを計算しcolに入れる */
 	SET_COLOR(color, 0.0, 0.0, 0.0);
 	color = colorf_mul(&color, 1, &scene->ambient_illuminance, 1, &shape->material.ambient_ref);
+
+
+	/* 視線ベクトルの逆ベクトルの計算 */
+	inv_eye_dir = mult(-1, &eye_ray->direction);
+	normalize(&inv_eye_dir);
+
+
+	/* 物体が完全鏡面反射の場合 */
+	if (shape->material.type == MT_PERFECT_REF)
+	{
+		/* 視線ベクトルの逆ベクトルと法線ベクトルの内積 */
+		vn_dot = dot(&inv_eye_dir, &intp.normal);
+
+		/* vn_dot > 0 のとき */
+		if (vn_dot > 0)
+		{
+			t_ray		re_ray;
+			t_colorf	re_color;
+
+			/* 視線ベクトルの正反射ベクトルを計算 */
+			ref_dir = vec_calc(2 * vn_dot, &intp.normal, -1, &inv_eye_dir);
+			normalize(&ref_dir);
+
+			/* 正反射方向のrayを計算 */
+			re_ray.start = vec_calc(1, &intp.position, EPSILON, &ref_dir);
+			re_ray.direction = ref_dir;
+
+			re_color = *out_col;
+			recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1);
+
+			/* 完全鏡面反射を計算 */
+			color = colorf_mul(&color, 1, &shape->material.reflect_ref, 1, &re_color);
+		}
+//		return (1);
+	}
+
+	/* 物体が完全鏡面反射でない場合 */
 
 	/* すべての光源について処理する */
 	i = 0;
@@ -91,9 +129,6 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 				ref_dir = vec_calc(2 * nl_dot, &intp.normal, -1, &light_dir);
 				normalize(&ref_dir);
 
-				/* 視線ベクトルの逆ベクトルの計算 */
-				inv_eye_dir = mult(-1, &eye_ray->direction);
-				normalize(&inv_eye_dir);
 
 				vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
 				vr_dot_pow = powf(vr_dot, shape->material.shininess);

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 22:25:19 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/14 09:59:08 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ typedef struct	s_material
 	float			shininess;		// alpha 光沢度
 
 	t_material_type	type;			// default or 完全鏡面反射
-//	t_colorf		reflect_ref;	// kf 完全鏡面反射係数RGB
+	t_colorf		reflect_ref;	// kf 完全鏡面反射係数RGB
 
 } t_material;
 
@@ -252,7 +252,8 @@ void init_material(t_material *mat,
 				   float difR, float difG, float difB,
 				   float speR, float speG, float speB,
 				   float shns,
-				   t_material_type type);
+				   t_material_type type,
+				   float refR, float refG, float refB);
 
 void init_light(t_light *light, t_light_type lt,
 				float vx, float vy, float vz,

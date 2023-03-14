@@ -75,10 +75,10 @@ endif
 # RULES
 all				: $(NAME)
 
-$(NAME) : $(OBJS)
+$(NAME)			: $(OBJS)
 	@make -C $(LIBFT_DIR)
 	@make -C $(MLX_DIR)
-	$(CC) $(CFLAGS) $^ $(LFLAGS) $(LIBS) -o $@
+	$(CC) $(CFLAGS) $(LFLAGS) $(LIBS) $^ -o $@
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $$(dirname $@)

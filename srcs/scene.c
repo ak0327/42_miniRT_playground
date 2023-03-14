@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 21:58:07 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/14 10:00:48 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ void scene_setting(t_scene *scene)
 	init_material(&scene->shapes[0].material,
 				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
 				  0.0f, 0.00f, 0.00f,		/* 拡散反射係数(RGB) */
-				  1.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
+				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  8.0f,							/* 光沢度 */
-				  MT_PERFECT_REF);					/* マテリアルタイプ */
+				  MT_PERFECT_REF, 					/* マテリアルタイプ */
+				  1.0f, 1.0f, 1.0f);		/* 完全鏡面反射係数(RGB) */
 
 	/* 白い床 */
 	init_shape(&scene->shapes[1], ST_PLANE,
@@ -49,7 +50,8 @@ void scene_setting(t_scene *scene)
 				  1.0f, 1.0f, 1.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.0f,							/* 光沢度 */
-				  MT_DEFAULT);
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f);
 
 	/* 白い天井 */
 	init_shape(&scene->shapes[2], ST_PLANE,
@@ -61,7 +63,8 @@ void scene_setting(t_scene *scene)
 				  1.0f, 1.0f, 1.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.0f,							/* 光沢度 */
-				  MT_DEFAULT);
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f);
 
 	/* 白い壁 */
 	init_shape(&scene->shapes[3], ST_PLANE,
@@ -73,7 +76,8 @@ void scene_setting(t_scene *scene)
 				  1.0f, 1.0f, 1.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.0f,							/* 光沢度 */
-				  MT_DEFAULT);
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f);
 
 	/* 赤い壁 */
 	init_shape(&scene->shapes[4], ST_PLANE,
@@ -85,7 +89,8 @@ void scene_setting(t_scene *scene)
 				  1.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.0f,							/* 光沢度 */
-				  MT_DEFAULT);
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f);
 
 	/* 緑の壁 */
 	init_shape(&scene->shapes[5], ST_PLANE,
@@ -97,7 +102,8 @@ void scene_setting(t_scene *scene)
 				  0.0f, 1.0f, 0.0f,		/* 拡散反射係数(RGB) */
 				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.0f,							/* 光沢度 */
-				  MT_DEFAULT);
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f);
 
 //	/* 平面の場合：第二引数にST_PLANEを渡す．この場合，追加で6つの実数を渡す． */
 //	init_shape(&scene->shapes[0], ST_PLANE,

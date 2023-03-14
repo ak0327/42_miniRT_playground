@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 19:46:48 by takira            #+#    #+#             */
-/*   Updated: 2023/03/13 22:30:38 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/14 09:58:51 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,13 @@ void init_material(t_material *mat,
 				   float difR, float difG, float difB,
 				   float speR, float speG, float speB,
 				   float shns,
-				   t_material_type type)
+				   t_material_type type,
+				   float refR, float refG, float refB)
 {
 	SET_COLOR(mat->ambient_ref,  ambR, ambG, ambB);
 	SET_COLOR(mat->diffuse_ref,  difR, difG, difB);
 	SET_COLOR(mat->specular_ref, speR, speG, speB);
 	mat->shininess = shns;
-//	mat->type = type;
-//	SET_COLOR(mat->reflect_ref, refR, refG, refB);
+	mat->type = type;
+	SET_COLOR(mat->reflect_ref, refR, refG, refB);
 }
