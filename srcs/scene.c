@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/14 10:40:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/14 12:33:31 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void scene_setting(t_scene *scene)
 				  8.0f,							/* 光沢度 */
 				  MT_PERFECT_REF, 					/* マテリアルタイプ */
 				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-				  1.0f);					/* 大気の絶対屈折率 */
+				  0.0f);					/* 絶対屈折率 */
 
 	/* 球 完全鏡面反射・屈折のみ */
 	init_shape(&scene->shapes[1], ST_SPHERE,
@@ -53,7 +53,7 @@ void scene_setting(t_scene *scene)
 				  8.0f,							/* 光沢度 */
 				  MT_DEFAULT, 						/* マテリアルタイプ */
 				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-				  1.0f);					/* 大気の絶対屈折率 */
+				  1.51f);					/* 絶対屈折率 */
 
 
 	/* 白い床 */
@@ -68,7 +68,7 @@ void scene_setting(t_scene *scene)
 				  0.0f,							/* 光沢度 */
 				  MT_DEFAULT,
 				  0.0f, 0.0f, 0.0f,
-				  1.0f);					/* 大気の絶対屈折率 */
+				  0.0f);
 
 
 	/* 白い天井 */
@@ -83,7 +83,7 @@ void scene_setting(t_scene *scene)
 				  0.0f,							/* 光沢度 */
 				  MT_DEFAULT,
 				  0.0f, 0.0f, 0.0f,
-				  1.0f);					/* 大気の絶対屈折率 */
+				  0.0f);
 
 
 	/* 白い壁 */
@@ -98,7 +98,7 @@ void scene_setting(t_scene *scene)
 				  0.0f,							/* 光沢度 */
 				  MT_DEFAULT,
 				  0.0f, 0.0f, 0.0f,
-				  1.0f);					/* 大気の絶対屈折率 */
+				  0.0f);
 
 
 	/* 赤い壁 */
@@ -113,7 +113,7 @@ void scene_setting(t_scene *scene)
 				  0.0f,							/* 光沢度 */
 				  MT_DEFAULT,
 				  0.0f, 0.0f, 0.0f,
-				  1.0f);					/* 大気の絶対屈折率 */
+				  0.0f);
 
 
 	/* 緑の壁 */
@@ -128,7 +128,7 @@ void scene_setting(t_scene *scene)
 				  0.0f,							/* 光沢度 */
 				  MT_DEFAULT,
 				  0.0f, 0.0f, 0.0f,
-				  1.0f);					/* 大気の絶対屈折率 */
+				  0.0f);
 
 
 //	/* 平面の場合：第二引数にST_PLANEを渡す．この場合，追加で6つの実数を渡す． */
@@ -198,4 +198,7 @@ void scene_setting(t_scene *scene)
 		   0.0, -1.0, 0.0,  平行光源の方向ベクトル
 		   1.0, 1.0, 1.0);  平行光源の照度(色)
 	*/
+
+	scene->global_refraction_index = 1.0f;
+
 }

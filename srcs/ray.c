@@ -6,11 +6,14 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/14 10:01:25 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/15 10:33:40 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level);
+
 
 int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level)
 {
@@ -57,13 +60,12 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	inv_eye_dir = mult(-1, &eye_ray->direction);
 	normalize(&inv_eye_dir);
 
+	/* 視線ベクトルの逆ベクトルと法線ベクトルの内積 */
+	vn_dot = dot(&inv_eye_dir, &intp.normal);
 
 	/* 物体が完全鏡面反射の場合 */
 	if (shape->material.type == MT_PERFECT_REF)
 	{
-		/* 視線ベクトルの逆ベクトルと法線ベクトルの内積 */
-		vn_dot = dot(&inv_eye_dir, &intp.normal);
-
 		/* vn_dot > 0 のとき */
 		if (vn_dot > 0)
 		{
@@ -84,6 +86,21 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 			/* 完全鏡面反射を計算 */
 			color = colorf_mul(&color, 1, &shape->material.reflect_ref, 1, &re_color);
 		}
+//		return (1);
+	}
+	else if (shape->material.type == MT_REFRACTION)
+	{
+		float	eta_1;				// 物質1の絶対屈折率
+		float	eta_2;				// 物質2の絶対屈折率
+		float 	eta_r;				// 一時変数eta_r
+		t_vector	re_dir, fe_dir;	// 反射方向、屈折方向
+		t_ray		re_ray, fe_ray;	// 反射ray, 屈折ray
+		t_colorf	re_color, fe_color;	// 反射光の輝度, 屈折光の輝度
+		float		cos_theta1, cos_theta2;
+		float		rho_p, rho_s;	// p偏光反射率, s偏光反射率
+		float		cr, ct;			// 反射率, 透過率
+		float		omega;			// 一時変数
+
 //		return (1);
 	}
 
