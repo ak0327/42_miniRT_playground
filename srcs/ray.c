@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/15 12:43:43 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/15 15:49:32 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,24 +121,45 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		eta_r = eta_2 / eta_1;
 
 		/* cos(theta1), cos(theta2)の計算 */
+		cos_theta1 = ;
+		cos_theta2 = ;
 
 		/* 一時変数omegaの計算 */
+		omega = ;
 
 		/* 屈折方向ベクトルの計算 */
+		fe_dir = ;
+		normalize(&fe_dir);
 
 		/* 正反射方向ベクトルの計算 */
+		re_dir = ;
+		normalize(&re_dir);
 
 		/* 完全鏡面反射率、透過率の計算 */
+		rho_p = ;
+		rho_s = ;
+		cr = ;
+		ct = ;
 
-		/* 正反射方向のレイの視点 */
+		/* 正反射方向のレイの始点を計算 */
 
-		/* 屈折方向のレイ */
+		re_ray.direction = re_dir;
 
-		/* 再帰呼び出し（反射、屈折） */
+		/* 屈折方向のレイの始点を計算 */
 
+		fe_ray.direction = fe_dir;
+
+		/* colorの初期化 */
+		re_color = *out_col;
+		fe_color = *out_col;
+
+		/* 再帰呼び出し（反射） */
+		recursive_raytrace();
+		/* 再帰呼び出し（屈折） */
+		recursive_raytrace();
 
 		/* 完全鏡面反射、屈折光を計算 */
-
+		color = colorf_mul();
 	}
 
 	/* 物体が完全鏡面反射でない場合 */
