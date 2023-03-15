@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/15 16:20:25 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/15 16:33:35 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,11 +143,11 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		ct = 1 - cr;
 
 		/* 正反射方向のレイの始点を計算 */
-
+		re_ray.start = vec_calc(1, &intp.position, EPSILON, &re_dir);
 		re_ray.direction = re_dir;
 
 		/* 屈折方向のレイの始点を計算 */
-
+		fe_ray.start = vec_calc(1, &intp.position, EPSILON, &fe_dir);
 		fe_ray.direction = fe_dir;
 
 		/* colorの初期化 */
@@ -155,12 +155,15 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		fe_color = *out_col;
 
 		/* 再帰呼び出し（反射） */
-		recursive_raytrace();
+		recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1);
 		/* 再帰呼び出し（屈折） */
-		recursive_raytrace();
+		recursive_raytrace(scene, &fe_ray, &fe_color, recursion_level + 1);
 
 		/* 完全鏡面反射、屈折光を計算 */
-		color = colorf_mul();
+		t_colorf	tmp;
+		SET_COLOR(tmp, 0.0, 0.0, 0.0);
+		tmp = colorf_mul(&tmp, cr, &re_color, ct, &fe_color);
+		color = colorf_mul(&color, 1, &shape->material.reflect_ref, 1, &tmp);
 	}
 
 	/* 物体が完全鏡面反射でない場合 */
