@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/15 15:49:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/15 16:20:25 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		float		cr, ct;			// 反射率, 透過率
 		float		omega;			// 一時変数
 
+		n_dir = intp.normal;
 		if (vn_dot >= 0)
 		{
 			eta_1 = shape->material.refraction_index;
@@ -121,25 +122,25 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		eta_r = eta_2 / eta_1;
 
 		/* cos(theta1), cos(theta2)の計算 */
-		cos_theta1 = ;
-		cos_theta2 = ;
+		cos_theta1 = vn_dot;
+		cos_theta2 = 1 / eta_r * sqrtf(SQR(eta_r) - (1 - SQR(cos_theta1)));
 
 		/* 一時変数omegaの計算 */
-		omega = ;
+		omega = eta_r * cos_theta2 - cos_theta1;
 
 		/* 屈折方向ベクトルの計算 */
-		fe_dir = ;
+		fe_dir = vec_calc(1 / eta_r, &inv_eye_dir, -1 / eta_r * omega, &n_dir);
 		normalize(&fe_dir);
 
 		/* 正反射方向ベクトルの計算 */
-		re_dir = ;
+		re_dir = vec_calc(2 * vn_dot, &n_dir, -1, &inv_eye_dir);
 		normalize(&re_dir);
 
 		/* 完全鏡面反射率、透過率の計算 */
-		rho_p = ;
-		rho_s = ;
-		cr = ;
-		ct = ;
+		rho_p = (eta_2 * cos_theta1 - eta_1 * cos_theta2) / ((eta_2 * cos_theta1 + eta_1 * cos_theta2));
+		rho_s = (eta_1 * cos_theta1 - eta_2 * cos_theta2) / (eta_1 * cos_theta1 + eta_2 * cos_theta2);
+		cr = 0.5f * (SQR(rho_p) + SQR(rho_s));
+		ct = 1 - cr;
 
 		/* 正反射方向のレイの始点を計算 */
 
