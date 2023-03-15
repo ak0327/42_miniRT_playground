@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/15 10:33:40 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/15 12:43:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		float	eta_1;				// 物質1の絶対屈折率
 		float	eta_2;				// 物質2の絶対屈折率
 		float 	eta_r;				// 一時変数eta_r
+		t_vector	n_dir;
 		t_vector	re_dir, fe_dir;	// 反射方向、屈折方向
 		t_ray		re_ray, fe_ray;	// 反射ray, 屈折ray
 		t_colorf	re_color, fe_color;	// 反射光の輝度, 屈折光の輝度
@@ -101,7 +102,43 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		float		cr, ct;			// 反射率, 透過率
 		float		omega;			// 一時変数
 
-//		return (1);
+		if (vn_dot >= 0)
+		{
+			eta_1 = shape->material.refraction_index;
+			eta_2 = scene->global_refraction_index;
+		}
+		else // 物体の裏側から入射した場合
+		{
+			/* 法線ベクトルをひっくり返し内積を計算しなおす */
+			n_dir = mult(-1, &intp.normal);
+			vn_dot = dot(&inv_eye_dir, &n_dir);
+
+			/* 屈折率1,2を入れ替える */
+			eta_1 = scene->global_refraction_index;
+			eta_2 = shape->material.refraction_index;
+		}
+
+		eta_r = eta_2 / eta_1;
+
+		/* cos(theta1), cos(theta2)の計算 */
+
+		/* 一時変数omegaの計算 */
+
+		/* 屈折方向ベクトルの計算 */
+
+		/* 正反射方向ベクトルの計算 */
+
+		/* 完全鏡面反射率、透過率の計算 */
+
+		/* 正反射方向のレイの視点 */
+
+		/* 屈折方向のレイ */
+
+		/* 再帰呼び出し（反射、屈折） */
+
+
+		/* 完全鏡面反射、屈折光を計算 */
+
 	}
 
 	/* 物体が完全鏡面反射でない場合 */
