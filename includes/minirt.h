@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/14 10:38:59 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/15 19:07:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@
 #define SET_VECTOR(vec, x_, y_, z_) { vec.x = x_; vec.y = y_; vec.z = z_; }
 
 
-#define EPSILON (1.0f/512)
+#define EPSILON (1.0f/512.0f)
 #define MAX_RECURSION 8
 
 /********** enum **********/
@@ -151,13 +151,13 @@ typedef union	u_shape_data // sphere or plane
 
 typedef struct	s_material
 {
-	t_colorf		ambient_ref;	// ka j環境光反射率RGB
+	t_colorf		ambient_ref;	// ka 環境光反射率RGB
 	t_colorf		diffuse_ref;	// kd 拡散反射率RGB
 	t_colorf		specular_ref;	// ks 鏡面反射率RGB
 	float			shininess;		// alpha 光沢度
 
 	t_material_type	type;			// default or 完全鏡面反射
-	t_colorf		reflect_ref;	// kf 完全鏡面反射係数RGB
+	t_colorf		reflect_ref;	// kf 完全鏡面反射光/屈折光係数RGB
 	float			refraction_index;	// 絶対屈折率
 
 } t_material;
