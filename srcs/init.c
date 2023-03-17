@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 19:46:48 by takira            #+#    #+#             */
-/*   Updated: 2023/03/14 10:39:36 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 21:20:58 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 	va_start(args, st);
 
 	shape->type = st;
-	if ( st == ST_SPHERE )
+	if (st == ST_SPHERE)
 	{
 		t_sphere *sph = &shape->data.sphere;
 
@@ -36,7 +36,7 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 		sph->center.z = va_arg(args, double);
 		sph->radius   = va_arg(args, double);
 	}
-	else if ( st == ST_PLANE )
+	else if (st == ST_PLANE)
 	{
 		t_plane *plane = &shape->data.plane;
 
@@ -47,6 +47,36 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 		plane->normal.x = va_arg(args, double);
 		plane->normal.y = va_arg(args, double);
 		plane->normal.z = va_arg(args, double);
+	}
+	else if (st == ST_CYLINDER)
+	{
+		t_cylinder *cylinder = &shape->data.cylinder;
+
+		cylinder->normal.x = va_arg(args, double);
+		cylinder->normal.y = va_arg(args, double);
+		cylinder->normal.z = va_arg(args, double);
+
+		cylinder->position.x = va_arg(args, double);
+		cylinder->position.y = va_arg(args, double);
+		cylinder->position.z = va_arg(args, double);
+
+		cylinder->height = va_arg(args, double);
+		cylinder->radius = va_arg(args, double);
+	}
+	else if (st == ST_CORN)
+	{
+		t_cylinder *cylinder = &shape->data.cylinder;
+
+		cylinder->normal.x = va_arg(args, double);
+		cylinder->normal.y = va_arg(args, double);
+		cylinder->normal.z = va_arg(args, double);
+
+		cylinder->position.x = va_arg(args, double);
+		cylinder->position.y = va_arg(args, double);
+		cylinder->position.z = va_arg(args, double);
+
+		cylinder->height = va_arg(args, double);
+		cylinder->radius = va_arg(args, double);
 	}
 	else
 	{

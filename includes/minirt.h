@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/17 19:53:22 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 20:48:01 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,11 @@ typedef struct	s_ray
 	t_vector	direction;	// 方向ベクトル（単位？）
 } t_ray;
 
+typedef struct	s_plane
+{
+	t_vector	normal;		// 単位法線ベクトル
+	t_vector	position;	// planeが通る点の位置ベクトル
+} t_plane;
 
 typedef struct	s_sphere
 {
@@ -140,16 +145,10 @@ typedef struct	s_sphere
 	t_vector	center;	// 中心
 } t_sphere;
 
-typedef struct	s_plane
-{
-	t_vector	normal;		// 単位法線ベクトル
-	t_vector	position;	// planeが通る点の位置ベクトル
-} t_plane;
-
 typedef struct	s_cylinder
 {
 	t_vector	normal;		// 単位法線ベクトル
-	t_vector	center;	// planeが通る点の位置ベクトル
+	t_vector	position;	// 中心位置ベクトル
 	float		height;
 	float		radius;
 } t_cylinder;
@@ -157,7 +156,7 @@ typedef struct	s_cylinder
 typedef struct	s_corn
 {
 	t_vector	normal;		// 単位法線ベクトル
-	t_vector	center;	// planeが通る点の位置ベクトル
+	t_vector	position;	// 中心位置ベクトル
 	float		height;
 	float		radius;
 } t_corn;
@@ -165,7 +164,7 @@ typedef struct	s_corn
 typedef struct	s_hyperboloid
 {
 	t_vector	normal;		// 単位法線ベクトル
-	t_vector	center;	// planeが通る点の位置ベクトル
+	t_vector	position;	// 中心位置ベクトル
 	float		height;
 	float		radius;
 } t_hyperboloid;
@@ -173,7 +172,7 @@ typedef struct	s_hyperboloid
 typedef struct	s_paraboloid
 {
 	t_vector	normal;		// 単位法線ベクトル
-	t_vector	center;	// planeが通る点の位置ベクトル
+	t_vector	position;	// 中心位置ベクトル
 	float		height;
 	float		radius;
 } t_paraboloid;

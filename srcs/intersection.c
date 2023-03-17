@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/17 19:53:30 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 21:19:18 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,55 @@
 
 static int	intersection_with_cylinder(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
 {
-	const t_sphere	*cyl = &shape->data.cylinder;
+	const t_cylinder	*cyl = &shape->data.cylinder;
 	t_vector		pe_pc;
 	float			A, B, C, D;
 	float			t;
 	t_vector		td;
 
+	float			dx, dy, dz;
+
+	pe_pc = sub(&ray->start, &cyl->position);
+
+	dx = ray->direction.x;
+	dy = ray->direction.y;
+	dz = ray->direction.z;
+
+	A = SQR(ray->direction.x) + SQR(ray->direction.z);
+	B = 2.0f * ray->direction.x * (ray->start.x - cyl->position.x) + 2.0f * ray->direction.z * (ray->start.z - cyl->position.z);
+	C = SQR(ray->start.x - cyl->position.x) + SQR(ray->start.z - cyl->position.z) - SQR(cyl->radius);
+
+	D = SQR(B) - 4 * A * C;
+
+	t = -1.0f;
+	if (D == 0)
+		t = -B / (2 * A);
+	else if (D > 0)
+	{
+		float t1 = (float) (-B + sqrtf(D)) / (2 * A);
+		float t2 = (float) (-B - sqrtf(D)) / (2 * A);
+		if (t1 > 0) t = t1;
+		if (t2 > 0 && t2 < t) t = t2;
+	}
+
+	if (t <= 0)
+		return (0);
+
+	if (!out_intp)
+		return (0);
+
+	out_intp->distance = t;
+	td = mult(t, &ray->direction);
+	out_intp->position = add(&ray->start, &td);
+
+	if (ABS(out_intp->position.y - cyl->position.y) > 0.5f * cyl->height)
+		return (0);
+
+
+	out_intp->normal.x = 2 * (out_intp->position.x - cyl->position.x);
+	out_intp->normal.y = 0;
+	out_intp->normal.z = 2 * (out_intp->position.z - cyl->position.z);
+	normalize(&out_intp->normal);
 	return (1);
 }
 
@@ -111,10 +154,14 @@ int intersection_test(const t_shape *shape,
 					  const t_ray *ray,
 					  t_intersection_point *out_intp)
 {
-	if (shape->type == ST_SPHERE)
-		return (intersection_with_sphere(shape, ray, out_intp));
 	if (shape->type == ST_PLANE)
 		return (intersection_with_plane(shape, ray, out_intp));
+	if (shape->type == ST_SPHERE)
+		return (intersection_with_sphere(shape, ray, out_intp));
+	if (shape->type == ST_CYLINDER)
+		return (intersection_with_cylinder(shape, ray, out_intp));
+	if (shape->type == ST_CORN)
+		return (intersection_with_corn(shape, ray, out_intp));
 	return (0);
 }
 

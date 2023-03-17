@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 20:36:19 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 20:56:41 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ int	main(void)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	/* init eye & sphere */
-	eye_pos = init_vector(0, 0, -5);
+//	eye_pos = init_vector(0, 0, -5);
+	eye_pos = init_vector(0, 0, -10);
 	scene_setting(&scene);
 
 	/* draw */
