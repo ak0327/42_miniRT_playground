@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/15 19:07:06 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 13:14:31 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,8 @@ void		cross(t_vector *o, t_vector *a, t_vector *b);
 const char	*vector_str(const t_vector *vec);
 t_vector	copy_vec(const t_vector *a);
 t_vector	vec_calc(float k1, t_vector *a, float k2, t_vector *b);
+t_vector	normalize_vec(const t_vector *a);
+t_vector	normalize_vec_inv(const t_vector *a);
 
 
 /********** screen **********/
@@ -232,6 +234,7 @@ t_colorf	init_color(float r, float g, float b);
 //t_colorf	colorf_mul(t_colorf c, float k1, t_colorf c1, float k2, t_colorf c2);
 //t_colorf	colorf_mul(t_colorf *c, float k1, t_colorf *c1, float k2, t_colorf *c2);
 t_colorf	colorf_mul(const t_colorf *c, float k1, const t_colorf *c1, float k2, const t_colorf *c2);
+t_colorf	colorf_add(const t_colorf *c1, const t_colorf *c2);
 
 
 /********** mlx_keyhooks **********/
@@ -239,8 +242,8 @@ void		mlx_hooks(t_data data);
 
 
 /********** intersection **********/
-int intersection_test(const t_shape *shape, const t_ray * ray, t_intersection_point * out_intp);
-int get_nearest_shape(const t_scene *scene, const t_ray *ray, float max_dist, int exit_once_found,
+int			intersection_test(const t_shape *shape, const t_ray * ray, t_intersection_point * out_intp);
+int			get_nearest_shape(const t_scene *scene, const t_ray *ray, float max_dist, int exit_once_found,
 					  t_shape **out_shape, t_intersection_point *out_intp);
 
 /********** ray **********/
@@ -250,7 +253,7 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col);
 /********** init **********/
 void		scene_setting(t_scene *scene);
 void		init_shape(t_shape *shape, t_shape_type st, ...);
-void init_material(t_material *mat,
+void		init_material(t_material *mat,
 				   float ambR, float ambG, float ambB,
 				   float difR, float difG, float difB,
 				   float speR, float speG, float speB,
@@ -259,7 +262,7 @@ void init_material(t_material *mat,
 				   float refR, float refG, float refB,
 				   float refraction_index);
 
-void init_light(t_light *light, t_light_type lt,
+void		init_light(t_light *light, t_light_type lt,
 				float vx, float vy, float vz,
 				float illR, float illG, float illB);
 

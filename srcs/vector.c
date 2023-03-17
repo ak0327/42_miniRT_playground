@@ -23,6 +23,25 @@ t_vector	init_vector(float x, float y, float z)
 	return (vec);
 }
 
+t_vector	normalize_vec(const t_vector *a)
+{
+	t_vector	vec;
+
+	vec = copy_vec(a);
+	normalize(&vec);
+	return (vec);
+}
+
+t_vector	normalize_vec_inv(const t_vector *a)
+{
+	t_vector	vec;
+
+	vec = copy_vec(a);
+	vec = mult(-1, &vec);
+	normalize(&vec);
+	return (vec);
+}
+
 t_vector	vec_calc(float k1, t_vector *a, float k2, t_vector *b)
 {
 	t_vector	k1a;
