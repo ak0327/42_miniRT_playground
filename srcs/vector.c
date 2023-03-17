@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:48:43 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 10:28:23 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 16:36:56 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_vector	normalize_vec_inv(const t_vector *a)
 	t_vector	vec;
 
 	vec = copy_vec(a);
-	vec = mult(-1, &vec);
+	vec = mult(-1.0f, &vec);
 	normalize(&vec);
 	return (vec);
 }
@@ -107,7 +107,7 @@ t_vector	sigma_sum(int num, ...)
 	t_vector	vi;
 	int			i;
 
-	init_vector(0, 0, 0);
+	init_vector(0.0f, 0.0f, 0.0f);
 	i = 0;
 	va_start(ap, num);
 	va_arg(ap, int);

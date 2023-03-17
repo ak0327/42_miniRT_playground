@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/17 14:23:58 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 16:39:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level);
 
-static t_colorf	calc_perfect_reflect_color(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level, t_intersection_point intp, t_shape *shape)
+static t_colorf	calc_perfect_reflect_color(
+		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
+		t_intersection_point intp, t_shape *shape)
 {
 	t_colorf	color;
 	t_vector	eye_dir;
@@ -26,7 +28,7 @@ static t_colorf	calc_perfect_reflect_color(const t_scene *scene, const t_ray *ey
 	t_ray		re_ray;		// 反射ray,
 	t_colorf	re_color;	// 反射光の輝度
 
-	SET_COLOR(color, 0.0, 0.0, 0.0);
+	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
 	n_dir = normalize_vec(&intp.normal);
 	eye_dir = normalize_vec(&eye_ray->direction);
@@ -42,23 +44,24 @@ static t_colorf	calc_perfect_reflect_color(const t_scene *scene, const t_ray *ey
 		return (color);
 
 	/* 視線ベクトルの正反射ベクトルを計算 */
-	ref_dir = vec_calc(2 * vn_dot, &n_dir, -1, &inv_eye_dir);
+	ref_dir = vec_calc(2.0f * vn_dot, &n_dir, -1, &inv_eye_dir);
 	normalize(&ref_dir);
 
 	/* 正反射方向のrayを計算 */
-	re_ray.start = vec_calc(1, &intp.position, EPSILON, &ref_dir);
+	re_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &ref_dir);
 	re_ray.direction = ref_dir;
 
 	re_color = *out_col;
 	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1);
 
 	/* 完全鏡面反射を計算 */
-	color = colorf_mul(&color, 1, &shape->material.reflect_ref, 1, &re_color);
+	color = colorf_mul(&color, 1.0f, &shape->material.reflect_ref, 1.0f, &re_color);
 	return (color);
 }
 
 static t_colorf	calc_inflection_refraction_color(
-		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level, t_intersection_point intp, t_shape *shape)
+		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
+		t_intersection_point intp, t_shape *shape)
 {
 	float		eta_1;			// 物質1（屈折前）の絶対屈折率
 	float		eta_2;			// 物質2（屈折後）の絶対屈折率
@@ -80,7 +83,7 @@ static t_colorf	calc_inflection_refraction_color(
 	t_ray		re_ray;		// 反射ray,
 	t_colorf	re_color;	// 反射光の輝度
 
-	SET_COLOR(color, 0.0, 0.0, 0.0);
+	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
 	n_dir = normalize_vec(&intp.normal);
 	eye_dir = normalize_vec(&eye_ray->direction);
@@ -99,7 +102,7 @@ static t_colorf	calc_inflection_refraction_color(
 	else // 物体の裏側から入射した場合
 	{
 		/* 法線ベクトルをひっくり返し内積を計算しなおす */
-		n_dir = mult(-1, &n_dir);
+		n_dir = normalize_vec_inv(&n_dir);
 		vn_dot = dot(&inv_eye_dir, &n_dir);
 
 		/* 屈折率1,2を入れ替える */
@@ -111,37 +114,38 @@ static t_colorf	calc_inflection_refraction_color(
 
 	/* cos(theta1), cos(theta2)の計算 */
 	cos_theta1 = vn_dot;
-	cos_theta2 = eta_1 / eta_2 * sqrtf(SQR(eta_r) - (1 - SQR(cos_theta1)));
+	cos_theta2 = eta_1 / eta_2 * sqrtf(SQR(eta_r) - (1.0f - SQR(cos_theta1)));
 
 	/* 一時変数omegaの計算 */
 	omega = eta_r * cos_theta2 - cos_theta1;
 
+
+	/* 完全鏡面反射率、透過率の計算 */
+	rho_p = (eta_r * cos_theta1 - cos_theta2) / ((eta_r * cos_theta1 + cos_theta2));
+	rho_s = -1.0f * omega / (cos_theta1 + eta_r * cos_theta2);
+	cr = 0.5f * (SQR(rho_p) + SQR(rho_s));
+	ct = 1.0f - cr;
+
+
 	/* 正反射方向ベクトルの計算 */
-	re_dir = vec_calc(2 * vn_dot, &n_dir, -1, &inv_eye_dir);
+	re_dir = vec_calc(2.0f * vn_dot, &n_dir, -1.0f, &inv_eye_dir);
 	normalize(&re_dir);
+
+	/* 正反射方向のレイの始点を計算 */
+	re_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &re_dir);
+	re_ray.direction = re_dir;
+
+
+	/* 屈折方向のレイの始点を計算 */
+	fe_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &fe_dir);
+	fe_ray.direction = fe_dir;
 
 	/* 屈折方向ベクトルの計算 */
 	fe_dir = vec_calc(eta_1 / eta_2, &eye_dir, eta_1 / eta_2 * omega, &n_dir);
 	normalize(&fe_dir);
 
 
-	/* 正反射方向のレイの始点を計算 */
-	re_ray.start = vec_calc(1, &intp.position, EPSILON, &re_dir);
-	re_ray.direction = re_dir;
-
-	/* 屈折方向のレイの始点を計算 */
-	fe_ray.start = vec_calc(1, &intp.position, EPSILON, &fe_dir);
-	fe_ray.direction = fe_dir;
-
-	/* 完全鏡面反射率、透過率の計算 */
-	rho_p = (eta_r * cos_theta1 - cos_theta2) / ((eta_r * cos_theta1 + cos_theta2));
-	rho_s = -1 * omega / (cos_theta1 + eta_r * cos_theta2);
-	cr = 0.5f * (SQR(rho_p) + SQR(rho_s));
-	ct = 1 - cr;
-
 	/* colorの初期化 */
-//		re_color = init_color((float)(100/255.0), (float)(149/255.0), (float)(237/255.0));
-//		fe_color = init_color((float)(100/255.0), (float)(149/255.0), (float)(237/255.0));
 	re_color = *out_col;
 	fe_color = *out_col;
 
@@ -151,17 +155,13 @@ static t_colorf	calc_inflection_refraction_color(
 	recursive_raytrace(scene, &fe_ray, &fe_color, recursion_level + 1);
 
 	/* 完全鏡面反射、屈折光を計算 */
-	color = colorf_mul(&color, 1, &shape->material.reflect_ref, cr, &re_color);
-	color = colorf_mul(&color, 1, &shape->material.reflect_ref, ct, &fe_color);
-
-//		t_colorf	tmp;
-//		SET_COLOR(tmp, 0.0, 0.0, 0.0);
-//		tmp = colorf_mul(&tmp, cr, &re_color, ct, &fe_color);
-//		color = colorf_mul(&color, 1, &shape->material.reflect_ref, 1, &tmp);
+	color = colorf_mul(&color, 1.0f, &shape->material.reflect_ref, cr, &re_color);
+	color = colorf_mul(&color, 1.0f, &shape->material.reflect_ref, ct, &fe_color);
 	return (color);
 }
 
-static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray, t_intersection_point intp, t_shape *shape)
+static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
+								 t_intersection_point intp, t_shape *shape)
 {
 	t_colorf				color;
 
@@ -181,7 +181,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray, t_i
 	t_vector				vec_pi_to_light;
 
 
-	SET_COLOR(color, 0.0, 0.0, 0.0);
+	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
 	inv_eye_dir = normalize_vec_inv(&eye_ray->direction);
 
@@ -199,7 +199,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray, t_i
 		nl_dot = CLAMP(dot(&intp.normal, &light_dir), 0, 1);
 
 		/* shadow_rayを計算 */
-		shadow_ray.start = vec_calc(1, &intp.position, EPSILON, &light_dir);
+		shadow_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &light_dir);
 		shadow_ray.direction = light_dir;
 		if (light->type == LT_POINT)
 		{
@@ -215,20 +215,20 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray, t_i
 		if (!shadow_int_res)
 		{
 			/* 拡散反射光 diffuse を計算してcolに足し合わせる */
-			color = colorf_mul(&color, 1, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
+			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
 			/* 鏡面反射光 specular を計算してcolに足し合わせる */
 			if (nl_dot > 0)
 			{
 				/* 正反射ベクトルの計算 */
-				ref_dir = vec_calc(2 * nl_dot, &intp.normal, -1, &light_dir);
+				ref_dir = vec_calc(2.0f * nl_dot, &intp.normal, -1.0f, &light_dir);
 				normalize(&ref_dir);
 
 				vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
 				vr_dot_pow = powf(vr_dot, shape->material.shininess);
 
 				/* 鏡面反射光の計算 */
-				color = colorf_mul(&color, 1, &shape->material.specular_ref, vr_dot_pow, &light->illuminance);
+				color = colorf_mul(&color, 1.0f, &shape->material.specular_ref, vr_dot_pow, &light->illuminance);
 			}
 		}
 		i++;
@@ -256,8 +256,8 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	/* 視線方向に物体があった場合 */
 
 	/* 環境光Laを計算しcolに入れる */
-	SET_COLOR(color, 0.0, 0.0, 0.0);
-	color = colorf_mul(&color, 1, &scene->ambient_illuminance, 1, &shape->material.ambient_ref);
+	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
+	color = colorf_mul(&color, 1.0f, &scene->ambient_illuminance, 1.0f, &shape->material.ambient_ref);
 
 	/* 物体が完全鏡面反射の場合 */
 	if (shape->material.type == MT_PERFECT_REF)

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/17 13:14:31 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 19:53:22 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,12 @@
 /********** enum **********/
 typedef enum	e_shape_type
 {
-	ST_SPHERE,
 	ST_PLANE,
+	ST_SPHERE,
+	ST_CYLINDER,
+	ST_CORN,
+	ST_HYPERBOLOID,
+	ST_PARABOLOID,
 } t_shape_type;
 
 typedef enum	e_light_type
@@ -142,11 +146,47 @@ typedef struct	s_plane
 	t_vector	position;	// planeが通る点の位置ベクトル
 } t_plane;
 
+typedef struct	s_cylinder
+{
+	t_vector	normal;		// 単位法線ベクトル
+	t_vector	center;	// planeが通る点の位置ベクトル
+	float		height;
+	float		radius;
+} t_cylinder;
+
+typedef struct	s_corn
+{
+	t_vector	normal;		// 単位法線ベクトル
+	t_vector	center;	// planeが通る点の位置ベクトル
+	float		height;
+	float		radius;
+} t_corn;
+
+typedef struct	s_hyperboloid
+{
+	t_vector	normal;		// 単位法線ベクトル
+	t_vector	center;	// planeが通る点の位置ベクトル
+	float		height;
+	float		radius;
+} t_hyperboloid;
+
+typedef struct	s_paraboloid
+{
+	t_vector	normal;		// 単位法線ベクトル
+	t_vector	center;	// planeが通る点の位置ベクトル
+	float		height;
+	float		radius;
+} t_paraboloid;
+
 
 typedef union	u_shape_data // sphere or plane
 {
-	t_sphere	sphere;
-	t_plane		plane;
+	t_plane			plane;
+	t_sphere		sphere;
+	t_cylinder		cylinder;
+	t_corn			corn;
+	t_hyperboloid	hyperboloid;
+	t_paraboloid	paraboloid;
 } t_shape_data;
 
 typedef struct	s_material

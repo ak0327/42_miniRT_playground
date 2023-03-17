@@ -6,11 +6,40 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 12:40:04 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 19:53:30 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+static int	intersection_with_cylinder(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+{
+	const t_sphere	*cyl = &shape->data.cylinder;
+	t_vector		pe_pc;
+	float			A, B, C, D;
+	float			t;
+	t_vector		td;
+
+	return (1);
+}
+
+static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+{
+
+	return (1);
+}
+
+static int	intersection_with_hyperboloid(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+{
+
+	return (1);
+}
+
+static int	intersection_with_paraboloid(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+{
+
+	return (1);
+}
 
 static int	intersection_with_sphere(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
 {
@@ -109,7 +138,7 @@ int get_nearest_shape(const t_scene *scene,
 	{
 		res = intersection_test(&scene->shapes[i], ray, &intp);
 
-		if ( res && intp.distance < nearest_intp.distance )
+		if (res && intp.distance < nearest_intp.distance)
 		{
 			nearest_shape = &scene->shapes[i];
 			nearest_intp = intp;
