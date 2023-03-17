@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/17 14:20:22 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/17 14:23:58 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,6 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	t_colorf				perfect_reflect_color;
 	t_colorf				inflection_refraction_color;
 	t_colorf				light_color;
-
 
 	if (recursion_level > MAX_RECURSION)
 		return (0);
