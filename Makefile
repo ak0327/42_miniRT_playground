@@ -20,8 +20,16 @@ VPATH			= $(SRC_DIR) $(INCLUDE_DIR)
 SRC_DIR			= srcs
 SRC				= main.c \
 				  vector.c \
+				  screen.c \
 				  sphere.c \
+				  color.c \
+				  reflection.c \
+				  intersection.c \
 				  mlx_keyhooks.c \
+				  ray.c \
+				  scene.c \
+				  init.c \
+
 
 SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))
 
@@ -31,7 +39,7 @@ SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))
 OBJ_DIR			= objs
 OBJ				= $(SRC:%.c=%.o)
 OBJS			= $(addprefix $(OBJ_DIR)/, $(OBJ))
-DEPS			= $(OBJS:%.o=%:d)
+DEPS			= $(SRCS:%.c=%:d)
 
 
 #####################################################
@@ -65,16 +73,17 @@ endif
 
 #####################################################
 # RULES
-$(NAME) : $(OBJS)
+all				: $(NAME)
+
+$(NAME)			: $(OBJS)
 	@make -C $(LIBFT_DIR)
 	@make -C $(MLX_DIR)
-	$(CC) $(CFLAGS) $^ $(LFLAGS) $(LIBS) -o $@
+	$(CC) $(CFLAGS) $(LFLAGS) $(LIBS) $^ -o $@
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $$(dirname $@)
 	$(CC) $(INCLUDES) -c $< -o $@
 
-all				: $(NAME)
 
 clean			:
 	rm -rf $(OBJ_DIR)
@@ -82,7 +91,7 @@ clean			:
 	@#make clean -C $(MLX_DIR)
 
 fclean			: clean
-	rm -rf $(NAME)
+	rm -f $(NAME)
 	@make fclean -C $(LIBFT_DIR)
 	@#make fclean -C $(MLX_DIR)
 
@@ -99,3 +108,4 @@ norm			:
 
 .PHONY			: all clean fclean re test norm bonus
 
+-include	$(DEPS)

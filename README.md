@@ -1,4 +1,3 @@
 # minirt_rev0
 
-
-prototype
+Prototype of mini Ray-Tracing project in 42 Tokyo.
