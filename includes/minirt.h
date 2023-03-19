@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/17 20:48:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/19 10:13:58 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,8 @@ t_vector	sigma_sum(int num, ...);
 float		squared_norm(const t_vector *vec);
 float		norm(const t_vector *vec);
 float		normalize(t_vector *vec);
-void		cross(t_vector *o, t_vector *a, t_vector *b);
+t_vector	cross(t_vector *a, t_vector *b);
+//void		cross(t_vector *o, t_vector *a, t_vector *b);
 const char	*vector_str(const t_vector *vec);
 t_vector	copy_vec(const t_vector *a);
 t_vector	vec_calc(float k1, t_vector *a, float k2, t_vector *b);

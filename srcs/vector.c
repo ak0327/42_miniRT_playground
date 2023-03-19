@@ -151,11 +151,14 @@ float	normalize(t_vector *vec)
 	return (vnorm);
 }
 
-void	cross(t_vector *o, t_vector *a, t_vector *b)
+t_vector	cross(t_vector *a, t_vector *b)
 {
-	o->x = a->y * b->z - a->z * b->y;
-	o->y = a->z * b->x - a->x * b->z;
-	o->z = a->x * b->y - a->y * b->x;
+	t_vector	o;
+
+	o.x = a->y * b->z - a->z * b->y;
+	o.y = a->z * b->x - a->x * b->z;
+	o.z = a->x * b->y - a->y * b->x;
+	return (o);
 }
 
 // TODO : delete

@@ -24,13 +24,13 @@ static int	intersection_with_cylinder(const t_shape *shape, const t_ray *ray, t_
 
 	pe_pc = sub(&ray->start, &cyl->position);
 
-	dx = ray->direction.x;
-	dy = ray->direction.y;
-	dz = ray->direction.z;
-
 	A = SQR(ray->direction.x) + SQR(ray->direction.z);
 	B = 2.0f * ray->direction.x * (ray->start.x - cyl->position.x) + 2.0f * ray->direction.z * (ray->start.z - cyl->position.z);
 	C = SQR(ray->start.x - cyl->position.x) + SQR(ray->start.z - cyl->position.z) - SQR(cyl->radius);
+
+	t_vector d_x_n = cross(&ray->direction, &cyl->normal);
+	A = SQR(norm);
+
 
 	D = SQR(B) - 4 * A * C;
 
