@@ -28,6 +28,7 @@ SRC				= main.c \
 				  mlx_keyhooks.c \
 				  ray.c \
 				  scene.c \
+				  camera.c \
 				  init.c \
 
 
