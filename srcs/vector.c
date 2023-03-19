@@ -151,7 +151,7 @@ float	normalize(t_vector *vec)
 	return (vnorm);
 }
 
-t_vector	cross(t_vector *a, t_vector *b)
+t_vector	cross(const t_vector *a, const t_vector *b)
 {
 	t_vector	o;
 
