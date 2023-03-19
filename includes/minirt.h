@@ -282,7 +282,7 @@ void		mlx_hooks(t_data data);
 
 
 /********** intersection **********/
-int			intersection_test(const t_shape *shape, const t_ray * ray, t_intersection_point * out_intp);
+int			intersection_test(t_shape *shape, const t_ray * ray, t_intersection_point * out_intp);
 int			get_nearest_shape(const t_scene *scene, const t_ray *ray, float max_dist, int exit_once_found,
 					  t_shape **out_shape, t_intersection_point *out_intp);
 

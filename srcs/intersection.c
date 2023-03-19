@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/19 11:34:58 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/19 12:20:00 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
 {
-	t_cylinder		*cyl;
-	t_vector		pe_pc;
-	float			A, B, C, D;
-	float			t;
-	t_vector		td;
+	t_cylinder	*cyl;
+	float		A, B, C, D;
+	float		t1, t2;
+	t_vector	pe_pc, pipc_n;
+	t_vector	d_x_n;
+	t_vector	pepc_x_n;
+	t_vector	t1d, t2d;
+	t_vector	pos1, pos2;
+	t_vector	p1_pc, p2_pc;
 
 	cyl = &shape->data.cylinder;
 	cyl->normal = normalize_vec(&cyl->normal);
 	pe_pc = sub(&ray->start, &cyl->position);
 
-//	A = SQR(ray->direction.x) + SQR(ray->direction.z);
-//	B = 2.0f * ray->direction.x * (ray->start.x - cyl->position.x) + 2.0f * ray->direction.z * (ray->start.z - cyl->position.z);
-//	C = SQR(ray->start.x - cyl->position.x) + SQR(ray->start.z - cyl->position.z) - SQR(cyl->radius);
-
-	t_vector d_x_n = cross(&ray->direction, &cyl->normal);
-	t_vector pepc_x_n = cross(&pe_pc, &cyl->normal);
+	d_x_n = cross(&ray->direction, &cyl->normal);
+	pepc_x_n = cross(&pe_pc, &cyl->normal);
 	A = SQR(norm(&d_x_n));
 	B = 2 * dot(&d_x_n, &pepc_x_n);
 	C = SQR(norm(&pepc_x_n)) - SQR(cyl->radius);
@@ -41,8 +41,8 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	if (D < 0)
 		return (0);
 
-	float t1 = (float) (-B - sqrtf(D)) / (2 * A);
-	float t2 = (float) (-B + sqrtf(D)) / (2 * A);
+	t1 = (float) (-B - sqrtf(D)) / (2 * A);
+	t2 = (float) (-B + sqrtf(D)) / (2 * A);
 
 	if (t1 <= 0 && t2 <= 0)
 		return (0);
@@ -50,16 +50,9 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	if (!out_intp)
 		return (0);
 
-	t_vector	t1d = mult(t1, &ray->direction);
-	t_vector	t2d = mult(t2, &ray->direction);
-
-	t_vector	pos1 = add(&ray->start, &t1d);
-	t_vector	pos2 = add(&ray->start, &t2d);
-
-	t_vector	p1_pc = sub(&pos1, &cyl->position);
-	t_vector	p2_pc = sub(&pos2, &cyl->position);
-
-	t_vector	pipc_n;
+	t1d = mult(t1, &ray->direction);
+	pos1 = add(&ray->start, &t1d);
+	p1_pc = sub(&pos1, &cyl->position);
 
 	if (0 <= dot(&p1_pc, &cyl->normal) && dot(&p1_pc, &cyl->normal) <= cyl->height)
 	{
@@ -70,6 +63,10 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 		normalize(&out_intp->normal);
 		return (1);
 	}
+
+	t2d = mult(t2, &ray->direction);
+	pos2 = add(&ray->start, &t2d);
+	p2_pc = sub(&pos2, &cyl->position);
 	if (0 <= dot(&p2_pc, &cyl->normal) && dot(&p2_pc, &cyl->normal) <= cyl->height)
 	{
 		out_intp->distance = t2;
@@ -166,7 +163,7 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray, t_int
 	return (1);
 }
 
-int intersection_test(const t_shape *shape,
+int intersection_test(t_shape *shape,
 					  const t_ray *ray,
 					  t_intersection_point *out_intp)
 {
