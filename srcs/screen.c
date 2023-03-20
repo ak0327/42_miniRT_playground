@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:30:56 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 13:21:17 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/20 13:48:17 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,23 @@ t_vector	camera(int x, int y, t_vector lookfrom, t_vector lookat, float fov)
 
 t_vector	ray_dir(int x, int y, t_camera camera)
 {
+	/* camera */
 	const float	window_w = 512.0f;
 	const float	window_h = 512.0f;
-	float		theta_radians = camera.fov_deg / (float)M_PI / 180.0f;
+	float		theta_radians = camera.fov_deg * (float)M_PI / 180.0f;
+	float		distance_camera_to_screen = window_w / 2.0f / tanf(theta_radians / 2);
+	normalize(&camera.dir);
+	t_vector	dir_camera_to_sc_center = mult(distance_camera_to_screen, &camera.dir);
 
-	t_vector	ray_dir;
-	float		d_camera_to_screen = window_w / 2.0f / tanf(theta_radians / 2);
-	t_vector	d_camera_to_sc_center = mult(d_camera_to_screen, &camera.dir);
-
-	camera.u.x = d_camera_to_sc_center.z / sqrtf(SQR(d_camera_to_sc_center.x) + SQR(d_camera_to_sc_center.z));
+	camera.u.x = dir_camera_to_sc_center.z / sqrtf(SQR(dir_camera_to_sc_center.x) + SQR(dir_camera_to_sc_center.z));
 	camera.u.y = 0;
-	camera.u.z = -1 * d_camera_to_sc_center.x / sqrtf(SQR(d_camera_to_sc_center.x) + SQR(d_camera_to_sc_center.z));
+	camera.u.z = -1 * dir_camera_to_sc_center.x / sqrtf(SQR(dir_camera_to_sc_center.x) + SQR(dir_camera_to_sc_center.z));
 	normalize(&camera.u);
 
-	camera.v = mult(-1, &d_camera_to_sc_center);
+	camera.v = mult(-1, &dir_camera_to_sc_center);
 	camera.v = cross(&camera.u, &camera.v);
+//	camera.v = cross(&camera.u, &dir_camera_to_sc_center);
+
 	normalize(&camera.v);
 
 	if (camera.dir.x == 0 && camera.dir.y != 0 && camera.dir.z == 0)
@@ -88,15 +90,16 @@ t_vector	ray_dir(int x, int y, t_camera camera)
 		}
 	}
 
+	/* screen */
 	float sw = (float)x - (window_w - 1.0f) / 2.0f;
-	float sy = (window_h - 1.0f) / 2.0f - (float)y;
+	float sh = (window_h - 1.0f) / 2.0f - (float)y;
 
 	t_vector	xx = mult(sw, &camera.u);
-	t_vector	yy = mult(sy, &camera.v);
+	t_vector	yy = mult(sh, &camera.v);
 
 //	t_vector	P_sc = vec_calc((float)x - (window_w - 1.0f) / 2.0f, &u, (window_h - 1.0f) / 2.0f - (float)y, &v);
-	ray_dir = add(&xx, &yy);
-	ray_dir = add(&camera.center, &ray_dir);
+	t_vector ray_dir = add(&xx, &yy);
+	ray_dir = add(&dir_camera_to_sc_center, &ray_dir);
 //	ray_dir = add(&camera_dir, &P_sc);
 	normalize(&ray_dir);
 	return (ray_dir);

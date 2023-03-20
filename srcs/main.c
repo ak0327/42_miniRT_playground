@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 13:33:44 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/20 13:52:42 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,10 @@ int	main(void)
 	/* init eye & sphere */
 	scene_setting(&scene);
 
-	SET_VECTOR(camera.center, 0.0f, 0.0f, -5.0f)
+	SET_VECTOR(camera.center, 0.0f, 0.0f, 0.0f)
 	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 	normalize(&camera.dir);
-	camera.fov_deg = 70;
+	camera.fov_deg = 30;
 
 	/* draw */
 	y = 0;
