@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 13:52:42 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/20 14:03:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,9 @@ int	main(void)
 		return (EXIT_FAILURE);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
-	/* init eye & sphere */
+	/* init scene & camera */
 	scene_setting(&scene);
-
-	SET_VECTOR(camera.center, 0.0f, 0.0f, 0.0f)
-	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
-	normalize(&camera.dir);
-	camera.fov_deg = 30;
+	camera = init_camera();
 
 	/* draw */
 	y = 0;

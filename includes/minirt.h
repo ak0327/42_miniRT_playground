@@ -41,6 +41,7 @@
 # define ASPECT_WIDTH	1
 # define ASPECT_HEIGHT	1
 # define WINDOW_WIDTH	512
+# define WINDOW_HEIGHT	512
 # define WINDOW_TITLE	"miniRT"
 # define SCREEN_WIDTH	2
 # define SCREEN_HEIGHT	2
@@ -241,6 +242,7 @@ typedef struct	s_camera
 	t_vector	dir;
 	t_vector	u;
 	t_vector	v;
+	t_vector	dir_camera_to_sc_center;
 	float		fov_deg;
 } t_camera;
 
@@ -269,6 +271,11 @@ t_vector	normalize_vec_inv(const t_vector *a);
 t_vector	tr_screen_dimension_local_to_world(int x, int y);
 t_vector	get_camera_to_screen_vec(int x, int y, t_vector camera_center, t_vector camera_dir, float fov);
 t_vector	ray_dir(int x, int y, t_camera camera);
+
+
+/********** camera **********/
+t_camera	init_camera(void);
+
 
 /********** sphere **********/
 t_sphere	init_sphere(float x, float y, float z, float r);
