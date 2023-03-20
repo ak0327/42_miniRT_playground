@@ -14,7 +14,7 @@
 
 int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level);
 
-static t_colorf	calc_perfect_reflect_color(
+static t_colorf	calc_perfect_reflection_color(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
 		t_intersection_point intp, t_shape *shape)
 {
@@ -260,9 +260,12 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	color = colorf_mul(&color, 1.0f, &scene->ambient_illuminance, 1.0f, &shape->material.ambient_ref);
 
 	/* 物体が完全鏡面反射の場合 */
-	if (shape->material.type == MT_PERFECT_REF)
+	if (shape->material.type == MT_PERFECT_REFLECTION)
 	{
-		perfect_reflect_color = calc_perfect_reflect_color(scene, eye_ray, out_col, recursion_level, intp, shape);
+		perfect_reflect_color = calc_perfect_reflection_color(scene, eye_ray,
+															  out_col,
+															  recursion_level,
+															  intp, shape);
 		color = colorf_add(&color, &perfect_reflect_color);
 	}
 	else if (shape->material.type == MT_REFRACTION)

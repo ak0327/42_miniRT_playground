@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/19 12:20:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/20 17:22:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,49 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 		return (1);
 	}
 	return (0);
+}
+
+static float	sign(t_vector p1, t_vector p2, t_vector p3)
+{
+	return ((p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y));
+}
+
+static int	intersection_with_triangle(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+{
+	const t_triangle	*tri = &shape->data.triangle;
+	float 				dn_dot = dot(&ray->direction, &tri->normal);
+	t_vector			s_p;
+	float				t;
+	t_vector			td;
+
+	bool				b1, b2, b3;
+	t_vector			pt = add(&ray->start, &ray->direction);
+
+	if (dn_dot == 0)
+		return (0);
+
+	s_p = sub(&ray->start, &tri->position);
+	t = -dot(&s_p, &tri->normal) / dn_dot;
+
+	if (t <= 0)
+		return (0);
+
+	b1 = sign(pt, tri->p1, tri->p2) < 0.0f;
+	b2 = sign(pt, tri->p2, tri->p3) < 0.0f;
+	b3 = sign(pt, tri->p3, tri->p1) < 0.0f;
+
+	if (!((b1 == b2) && (b2 == b3)))
+		return (0);
+
+	if (!out_intp)
+		return (0);
+
+	out_intp->distance = t;
+	td = mult(t, &ray->direction);
+	out_intp->position = add(&ray->start, &td);
+	out_intp->normal = tri->normal;
+
+	return (1);
 }
 
 static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
@@ -175,6 +218,8 @@ int intersection_test(t_shape *shape,
 		return (intersection_with_cylinder(shape, ray, out_intp));
 	if (shape->type == ST_CORN)
 		return (intersection_with_corn(shape, ray, out_intp));
+	if (shape->type == ST_TRIANGLE)
+		return (intersection_with_triangle(shape, ray, out_intp));
 	return (0);
 }
 

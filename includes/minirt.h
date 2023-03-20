@@ -75,6 +75,7 @@ typedef enum	e_shape_type
 	ST_CORN,
 	ST_HYPERBOLOID,
 	ST_PARABOLOID,
+	ST_TRIANGLE,
 } t_shape_type;
 
 typedef enum	e_light_type
@@ -86,7 +87,7 @@ typedef enum	e_light_type
 typedef enum	e_material_type
 {
 	MT_DEFAULT,		// 通常の質感
-	MT_PERFECT_REF,	// 完全鏡面反射
+	MT_PERFECT_REFLECTION,	// 完全鏡面反射
 	MT_REFRACTION,	// 完全鏡面反射・屈折
 } t_material_type;
 
@@ -162,6 +163,15 @@ typedef struct	s_corn
 	float		radius;
 } t_corn;
 
+typedef struct	s_triangle
+{
+	t_vector	normal;		// 単位法線ベクトル
+	t_vector	position;	// 中心位置ベクトル
+	t_vector	p1;
+	t_vector	p2;
+	t_vector	p3;
+} t_triangle;
+
 typedef struct	s_hyperboloid
 {
 	t_vector	normal;		// 単位法線ベクトル
@@ -187,6 +197,8 @@ typedef union	u_shape_data // sphere or plane
 	t_corn			corn;
 	t_hyperboloid	hyperboloid;
 	t_paraboloid	paraboloid;
+	t_triangle		triangle;
+
 } t_shape_data;
 
 typedef struct	s_material
