@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/19 10:14:30 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/20 13:09:01 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,16 @@ typedef struct	s_intersection_point
 	t_vector	normal;		// 交点における物体表面の法線ベクトル
 } t_intersection_point;
 
+typedef struct	s_camera
+{
+	t_vector	center;
+	t_vector	dir;
+	t_vector	u;
+	t_vector	v;
+	float		fov_deg;
+} t_camera;
+
+
 
 /********** vector **********/
 t_vector	init_vector(float x, float y, float z);
@@ -257,7 +267,8 @@ t_vector	normalize_vec_inv(const t_vector *a);
 
 /********** screen **********/
 t_vector	tr_screen_dimension_local_to_world(int x, int y);
-
+t_vector	get_camera_to_screen_vec(int x, int y, t_vector camera_center, t_vector camera_dir, float fov);
+t_vector	ray_dir(int x, int y, t_camera camera);
 
 /********** sphere **********/
 t_sphere	init_sphere(float x, float y, float z, float r);

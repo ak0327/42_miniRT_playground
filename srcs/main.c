@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/17 20:56:41 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/20 13:33:44 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,6 @@ void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere, t_light light)
 int	main(void)
 {
 	t_data		data;
-
-	t_vector	eye_pos;
-	t_vector	screen_dim;
-
 	t_ray		eye_ray;
 	t_colorf	color;
 
@@ -112,14 +108,19 @@ int	main(void)
 	int			x, y;
 	int			r, g, b;
 
+	t_camera	camera;
+
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	/* init eye & sphere */
-//	eye_pos = init_vector(0, 0, -5);
-	eye_pos = init_vector(0, 0, -10);
 	scene_setting(&scene);
+
+	SET_VECTOR(camera.center, 0.0f, 0.0f, -5.0f)
+	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
+	normalize(&camera.dir);
+	camera.fov_deg = 70;
 
 	/* draw */
 	y = 0;
@@ -128,11 +129,10 @@ int	main(void)
 		x = 0;
 		while (x < data.win_width)
 		{
-			screen_dim = tr_screen_dimension_local_to_world(x, y);
 			color = init_color((float)(100/255.0), (float)(149/255.0), (float)(237/255.0));
 
-			eye_ray.start = eye_pos;
-			eye_ray.direction = sub(&screen_dim, &eye_pos);
+			eye_ray.start = camera.center;
+			eye_ray.direction = ray_dir(x, y, camera);
 
 			raytrace(&scene, &eye_ray, &color);
 
