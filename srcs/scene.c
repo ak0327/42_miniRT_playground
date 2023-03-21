@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/21 17:32:28 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/21 18:33:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ void scene_setting(t_scene *scene)
 				  0.0f);
 
 
-	init_shape(&scene->shapes[3], ST_CYLINDER,
+	init_shape(&scene->shapes[3], ST_CORN,
 			   0.0f, 1.0f, 0.0f,	/* 法線ベクトル */
 			   2.0f, 0.0f, 10.0f,	/* 中心位置 */
 			   1.0f,				/* 高さ */
