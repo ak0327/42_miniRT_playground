@@ -30,6 +30,7 @@ SRC				= main.c \
 				  scene.c \
 				  camera.c \
 				  init.c \
+				  checker.c \
 
 
 SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 13:09:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/21 16:10:01 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 # include "vector.h"
 
 /********** return value **********/
-
+# define COLOR_A	0
+# define COLOR_B	1
 
 /********** color **********/
 # define RED			0xFF0000
@@ -139,6 +140,7 @@ typedef struct	s_plane
 {
 	t_vector	normal;		// 単位法線ベクトル
 	t_vector	position;	// planeが通る点の位置ベクトル
+	float		checker_width;
 } t_plane;
 
 typedef struct	s_sphere
@@ -205,6 +207,8 @@ typedef struct	s_material
 {
 	t_colorf		ambient_ref;	// ka 環境光反射率RGB
 	t_colorf		diffuse_ref;	// kd 拡散反射率RGB
+	t_colorf		diffuse_ref_checker;	// kd 拡散反射率RGB
+
 	t_colorf		specular_ref;	// ks 鏡面反射率RGB
 	float			shininess;		// alpha 光沢度
 
@@ -320,12 +324,18 @@ int			get_nearest_shape(const t_scene *scene, const t_ray *ray, float max_dist, 
 int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col);
 
 
+/********** checker **********/
+t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
+							  t_intersection_point intp, t_shape *shape);
+
+
 /********** init **********/
 void		scene_setting(t_scene *scene);
 void		init_shape(t_shape *shape, t_shape_type st, ...);
 void		init_material(t_material *mat,
 				   float ambR, float ambG, float ambB,
 				   float difR, float difG, float difB,
+				   float difR_c, float difG_c, float difB_c,
 				   float speR, float speG, float speB,
 				   float shns,
 				   t_material_type type,

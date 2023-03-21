@@ -47,6 +47,8 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 		plane->normal.x = va_arg(args, double);
 		plane->normal.y = va_arg(args, double);
 		plane->normal.z = va_arg(args, double);
+
+		plane->checker_width = va_arg(args, double);
 	}
 	else if (st == ST_CYLINDER)
 	{
@@ -114,6 +116,7 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 void init_material(t_material *mat,
 				   float ambR, float ambG, float ambB,
 				   float difR, float difG, float difB,
+				   float difR_c, float difG_c, float difB_c,
 				   float speR, float speG, float speB,
 				   float shns,
 				   t_material_type type,
@@ -122,6 +125,7 @@ void init_material(t_material *mat,
 {
 	SET_COLOR(mat->ambient_ref,  ambR, ambG, ambB);
 	SET_COLOR(mat->diffuse_ref,  difR, difG, difB);
+	SET_COLOR(mat->diffuse_ref_checker,  difR_c, difG_c, difB_c);
 	SET_COLOR(mat->specular_ref, speR, speG, speB);
 	mat->shininess = shns;
 	mat->type = type;

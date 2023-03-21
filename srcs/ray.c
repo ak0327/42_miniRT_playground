@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/17 16:39:06 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/21 16:23:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 	{
 		/* 入射ベクトル light_dir を計算する（点光源の場合と平行光源の場合） */
 		light = &scene->lights[i];
+		i++;
+
 		if (light->type == LT_POINT)	// 点光源
 			light_dir = sub(&light->vector, &intp.position);
 		else
@@ -211,27 +213,38 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 		shadow_int_res = get_nearest_shape(scene, &shadow_ray, dist, 1, NULL, NULL);
 
+		/* shadow_rayが物体に遮られた場合 */
+		if (shadow_int_res)
+			continue ;
+
 		/* shadow_rayが物体に遮られなかった場合 */
-		if (!shadow_int_res)
+		/* 拡散反射光 diffuse を計算してcolに足し合わせる */
+
+		// checker とりあえずplateのみ
+		if (shape->type == ST_PLANE && shape->data.plane.checker_width)
 		{
-			/* 拡散反射光 diffuse を計算してcolに足し合わせる */
+			// checkerの場合
+			t_colorf	checker_diffuse_ref;
+			checker_diffuse_ref = get_checker_color(scene, eye_ray, intp, shape);
+			color = colorf_mul(&color, 1.0f, &checker_diffuse_ref, nl_dot,&light->illuminance);
+
+		}
+		else
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
-			/* 鏡面反射光 specular を計算してcolに足し合わせる */
-			if (nl_dot > 0)
-			{
-				/* 正反射ベクトルの計算 */
-				ref_dir = vec_calc(2.0f * nl_dot, &intp.normal, -1.0f, &light_dir);
-				normalize(&ref_dir);
+		/* 鏡面反射光 specular を計算してcolに足し合わせる */
+		if (nl_dot > 0)
+		{
+			/* 正反射ベクトルの計算 */
+			ref_dir = vec_calc(2.0f * nl_dot, &intp.normal, -1.0f, &light_dir);
+			normalize(&ref_dir);
 
-				vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
-				vr_dot_pow = powf(vr_dot, shape->material.shininess);
+			vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
+			vr_dot_pow = powf(vr_dot, shape->material.shininess);
 
-				/* 鏡面反射光の計算 */
-				color = colorf_mul(&color, 1.0f, &shape->material.specular_ref, vr_dot_pow, &light->illuminance);
-			}
+			/* 鏡面反射光の計算 */
+			color = colorf_mul(&color, 1.0f, &shape->material.specular_ref, vr_dot_pow, &light->illuminance);
 		}
-		i++;
 	}
 	return (color);
 }

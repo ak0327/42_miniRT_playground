@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/21 12:41:28 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/21 16:11:24 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,8 @@ void scene_setting(t_scene *scene)
 	/* 平面の場合：第二引数にST_PLANEを渡す．この場合，追加で6つの実数を渡す． */
 	init_shape(&scene->shapes[0], ST_PLANE,
 		   0.0, -1.0, 0.0,		/* 平面が通る点の位置 */
-		   0.0, 1.0, 0.0);		/* 平面の法線ベクトル */
+		   0.0, 1.0, 0.0,		/* 平面の法線ベクトル */
+		   5.0);				/*  チェッカーの幅 */
 
 //	init_material(&scene->shapes[0].material,
 //				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
@@ -149,12 +150,23 @@ void scene_setting(t_scene *scene)
 
 	init_material(&scene->shapes[0].material,
 				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
-				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
-				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
-				  8.0f,							/* 光沢度 */
-				  MT_PERFECT_REFLECTION, 					/* マテリアルタイプ */
-				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-				  0.0f);					/* 絶対屈折率 */
+				  0.69f, 0.69f, 0.69f,		/* 拡散反射係数(RGB) */
+				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
+				  8.0f,								/* 光沢度 */
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f,
+				  0.0f);
+
+//	init_material(&scene->shapes[0].material,
+//				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
+//				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
+//				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+//				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+//				  8.0f,							/* 光沢度 */
+//				  MT_PERFECT_REFLECTION, 					/* マテリアルタイプ */
+//				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
+//				  0.0f);					/* 絶対屈折率 */
 
 //	/* 三角形 */
 //	init_shape(&scene->shapes[1], ST_TRIANGLE,
@@ -212,7 +224,8 @@ void scene_setting(t_scene *scene)
 
 	init_material(&scene->shapes[1].material,
 				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
-				  0.69f, 0.00f, 0.00f,		/* 拡散反射係数(RGB) */
+				  0.70f, 0.00f, 0.00f,		/* 拡散反射係数(RGB) */
+				  0.70f, 0.00f, 0.00f,		/* 拡散反射係数(RGB) */
 				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
 				  8.0f,
 				  MT_DEFAULT,
@@ -229,6 +242,7 @@ void scene_setting(t_scene *scene)
 	init_material(&scene->shapes[2].material,
 				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
 				  0.0f, 0.0f, 1.0f,		/* 拡散反射係数(RGB) */
+				  0.70f, 0.00f, 0.00f,		/* 拡散反射係数(RGB) */
 				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
 				  8.0f,
 				  MT_DEFAULT,
