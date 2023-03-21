@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:30:56 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 16:38:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/21 17:10:10 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,3 @@ t_vector	ray_dir(int x, int y, t_camera camera)
 	normalize(&ray_dir);
 	return (ray_dir);
 }
-

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 17:41:30 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/21 17:32:53 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_camera	init_camera(void)
 	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 
 	normalize(&camera.dir);
-	camera.fov_deg = 30;
+	camera.fov_deg = 35;
 
 	theta_radians  = camera.fov_deg * (float)M_PI / 180.0f;
 	distance_camera_to_screen = WINDOW_WIDTH / 2.0f / tanf(theta_radians / 2);

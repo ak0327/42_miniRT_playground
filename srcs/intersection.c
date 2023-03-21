@@ -124,6 +124,9 @@ static int	intersection_with_triangle(const t_shape *shape, const t_ray *ray, t_
 
 static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
 {
+	const t_corn	*corn = &shape->data.corn;
+
+
 
 	return (1);
 }
