@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/03/21 16:31:49 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/21 17:01:33 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 		SET_VECTOR(v, 0.0f, 0.0f, unit);
 	}
 
+	// ここからどうする...??
 
 }
