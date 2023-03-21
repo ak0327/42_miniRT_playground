@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 14:03:06 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/21 12:38:44 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,28 @@ void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere, t_light light)
 	}
 }
 
+int	convert_color_float_to_hex(t_colorf color)
+{
+	int	hex_color;
+	int	r, g, b;
+
+	r = (int)(255 * CLAMP(color.r, 0, 1));
+	g = (int)(255 * CLAMP(color.g, 0, 1));
+	b = (int)(255 * CLAMP(color.b, 0, 1));
+	hex_color = r << 16 | g << 8 | b;
+	return (hex_color);
+}
+
 int	main(void)
 {
 	t_data		data;
 	t_ray		eye_ray;
 	t_colorf	color;
+	int			hex_color;
 
 	t_scene		scene;
 
 	int			x, y;
-	int			r, g, b;
 
 	t_camera	camera;
 
@@ -131,12 +143,8 @@ int	main(void)
 			eye_ray.direction = ray_dir(x, y, camera);
 
 			raytrace(&scene, &eye_ray, &color);
-
-			r = (int)(255 * CLAMP(color.r, 0, 1));
-			g = (int)(255 * CLAMP(color.g, 0, 1));
-			b = (int)(255 * CLAMP(color.b, 0, 1));
-
-			my_mlx_pixel_put(&data, x, y, r << 16 | g << 8 | b);
+			hex_color = convert_color_float_to_hex(color);
+			my_mlx_pixel_put(&data, x, y, hex_color);
 
 			x++;
 		}
