@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 17:41:30 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/21 12:31:10 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ t_camera	init_camera(void)
 	camera.u.z = -1 * camera.dir_camera_to_sc_center.x / sqrtf(SQR(camera.dir_camera_to_sc_center.x) + SQR(camera.dir_camera_to_sc_center.z));
 	normalize(&camera.u);
 
-	camera.v = mult(-1, &camera.dir_camera_to_sc_center);
-	camera.v = cross(&camera.u, &camera.v);
+	camera.v = cross(&camera.dir_camera_to_sc_center, &camera.u);
 	normalize(&camera.v);
 
 	if (camera.dir.x == 0 && camera.dir.y != 0 && camera.dir.z == 0)
