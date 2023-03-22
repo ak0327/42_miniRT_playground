@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 14:03:06 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/22 15:34:15 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,15 @@ void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere, t_light light)
 		y++;
 	}
 }
+
+/*
+
+   +y
+   |  +z
+   | /
+   |/_____ +x
+
+ */
 
 int	main(void)
 {
