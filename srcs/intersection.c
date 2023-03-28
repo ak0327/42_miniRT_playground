@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/28 17:48:18 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/28 19:48:32 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,60 +125,83 @@ static int	intersection_with_triangle(const t_shape *shape, const t_ray *ray, t_
 static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
 {
 	const t_corn	*corn = &shape->data.corn;
-	t_vector		d = ray->direction;
-	t_vector		s = ray->start;
+	t_vector		di = ray->direction;
+	t_vector		pe = ray->start;
 	float			A, B, C, D;
 	float			r = corn->radius;
 	float			h = corn->height;
-	t_vector		c = corn->position;
+	t_vector		pc = corn->position;
+	t_vector		n = corn->normal;
 
 	t_vector		int_p;
-	float			t;
 
-	t_vector		cross_d_n = cross(&d, &corn->normal);
-	t_vector		cross_pc_n = cross(&corn->position, &corn->normal);
-	t_vector		cross_pe_n = cross(&ray->start, &corn->normal);
-	float			dot_d_n = dot(&d, &corn->normal);
-	float			dot_pe_n = dot(&ray->start, &corn->normal);
-	t_vector		tmp1 = sub(&ray->start, &corn->position);
-	t_vector		tmp2 = cross(&tmp1, &corn->normal);
-	float			tmp3 = dot(&tmp1, &corn->normal);
+	t_vector		cross_d_n = cross(&di, &n);
+	t_vector		cross_pc_n = cross(&pc, &n);
+	t_vector		cross_pe_n = cross(&pe, &n);
+	float			dot_d_n = dot(&di, &n);
+	float			dot_pe_n = dot(&pe, &n);
+	t_vector		sub_pe_pc = sub(&pe, &pc);
+	t_vector		cross_pepc_n = cross(&sub_pe_pc, &n);
+	float			dot_pepc_n = dot(&sub_pe_pc, &n);
 
 	A = norm(&cross_d_n) - SQR(r) / SQR(h) * SQR(dot_d_n);
-	B = 2 * dot(&cross_d_n, &tmp2) - 2 * SQR(r) / SQR(h) * dot_d_n * tmp3;
-	C = norm(&tmp2) - SQR(r) / SQR(h) * SQR(tmp3);
+	B = 2 * dot(&cross_d_n, &cross_pepc_n) - 2 * SQR(r) / SQR(h) * dot_d_n * dot_pepc_n;
+	C = norm(&cross_pepc_n) - SQR(r) / SQR(h) * SQR(dot_pepc_n);
 
 	D = SQR(B) - 4 * A * C;
 
-	t = -1.0f;
-
 	if (A == 0)
 		return (0);
-
-	if (D == 0)
-		t = -B / (2 * A);
-	else if (D > 0)
-	{
-		float t1 = (float) (-B + sqrtf(D)) / (2 * A);
-		float t2 = (float) (-B - sqrtf(D)) / (2 * A);
-		if (t1 > 0) t = t1;
-		if (t2 > 0 && t2 < t) t = t2;
-	}
-
-	if (t <= 0)
+	if (D < 0)
 		return (0);
+
+	float			t1, t2;
+	t_vector		t1d, t2d;
+	t_vector		pos1, pos2, p1_pc, p2_pc, pipc_n;
+
+	t1 = (float) (-B - sqrtf(D)) / (2 * A);
+	t2 = (float) (-B + sqrtf(D)) / (2 * A);
+
+	if (t1 <= 0 && t2 <= 0)
+		return (0);
+
 	if (!out_intp)
 		return (0);
-	int_p = vec_calc(1.0f, &s, t, &d);
-	if (!(0 <= int_p.y - c.y && int_p.y - c.y <= h))
-		return (0);
 
-	out_intp->position = int_p;
-	out_intp->normal.x = 2 * (int_p.x - c.x);
-	out_intp->normal.y = 2 * (r / h) * (int_p.y - h - c.y);
-	out_intp->normal.z = 2 * (int_p.z - c.z);
-	normalize(&out_intp->normal);
-	return (1);
+	t1d = mult(t1, &di);
+	pos1 = add(&pe, &t1d);
+	p1_pc = sub(&pos1, &pc);
+
+	if (0 <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= h)
+	{
+
+		pipc_n = mult(dot(&p1_pc, &n), &n);
+		out_intp->normal = sub(&p1_pc, &pipc_n);
+		normalize(&out_intp->normal);
+
+		out_intp->distance = t1;
+		out_intp->position = pos1;
+		out_intp->normal.x = 2 * (int_p.x - pc.x);
+		out_intp->normal.y = 2 * (r / h) * (int_p.y - h - pc.y);
+		out_intp->normal.z = 2 * (int_p.z - pc.z);
+		normalize(&out_intp->normal);
+		return (1);
+	}
+
+	t2d = mult(t2, &di);
+	pos2 = add(&ray->start, &t2d);
+	p2_pc = sub(&pos2, &pc);
+	if (0 <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= h)
+	{
+		out_intp->distance = t2;
+		out_intp->position = pos2;
+		out_intp->normal.x = 2 * (int_p.x - pc.x);
+		out_intp->normal.y = 2 * (r / h) * (int_p.y - h - pc.y);
+		out_intp->normal.z = 2 * (int_p.z - pc.z);
+		normalize(&out_intp->normal);
+		return (1);
+	}
+	return (0);
 }
 
 /* 上向きはOK */
