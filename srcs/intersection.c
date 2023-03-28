@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/29 00:23:00 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/29 00:29:47 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t1 = (float) (-B - sqrtf(D)) / (2 * A);
 	t2 = (float) (-B + sqrtf(D)) / (2 * A);
 
-	if (t1 <= 0 && t2 <= 0)
-		return (0);
-
-	if (!out_intp)
+	if ((t1 <= 0 && t2 <= 0) || !out_intp)
 		return (0);
 
 	t1d = mult(t1, &ray->direction);
@@ -162,8 +159,9 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 
 	t1d = mult(t1, &di);
 	pos1 = add(&pe, &t1d);
+	t_vector	p1_pc = sub(&pos1, &pc);
 
-	if (0 <= pos1.y - pc.y && pos1.y - pc.y <= h)
+	if (0 <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= h)
 	{
 		out_intp->distance = t1;
 		out_intp->position = pos1;
@@ -176,7 +174,8 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 
 	t2d = mult(t2, &di);
 	pos2 = add(&pe, &t2d);
-	if (0 <= pos2.y - pc.y && pos2.y - pc.y <= h)
+	t_vector	p2_pc = sub(&pos2, &pc);
+	if (0 <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= h)
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;
