@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/21 19:43:14 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/28 17:22:01 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,22 +131,27 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	float			r = corn->radius;
 	float			h = corn->height;
 	t_vector		c = corn->position;
-	float			ax, ay, az;
 
 	t_vector		int_p;
 	float			t;
 
-	ax = s.x - c.x;
-	ay = s.y - h - c.y;
-	az = s.z - c.z;
+	t_vector		cross_d_n = cross(&d, &corn->normal);
+	t_vector		cross_pc_n = cross(&corn->position, &corn->normal);
+	t_vector		cross_pe_n = cross(&ray->start, &corn->normal);
+	float			dot_d_n = dot(&d, &corn->normal);
+	float			dot_pe_n = dot(&ray->start, &corn->normal);
+	t_vector		tmp = sub(&cross_pe_n, &cross_pc_n);
 
-	A = SQR(d.x) - SQR(r / h) * SQR(d.y) + SQR(d.z);
-	B = 2 * d.x * ax - 2 * SQR(r / h) * d.y * ay + 2 * d.z * az;
-	C = SQR(ax) - SQR(r/ h) * SQR(ay) + SQR(az);
+	A = norm(&cross_d_n) - SQR(r) / SQR(h) * SQR(dot_d_n);
+	B = 2 * dot(&cross_d_n, &tmp) - 2 * dot_pe_n * dot_d_n * SQR(r) / SQR(h);
+	C = norm(&tmp) - SQR(r) / SQR(h) * SQR(dot_pe_n);
 
 	D = SQR(B) - 4 * A * C;
 
 	t = -1.0f;
+
+	if (A == 0)
+		return (0);
 
 	if (D == 0)
 		t = -B / (2 * A);
