@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/28 17:22:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/28 17:48:18 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,13 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	t_vector		cross_pe_n = cross(&ray->start, &corn->normal);
 	float			dot_d_n = dot(&d, &corn->normal);
 	float			dot_pe_n = dot(&ray->start, &corn->normal);
-	t_vector		tmp = sub(&cross_pe_n, &cross_pc_n);
+	t_vector		tmp1 = sub(&ray->start, &corn->position);
+	t_vector		tmp2 = cross(&tmp1, &corn->normal);
+	float			tmp3 = dot(&tmp1, &corn->normal);
 
 	A = norm(&cross_d_n) - SQR(r) / SQR(h) * SQR(dot_d_n);
-	B = 2 * dot(&cross_d_n, &tmp) - 2 * dot_pe_n * dot_d_n * SQR(r) / SQR(h);
-	C = norm(&tmp) - SQR(r) / SQR(h) * SQR(dot_pe_n);
+	B = 2 * dot(&cross_d_n, &tmp2) - 2 * SQR(r) / SQR(h) * dot_d_n * tmp3;
+	C = norm(&tmp2) - SQR(r) / SQR(h) * SQR(tmp3);
 
 	D = SQR(B) - 4 * A * C;
 
@@ -168,7 +170,7 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	if (!out_intp)
 		return (0);
 	int_p = vec_calc(1.0f, &s, t, &d);
-	if (!(0 <= int_p.y - c.y && int_p.y - c.y <= h)) // ここを2/hにすれば円錐台になる
+	if (!(0 <= int_p.y - c.y && int_p.y - c.y <= h))
 		return (0);
 
 	out_intp->position = int_p;
