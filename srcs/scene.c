@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/29 20:04:56 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/29 21:09:02 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,7 +275,7 @@ void scene_setting(t_scene *scene)
 
 
 	init_shape(&scene->shapes[6], ST_SPHERE,
-			   1.0f, -0.5f, 3.0f,	/* 球の中心位置 */
+			   1.0f, -0.5f, 5.0f,	/* 球の中心位置 */
 			   0.5f);    			/* 球の半径 */
 
 	init_material(&scene->shapes[6].material,
@@ -434,10 +434,6 @@ void scene_setting(t_scene *scene)
 				  MT_DEFAULT,
 				  0.0f, 0.0f, 0.0f,
 				  0.0f);
-
-
-
-
 
 
 
