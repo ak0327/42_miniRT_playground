@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/29 19:37:15 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/29 20:45:04 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,37 +164,35 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	t1d = mult(t1, &di);
 	pos1 = add(&pe, &t1d);
 	t_vector	p1_pc = sub(&pos1, &pc);
-	t_vector	r1 = cross(&p1_pc, &n);
+	t_vector	h1 = mult(dot(&p1_pc, &n), &n);
 
-	if (-h <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= 0)
+	if (0 <= norm(&h1) && norm(&h1) <= h)
 	{
 		out_intp->distance = t1;
 		out_intp->position = pos1;
 
-//		out_intp->normal = mult(cosf(alpha), &r1);
-		out_intp->normal.x = 2 * (pos1.x - pc.x);
-		out_intp->normal.y = -2 * SQR(r / h) * (pos1.y - pc.y - h);
-		out_intp->normal.z = 2 * (pos1.z - pc.z);
+		t_vector	l1 = sub(&p1_pc, &h1);
+		normalize(&l1);
+		out_intp->normal = vec_calc(cosf(alpha), &l1, sinf(alpha), &n);
+
 		normalize(&out_intp->normal);
-//		normalize_vec_inv(&out_intp->normal);
 		return (1);
 	}
 
 	t2d = mult(t2, &di);
 	pos2 = add(&pe, &t2d);
 	t_vector	p2_pc = sub(&pos2, &pc);
-	t_vector	r2 = cross(&p2_pc, &n);
+	t_vector	h2 = mult(dot(&p2_pc, &n), &n);
 
-	if (-h <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= 0)
+	if (0 <= norm(&h2) && norm(&h2) <= h)
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;
 
-//		out_intp->normal = mult(cosf(alpha), &r2);
-		out_intp->normal.x = 2 * (pos2.x - pc.x);
-		out_intp->normal.y = -2 * SQR(r / h) * (pos2.y - pc.y - h);
-		out_intp->normal.z = 2 * (pos2.z - pc.z);
-//		normalize(&out_intp->normal);
+		t_vector	l2 = sub(&p2_pc, &h2);
+		normalize(&l2);
+		out_intp->normal = vec_calc(cosf(alpha), &l2, sinf(alpha), &n);
+
 		normalize_vec_inv(&out_intp->normal);
 		return (1);
 	}
