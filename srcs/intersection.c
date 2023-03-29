@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/29 00:29:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/29 19:37:15 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,8 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	t_vector		t1d, t2d;
 	t_vector		pos1, pos2;
 
+	float			alpha;
+
 	A = squared_norm(&cross_d_n) - SQR(r / h) * SQR(dot_d_n);
 	B = 2 * dot(&cross_d_n, &cross_pepc_n) - 2 * SQR(r / h) * dot_d_n * dot_pepc_n;
 	C = squared_norm(&cross_pepc_n) - SQR(r / h) * SQR(dot_pepc_n);
@@ -157,32 +159,43 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	if ((t1 <= 0 && t2 <= 0) || !out_intp)
 		return (0);
 
+	alpha = atanf(r / h);
+
 	t1d = mult(t1, &di);
 	pos1 = add(&pe, &t1d);
 	t_vector	p1_pc = sub(&pos1, &pc);
+	t_vector	r1 = cross(&p1_pc, &n);
 
-	if (0 <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= h)
+	if (-h <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= 0)
 	{
 		out_intp->distance = t1;
 		out_intp->position = pos1;
+
+//		out_intp->normal = mult(cosf(alpha), &r1);
 		out_intp->normal.x = 2 * (pos1.x - pc.x);
 		out_intp->normal.y = -2 * SQR(r / h) * (pos1.y - pc.y - h);
 		out_intp->normal.z = 2 * (pos1.z - pc.z);
 		normalize(&out_intp->normal);
+//		normalize_vec_inv(&out_intp->normal);
 		return (1);
 	}
 
 	t2d = mult(t2, &di);
 	pos2 = add(&pe, &t2d);
 	t_vector	p2_pc = sub(&pos2, &pc);
-	if (0 <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= h)
+	t_vector	r2 = cross(&p2_pc, &n);
+
+	if (-h <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= 0)
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;
+
+//		out_intp->normal = mult(cosf(alpha), &r2);
 		out_intp->normal.x = 2 * (pos2.x - pc.x);
 		out_intp->normal.y = -2 * SQR(r / h) * (pos2.y - pc.y - h);
 		out_intp->normal.z = 2 * (pos2.z - pc.z);
-		normalize(&out_intp->normal);
+//		normalize(&out_intp->normal);
+		normalize_vec_inv(&out_intp->normal);
 		return (1);
 	}
 	return (0);
@@ -331,8 +344,8 @@ int intersection_test(t_shape *shape,
 		return (intersection_with_cylinder(shape, ray, out_intp));
 	if (shape->type == ST_CORN)
 		return (intersection_with_corn(shape, ray, out_intp));
-	if (shape->type == ST_TRIANGLE)
-		return (intersection_with_triangle(shape, ray, out_intp));
+//	if (shape->type == ST_TRIANGLE)
+//		return (intersection_with_triangle(shape, ray, out_intp));
 	return (0);
 }
 
