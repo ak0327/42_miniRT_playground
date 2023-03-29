@@ -81,31 +81,6 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 		corn->height = va_arg(args, double);
 		corn->radius = va_arg(args, double);
 	}
-	else if (st == ST_TRIANGLE)
-	{
-		t_triangle *triangle = &shape->data.triangle;
-
-		triangle->normal.x = va_arg(args, double);
-		triangle->normal.y = va_arg(args, double);
-		triangle->normal.z = va_arg(args, double);
-		normalize(&triangle->normal);
-
-		triangle->position.x = va_arg(args, double);
-		triangle->position.y = va_arg(args, double);
-		triangle->position.z = va_arg(args, double);
-
-		triangle->p1.x = va_arg(args, double);
-		triangle->p1.y = va_arg(args, double);
-		triangle->p1.z = va_arg(args, double);
-
-		triangle->p2.x = va_arg(args, double);
-		triangle->p2.y = va_arg(args, double);
-		triangle->p2.z = va_arg(args, double);
-
-		triangle->p3.x = va_arg(args, double);
-		triangle->p3.y = va_arg(args, double);
-		triangle->p3.z = va_arg(args, double);
-	}
 	else
 	{
 		fprintf(stderr, "init_shape : unknown shape type.\n");

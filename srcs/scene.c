@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/29 21:09:02 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/29 21:20:33 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,17 +296,12 @@ void scene_setting(t_scene *scene)
 				  0.0f);					/* 絶対屈折率 */
 
 
+
 	init_shape(&scene->shapes[0], ST_CORN,
 			   0.0f, 1.0f, 0.0f,	/* 法線ベクトル */
 			   -0.75f, 0.5f, 5.0f,	/* 中心位置 */
 			   1.5f,				/* 高さ */
 			   0.75f);				/* 半径 */
-
-//	init_shape(&scene->shapes[0], ST_CORN,
-//			   0.0f, 1.0f, 0.0f,	/* 法線ベクトル */
-//			   -0.75f, 0.5f, 5.0f,	/* 中心位置 */
-//			   1.5f,				/* 高さ */
-//			   0.75f);				/* 半径 */
 
 	init_material(&scene->shapes[0].material,
 				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
@@ -317,12 +312,13 @@ void scene_setting(t_scene *scene)
 				  1.0f, 1.0f, 1.0f,
 				  0.0f);
 //				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
-//				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
-//				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
-//				  0.0f,							/* 光沢度 */
-//				  MT_DEFAULT, 					/* マテリアルタイプ */
+//				  0.3f, 0.3f, 0.3f,		/* 拡散反射係数(RGB) */
+//				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+//				  8.0f,							/* 光沢度 */
+//				  MT_PERFECT_REFLECTION, 					/* マテリアルタイプ */
 //				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
 //				  0.0f);					/* 絶対屈折率 */
+
 
 
 //	init_shape(&scene->shapes[0], ST_CYLINDER,
