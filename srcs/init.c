@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 19:46:48 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 17:16:41 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/29 21:45:50 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 		plane->normal.x = va_arg(args, double);
 		plane->normal.y = va_arg(args, double);
 		plane->normal.z = va_arg(args, double);
-
-		plane->checker_width = va_arg(args, double);
+		normalize(&plane->normal);
 	}
 	else if (st == ST_CYLINDER)
 	{
@@ -57,6 +56,7 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 		cylinder->normal.x = va_arg(args, double);
 		cylinder->normal.y = va_arg(args, double);
 		cylinder->normal.z = va_arg(args, double);
+		normalize(&cylinder->normal);
 
 		cylinder->position.x = va_arg(args, double);
 		cylinder->position.y = va_arg(args, double);
@@ -67,42 +67,19 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 	}
 	else if (st == ST_CORN)
 	{
-		t_cylinder *cylinder = &shape->data.cylinder;
+		t_corn *corn = &shape->data.corn;
 
-		cylinder->normal.x = va_arg(args, double);
-		cylinder->normal.y = va_arg(args, double);
-		cylinder->normal.z = va_arg(args, double);
+		corn->normal.x = va_arg(args, double);
+		corn->normal.y = va_arg(args, double);
+		corn->normal.z = va_arg(args, double);
+		normalize(&corn->normal);
 
-		cylinder->position.x = va_arg(args, double);
-		cylinder->position.y = va_arg(args, double);
-		cylinder->position.z = va_arg(args, double);
+		corn->position.x = va_arg(args, double);
+		corn->position.y = va_arg(args, double);
+		corn->position.z = va_arg(args, double);
 
-		cylinder->height = va_arg(args, double);
-		cylinder->radius = va_arg(args, double);
-	}
-	else if (st == ST_TRIANGLE)
-	{
-		t_triangle *triangle = &shape->data.triangle;
-
-		triangle->normal.x = va_arg(args, double);
-		triangle->normal.y = va_arg(args, double);
-		triangle->normal.z = va_arg(args, double);
-
-		triangle->position.x = va_arg(args, double);
-		triangle->position.y = va_arg(args, double);
-		triangle->position.z = va_arg(args, double);
-
-		triangle->p1.x = va_arg(args, double);
-		triangle->p1.y = va_arg(args, double);
-		triangle->p1.z = va_arg(args, double);
-
-		triangle->p2.x = va_arg(args, double);
-		triangle->p2.y = va_arg(args, double);
-		triangle->p2.z = va_arg(args, double);
-
-		triangle->p3.x = va_arg(args, double);
-		triangle->p3.y = va_arg(args, double);
-		triangle->p3.z = va_arg(args, double);
+		corn->height = va_arg(args, double);
+		corn->radius = va_arg(args, double);
 	}
 	else
 	{

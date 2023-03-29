@@ -165,15 +165,6 @@ typedef struct	s_corn
 	float		radius;
 } t_corn;
 
-typedef struct	s_triangle
-{
-	t_vector	normal;		// 単位法線ベクトル
-	t_vector	position;	// 中心位置ベクトル
-	t_vector	p1;
-	t_vector	p2;
-	t_vector	p3;
-} t_triangle;
-
 typedef struct	s_hyperboloid
 {
 	t_vector	normal;		// 単位法線ベクトル

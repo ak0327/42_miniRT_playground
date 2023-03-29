@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/20 17:22:06 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/29 21:29:36 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t1 = (float) (-B - sqrtf(D)) / (2 * A);
 	t2 = (float) (-B + sqrtf(D)) / (2 * A);
 
-	if (t1 <= 0 && t2 <= 0)
-		return (0);
-
-	if (!out_intp)
+	if ((t1 <= 0 && t2 <= 0) || !out_intp)
 		return (0);
 
 	t1d = mult(t1, &ray->direction);
@@ -84,49 +81,134 @@ static float	sign(t_vector p1, t_vector p2, t_vector p3)
 	return ((p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y));
 }
 
-static int	intersection_with_triangle(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
-{
-	const t_triangle	*tri = &shape->data.triangle;
-	float 				dn_dot = dot(&ray->direction, &tri->normal);
-	t_vector			s_p;
-	float				t;
-	t_vector			td;
-
-	bool				b1, b2, b3;
-	t_vector			pt = add(&ray->start, &ray->direction);
-
-	if (dn_dot == 0)
-		return (0);
-
-	s_p = sub(&ray->start, &tri->position);
-	t = -dot(&s_p, &tri->normal) / dn_dot;
-
-	if (t <= 0)
-		return (0);
-
-	b1 = sign(pt, tri->p1, tri->p2) < 0.0f;
-	b2 = sign(pt, tri->p2, tri->p3) < 0.0f;
-	b3 = sign(pt, tri->p3, tri->p1) < 0.0f;
-
-	if (!((b1 == b2) && (b2 == b3)))
-		return (0);
-
-	if (!out_intp)
-		return (0);
-
-	out_intp->distance = t;
-	td = mult(t, &ray->direction);
-	out_intp->position = add(&ray->start, &td);
-	out_intp->normal = tri->normal;
-
-	return (1);
-}
-
 static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
 {
+	const t_corn	*corn = &shape->data.corn;
+	t_vector		di = ray->direction;
+	t_vector		pe = ray->start;
+	float			A, B, C, D;
+	float			r = corn->radius;
+	float			h = corn->height;
+	t_vector		pc = corn->position;
+	t_vector		n = corn->normal;
 
-	return (1);
+	t_vector		cross_d_n = cross(&di, &n);
+	float			dot_d_n = dot(&di, &n);
+	t_vector		sub_pe_pc = sub(&pe, &pc);
+	t_vector		cross_pepc_n = cross(&sub_pe_pc, &n);
+	float			dot_pepc_n = dot(&sub_pe_pc, &n);
+
+	float			t1, t2;
+	t_vector		t1d, t2d;
+	t_vector		pos1, pos2;
+
+	float			alpha;
+
+	A = squared_norm(&cross_d_n) - SQR(r / h) * SQR(dot_d_n);
+	B = 2 * dot(&cross_d_n, &cross_pepc_n) - 2 * SQR(r / h) * dot_d_n * dot_pepc_n;
+	C = squared_norm(&cross_pepc_n) - SQR(r / h) * SQR(dot_pepc_n);
+
+	D = SQR(B) - 4 * A * C;
+
+	if (A == 0)
+		return (0);
+	if (D < 0)
+		return (0);
+
+	t1 = (float) (-B - sqrtf(D)) / (2 * A);
+	t2 = (float) (-B + sqrtf(D)) / (2 * A);
+
+	if ((t1 <= 0 && t2 <= 0) || !out_intp)
+		return (0);
+
+	alpha = atanf(r / h);
+
+	t1d = mult(t1, &di);
+	pos1 = add(&pe, &t1d);
+	t_vector	p1_pc = sub(&pos1, &pc);
+	t_vector	h1 = mult(dot(&p1_pc, &n), &n);
+	t_vector	l1 = sub(&p1_pc, &h1);
+	normalize(&l1);
+
+	if (-h <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= 0)
+	{
+		out_intp->distance = t1;
+		out_intp->position = pos1;
+		out_intp->normal = vec_calc(cosf(alpha), &l1, sinf(alpha), &n);
+		normalize(&out_intp->normal);
+		return (1);
+	}
+
+	t2d = mult(t2, &di);
+	pos2 = add(&pe, &t2d);
+	t_vector	p2_pc = sub(&pos2, &pc);
+	t_vector	h2 = mult(dot(&p2_pc, &n), &n);
+	t_vector	l2 = sub(&p2_pc, &h2);
+	normalize(&l2);
+
+	if (-h <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= 0)
+	{
+		out_intp->distance = t2;
+		out_intp->position = pos2;
+		out_intp->normal = vec_calc(cosf(alpha), &l2, sinf(alpha), &n);
+		normalize_vec_inv(&out_intp->normal);
+		return (1);
+	}
+	return (0);
 }
+
+/* 上向きはOK */
+//static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+//{
+//	const t_corn	*corn = &shape->data.corn;
+//	t_vector		d = ray->direction;
+//	t_vector		s = ray->start;
+//	float			A, B, C, D;
+//	float			r = corn->radius;
+//	float			h = corn->height;
+//	t_vector		c = corn->position;
+//	float			ax, ay, az;
+//
+//	t_vector		int_p;
+//	float			t;
+//
+//	ax = s.x - c.x;
+//	ay = s.y - h - c.y;
+//	az = s.z - c.z;
+//
+//	A = SQR(d.x) - SQR(r / h) * SQR(d.y) + SQR(d.z);
+//	B = 2 * d.x * ax - 2 * SQR(r / h) * d.y * ay + 2 * d.z * az;
+//	C = SQR(ax) - SQR(r/ h) * SQR(ay) + SQR(az);
+//
+//	D = SQR(B) - 4 * A * C;
+//
+//	t = -1.0f;
+//
+//	if (D == 0)
+//		t = -B / (2 * A);
+//	else if (D > 0)
+//	{
+//		float t1 = (float) (-B + sqrtf(D)) / (2 * A);
+//		float t2 = (float) (-B - sqrtf(D)) / (2 * A);
+//		if (t1 > 0) t = t1;
+//		if (t2 > 0 && t2 < t) t = t2;
+//	}
+//
+//	if (t <= 0)
+//		return (0);
+//	if (!out_intp)
+//		return (0);
+//	int_p = vec_calc(1.0f, &s, t, &d);
+//	if (!(0 <= int_p.y - c.y && int_p.y - c.y <= h)) // ここを2/hにすれば円錐台になる
+//		return (0);
+//
+//	out_intp->position = int_p;
+//	out_intp->normal.x = 2 * (int_p.x - c.x);
+//	out_intp->normal.y = -2 * (r / h) * (int_p.y - h - c.y);
+//	out_intp->normal.z = 2 * (int_p.z - c.z);
+//	normalize(&out_intp->normal);
+//	return (1);
+//}
 
 static int	intersection_with_hyperboloid(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
 {
@@ -218,8 +300,6 @@ int intersection_test(t_shape *shape,
 		return (intersection_with_cylinder(shape, ray, out_intp));
 	if (shape->type == ST_CORN)
 		return (intersection_with_corn(shape, ray, out_intp));
-	if (shape->type == ST_TRIANGLE)
-		return (intersection_with_triangle(shape, ray, out_intp));
 	return (0);
 }
 
