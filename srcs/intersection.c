@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/29 21:29:36 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/29 22:25:51 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,59 +156,6 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	}
 	return (0);
 }
-
-/* 上向きはOK */
-//static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
-//{
-//	const t_corn	*corn = &shape->data.corn;
-//	t_vector		d = ray->direction;
-//	t_vector		s = ray->start;
-//	float			A, B, C, D;
-//	float			r = corn->radius;
-//	float			h = corn->height;
-//	t_vector		c = corn->position;
-//	float			ax, ay, az;
-//
-//	t_vector		int_p;
-//	float			t;
-//
-//	ax = s.x - c.x;
-//	ay = s.y - h - c.y;
-//	az = s.z - c.z;
-//
-//	A = SQR(d.x) - SQR(r / h) * SQR(d.y) + SQR(d.z);
-//	B = 2 * d.x * ax - 2 * SQR(r / h) * d.y * ay + 2 * d.z * az;
-//	C = SQR(ax) - SQR(r/ h) * SQR(ay) + SQR(az);
-//
-//	D = SQR(B) - 4 * A * C;
-//
-//	t = -1.0f;
-//
-//	if (D == 0)
-//		t = -B / (2 * A);
-//	else if (D > 0)
-//	{
-//		float t1 = (float) (-B + sqrtf(D)) / (2 * A);
-//		float t2 = (float) (-B - sqrtf(D)) / (2 * A);
-//		if (t1 > 0) t = t1;
-//		if (t2 > 0 && t2 < t) t = t2;
-//	}
-//
-//	if (t <= 0)
-//		return (0);
-//	if (!out_intp)
-//		return (0);
-//	int_p = vec_calc(1.0f, &s, t, &d);
-//	if (!(0 <= int_p.y - c.y && int_p.y - c.y <= h)) // ここを2/hにすれば円錐台になる
-//		return (0);
-//
-//	out_intp->position = int_p;
-//	out_intp->normal.x = 2 * (int_p.x - c.x);
-//	out_intp->normal.y = -2 * (r / h) * (int_p.y - h - c.y);
-//	out_intp->normal.z = 2 * (int_p.z - c.z);
-//	normalize(&out_intp->normal);
-//	return (1);
-//}
 
 static int	intersection_with_hyperboloid(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
 {

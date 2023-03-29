@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/21 16:23:43 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/29 23:25:36 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,14 +220,26 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		/* shadow_rayが物体に遮られなかった場合 */
 		/* 拡散反射光 diffuse を計算してcolに足し合わせる */
 
-		// checker とりあえずplateのみ
-		if (shape->type == ST_PLANE && shape->data.plane.checker_width)
+		// checker とりあえずplateのみハードコーディング
+		if (shape->type == ST_PLANE)
 		{
-			// checkerの場合
-			t_colorf	checker_diffuse_ref;
-			checker_diffuse_ref = get_checker_color(scene, eye_ray, intp, shape);
-			color = colorf_mul(&color, 1.0f, &checker_diffuse_ref, nl_dot,&light->illuminance);
+			t_colorf	checker_col;
+			int	condition_a = (int)(floorf(intp.position.x) + floorf(intp.position.y) + floorf(intp.position.z)) % 2;
 
+			if (condition_a)
+			{
+				SET_COLOR(checker_col, 255.0f, 0.0f, 0.0f);
+				color = colorf_add(&color, &checker_col);
+			}
+			else
+			{
+				SET_COLOR(checker_col, 0.0f, 255.0f, 0.0f);
+				color = colorf_add(&color, &checker_col);
+//				color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
+			}
+
+//			checker_diffuse_ref = get_checker_color(scene, eye_ray, intp, shape);
+//			color = colorf_mul(&color, 1.0f, &checker_diffuse_ref, nl_dot,&light->illuminance);
 		}
 		else
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
@@ -264,17 +276,20 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		return (0);
 
 	intersect_result = get_nearest_shape(scene, eye_ray, FLT_MAX, 0, &shape, &intp);
+
+	/* 視線方向に物体がなかった場合 */
 	if (!intersect_result)
 		return (0);
+
 	/* 視線方向に物体があった場合 */
 
 	/* 環境光Laを計算しcolに入れる */
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 	color = colorf_mul(&color, 1.0f, &scene->ambient_illuminance, 1.0f, &shape->material.ambient_ref);
 
-	/* 物体が完全鏡面反射の場合 */
 	if (shape->material.type == MT_PERFECT_REFLECTION)
 	{
+		/* 完全鏡面反射 */
 		perfect_reflect_color = calc_perfect_reflection_color(scene, eye_ray,
 															  out_col,
 															  recursion_level,
@@ -283,6 +298,7 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	}
 	else if (shape->material.type == MT_REFRACTION)
 	{
+		/* 屈折 */
 		inflection_refraction_color = calc_inflection_refraction_color(scene, eye_ray, out_col, recursion_level, intp, shape);
 		color = colorf_add(&color, &inflection_refraction_color);
 	}

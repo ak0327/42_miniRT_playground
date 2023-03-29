@@ -190,7 +190,6 @@ typedef union	u_shape_data // sphere or plane
 	t_corn			corn;
 	t_hyperboloid	hyperboloid;
 	t_paraboloid	paraboloid;
-	t_triangle		triangle;
 
 } t_shape_data;
 
@@ -326,7 +325,6 @@ void		init_shape(t_shape *shape, t_shape_type st, ...);
 void		init_material(t_material *mat,
 				   float ambR, float ambG, float ambB,
 				   float difR, float difG, float difB,
-				   float difR_c, float difG_c, float difB_c,
 				   float speR, float speG, float speB,
 				   float shns,
 				   t_material_type type,

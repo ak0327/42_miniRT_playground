@@ -296,7 +296,6 @@ void scene_setting(t_scene *scene)
 				  0.0f);					/* 絶対屈折率 */
 
 
-
 	init_shape(&scene->shapes[0], ST_CORN,
 			   0.0f, 1.0f, 0.0f,	/* 法線ベクトル */
 			   -0.75f, 0.5f, 5.0f,	/* 中心位置 */
