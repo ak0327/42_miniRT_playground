@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/30 13:30:03 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/30 22:09:51 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,21 +241,32 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //				SET_COLOR(checker_col, 0.0f, 0.2f, 0.2f);
 //				color = colorf_add(&color, &checker_col);
 //			}
-			float	theta, phi;
-			theta = atanf(intp.position.z / intp.position.x);
-			phi = acosf(intp.position.y / shape->data.sphere.radius);
 
-			float	raw_u = theta / (2.0f * (float)M_PI);
-			int		u, v;
-			u = 1 - (int)(raw_u + 0.5);
-			v = 1 - (int)(phi / M_PI);
+			float	theta, phi, radius;
+			theta = atan2f(intp.position.x, intp.position.z);
+			radius = norm(&intp.position);
+			phi = acosf(intp.position.y / radius);
+//			phi = acosf(intp.position.y / shape->data.sphere.radius);
 
-			condition_checker = (u + v) % 2;
+			float	u = theta / (2.0f * (float)M_PI);
+			float	v;
+//			u = 1.0f - raw_u + 0.5f;
+			v = 1.0f - phi / (float)M_PI;
+			condition_checker = (int)(u + v) % 2;
+//			printf("(u,v)=(%f,%f), (u+v)%%2:%d\n", u, v, condition_checker);
 			if (condition_checker)
 			{
-				SET_COLOR(checker_col, 0.0f, 0.2f, 0.2f);
+				SET_COLOR(checker_col, 0.3f, 0.3f, 0.3f);
 				color = colorf_add(&color, &checker_col);
 			}
+
+			/* ring pattern */
+//			condition_checker = (int)(floorf(sqrtf(SQR(intp.position.x) + SQR(intp.position.z)))) % 2;
+//			if (condition_checker)
+//			{
+//				SET_COLOR(checker_col, 0.3f, 0.3f, 0.3f);
+//				color = colorf_add(&color, &checker_col);
+//			}
 		}
 
 		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
