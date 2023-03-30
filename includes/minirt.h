@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/21 16:10:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/30 12:40:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@
 #define SET_VECTOR(vec, x_, y_, z_) { vec.x = x_; vec.y = y_; vec.z = z_; }
 
 
-#define EPSILON (1.0f/512.0f)
-#define MAX_RECURSION 8
+#define EPSILON			(1.0f / 512.0f)
+#define MAX_RECURSION	8
 
 /********** enum **********/
 typedef enum	e_shape_type

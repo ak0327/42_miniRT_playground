@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/29 23:25:36 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/30 13:30:03 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,23 +163,25 @@ static t_colorf	calc_inflection_refraction_color(
 static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 								 t_intersection_point intp, t_shape *shape)
 {
-	t_colorf				color;
+	t_colorf	color;
+	t_colorf	checker_col;
 
-	size_t					i;
-	t_light					*light;
-	t_vector				light_dir; 	// 入射ベクトル
-	float					nl_dot;		// 法線ベクトルと入射ベクトルの内積
-	t_vector				ref_dir;
-	float					vr_dot;
-	float					vr_dot_pow;
+	size_t		i;
+	t_light		*light;
+	t_vector	light_dir; 	// 入射ベクトル
+	float		nl_dot;		// 法線ベクトルと入射ベクトルの内積
+	t_vector	ref_dir;
+	float		vr_dot;
+	float		vr_dot_pow;
 
-	t_vector				inv_eye_dir;
+	t_vector	inv_eye_dir;
 
-	int 					shadow_int_res;
-	t_ray					shadow_ray;
-	float					dist;
-	t_vector				vec_pi_to_light;
+	int 		shadow_int_res;
+	t_ray		shadow_ray;
+	float		dist;
+	t_vector	vec_pi_to_light;
 
+	int			condition_checker;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
@@ -220,29 +222,43 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		/* shadow_rayが物体に遮られなかった場合 */
 		/* 拡散反射光 diffuse を計算してcolに足し合わせる */
 
-		// checker とりあえずplateのみハードコーディング
+		// checker_color, あとで関数に切り出す
 		if (shape->type == ST_PLANE)
 		{
-			t_colorf	checker_col;
-			int	condition_a = (int)(floorf(intp.position.x) + floorf(intp.position.y) + floorf(intp.position.z)) % 2;
-
-			if (condition_a)
+			// 斜めにするとチェッカーにならない -> local座標に落とし込まないといけない？一旦これでOKとする
+			condition_checker = (int)(floorf(intp.position.x) + floorf(intp.position.y) + floorf(intp.position.z)) % 2;
+			if (condition_checker)
 			{
-				SET_COLOR(checker_col, 255.0f, 0.0f, 0.0f);
+				SET_COLOR(checker_col, 0.2f, 0.2f, 0.0f);
 				color = colorf_add(&color, &checker_col);
 			}
-			else
-			{
-				SET_COLOR(checker_col, 0.0f, 255.0f, 0.0f);
-				color = colorf_add(&color, &checker_col);
-//				color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
-			}
-
-//			checker_diffuse_ref = get_checker_color(scene, eye_ray, intp, shape);
-//			color = colorf_mul(&color, 1.0f, &checker_diffuse_ref, nl_dot,&light->illuminance);
 		}
-		else
-			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
+		else if (shape->type == ST_SPHERE)
+		{
+//			condition_checker = (int)(floorf(intp.position.x) + floorf(intp.position.y) + floorf(intp.position.z)) % 2;
+//			if (condition_checker)
+//			{
+//				SET_COLOR(checker_col, 0.0f, 0.2f, 0.2f);
+//				color = colorf_add(&color, &checker_col);
+//			}
+			float	theta, phi;
+			theta = atanf(intp.position.z / intp.position.x);
+			phi = acosf(intp.position.y / shape->data.sphere.radius);
+
+			float	raw_u = theta / (2.0f * (float)M_PI);
+			int		u, v;
+			u = 1 - (int)(raw_u + 0.5);
+			v = 1 - (int)(phi / M_PI);
+
+			condition_checker = (u + v) % 2;
+			if (condition_checker)
+			{
+				SET_COLOR(checker_col, 0.0f, 0.2f, 0.2f);
+				color = colorf_add(&color, &checker_col);
+			}
+		}
+
+		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
 		/* 鏡面反射光 specular を計算してcolに足し合わせる */
 		if (nl_dot > 0)
