@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/30 22:37:31 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/30 22:56:19 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,6 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 	float		dist;
 	t_vector	vec_pi_to_light;
 
-	int			condition_checker;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
@@ -222,65 +221,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		/* shadow_rayが物体に遮られなかった場合 */
 		/* 拡散反射光 diffuse を計算してcolに足し合わせる */
 
-		// checker_color, あとで関数に切り出す
-		if (shape->type == ST_PLANE)
-		{
-			// 斜めにするとチェッカーにならない -> local座標に落とし込まないといけない？一旦これでOKとする
-			condition_checker = (int)(floorf(intp.position.x) + floorf(intp.position.y) + floorf(intp.position.z)) % 2;
-			if (condition_checker)
-			{
-				SET_COLOR(checker_col, 0.2f, 0.2f, 0.0f);
-				color = colorf_add(&color, &checker_col);
-			}
-		}
-		else if (shape->type == ST_SPHERE)
-		{
-//			condition_checker = (int)(floorf(intp.position.x) + floorf(intp.position.y) + floorf(intp.position.z)) % 2;
-//			if (condition_checker)
-//			{
-//				SET_COLOR(checker_col, 0.0f, 0.2f, 0.2f);
-//				color = colorf_add(&color, &checker_col);
-//			}
-
-			float	theta, phi, radius;
-			theta = atan2f(intp.position.x, intp.position.z);
-			radius = norm(&intp.position);
-			phi = acosf(intp.position.y / radius);
-//			phi = acosf(intp.position.y / shape->data.sphere.radius);
-
-			float	u = theta / (2.0f * (float)M_PI);
-			float	v;
-//			u = 1.0f - raw_u + 0.5f;
-			v = 1.0f - phi / (float)M_PI;
-			condition_checker = (int)(u + v) % 2;
-//			printf("(u,v)=(%f,%f), (u+v)%%2:%d\n", u, v, condition_checker);
-			if (condition_checker)
-			{
-				SET_COLOR(checker_col, 0.3f, 0.3f, 0.3f);
-				color = colorf_add(&color, &checker_col);
-			}
-
-			/* ring pattern */
-//			condition_checker = (int)(floorf(sqrtf(SQR(intp.position.x) + SQR(intp.position.z)))) % 2;
-//			if (condition_checker)
-//			{
-//				SET_COLOR(checker_col, 0.3f, 0.3f, 0.3f);
-//				color = colorf_add(&color, &checker_col);
-//			}
-		}
-		else if (shape->type == ST_CYLINDER)
-		{
-			float	theta = atanf(intp.position.z / intp.position.x);
-			float	u = theta / (2.0f * (float)M_PI);
-			float	v = intp.position.y;
-			condition_checker = (int)(floorf(u) + floorf(v)) % 2;
-			if (condition_checker)
-			{
-				SET_COLOR(checker_col, 1.0f, 1.0f, 1.0f);
-				color = colorf_add(&color, &checker_col);
-			}
-		}
-
+		checker_col = get_checker_color(scene, eye_ray, intp, shape);
+		color = colorf_add(&color, &checker_col);
 		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
 		/* 鏡面反射光 specular を計算してcolに足し合わせる */
