@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/03/30 22:09:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/03/30 22:37:31 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,18 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //				SET_COLOR(checker_col, 0.3f, 0.3f, 0.3f);
 //				color = colorf_add(&color, &checker_col);
 //			}
+		}
+		else if (shape->type == ST_CYLINDER)
+		{
+			float	theta = atanf(intp.position.z / intp.position.x);
+			float	u = theta / (2.0f * (float)M_PI);
+			float	v = intp.position.y;
+			condition_checker = (int)(floorf(u) + floorf(v)) % 2;
+			if (condition_checker)
+			{
+				SET_COLOR(checker_col, 1.0f, 1.0f, 1.0f);
+				color = colorf_add(&color, &checker_col);
+			}
 		}
 
 		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
