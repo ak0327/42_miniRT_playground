@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/01 12:20:08 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/01 18:00:59 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ t_camera	init_camera(void)
 //	SET_VECTOR(camera.center, 0.0f, 0.0f, 0.0f)
 //	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 
-	SET_VECTOR(camera.center, 5.0f, 20.0f, -50.0f)
-	SET_VECTOR(camera.dir, 0.0f, -0.2f, 1.0f)
+	SET_VECTOR(camera.center, 5.0f, 25.0f, -50.0f)
+	SET_VECTOR(camera.dir, 0.0f, -0.3f, 1.0f)
 
 	normalize(&camera.dir);
 	camera.fov_deg = 50.0f;
@@ -47,11 +47,16 @@ t_camera	init_camera(void)
 
 	if (camera.dir.x == 0.0f && camera.dir.y != 0.0f && camera.dir.z == 0.0f)
 	{
-		unit = 1.0f;
 		if (camera.dir.y > 0.0f)
-			unit = -1.0f;
-		SET_VECTOR(camera.u, unit, 0.0f, 0.0f)
-		SET_VECTOR(camera.v, 0.0f, 0.0f, unit)
+		{
+			SET_VECTOR(camera.u, -1.0f, 0.0f, 0.0f)
+			SET_VECTOR(camera.v, 0.0f, 0.0f, -1.0f)
+		}
+		else
+		{
+			SET_VECTOR(camera.u, 1.0f, 0.0f, 0.0f)
+			SET_VECTOR(camera.v, 0.0f, 0.0f, 1.0f)
+		}
 	}
 	return (camera);
 }

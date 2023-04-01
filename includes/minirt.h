@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/01 10:07:30 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/01 17:45:22 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@
 //# define WINDOW_WIDTH	384
 //# define ASPECT_WIDTH	1
 //# define ASPECT_HEIGHT	1
-# define ASPECT			(16.0f / 9.0f)
-# define WINDOW_HEIGHT	540
-# define WINDOW_WIDTH	960
-# define WINDOW_TITLE	"miniRT"
+# define ASPECT				(16.0f / 9.0f)
+# define WINDOW_HEIGHT		540
+# define WINDOW_WIDTH		960
+# define WINDOW_TITLE		"miniRT"
 //# define SCREEN_WIDTH	2
 //# define SCREEN_HEIGHT	2
 
@@ -61,12 +61,15 @@
 
 #define CLAMP(val, minval, maxval)	MIN(MAX(val, minval), maxval)
 
-#define SET_COLOR(col, r_, g_, b_) { col.r = r_; col.g = g_; col.b = b_; }
-#define SET_VECTOR(vec, x_, y_, z_) { vec.x = x_; vec.y = y_; vec.z = z_; }
+#define SET_COLOR(col, r_, g_, b_)	{ col.r = r_; col.g = g_; col.b = b_; }
+#define SET_VECTOR(vec, x_, y_, z_)	{ vec.x = x_; vec.y = y_; vec.z = z_; }
 
 
 #define EPSILON			(1.0f / 512.0f)
+//#define EPSILON			(1.0f / 256.0f)
+//#define EPSILON			(1.0f / 128.0f)
 #define MAX_RECURSION	8
+
 
 /********** enum **********/
 typedef enum	e_shape_type
@@ -275,8 +278,6 @@ t_vector	normalize_vec_inv(const t_vector *a);
 
 
 /********** screen **********/
-t_vector	tr_screen_dimension_local_to_world(int x, int y);
-t_vector	get_camera_to_screen_vec(int x, int y, t_vector camera_center, t_vector camera_dir, float fov);
 t_vector	ray_dir(int x, int y, t_camera camera);
 
 

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/01 10:10:04 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/01 17:51:48 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(void)
 		x = 0;
 		while (x < data.win_width)
 		{
-			color = init_color((float)(100/255.0), (float)(149/255.0), (float)(237/255.0));
+			color = init_color((float)(100.0f/255.0f), (float)(149.0f/255.0f), (float)(237.0f/255.0f));
 
 			eye_ray.start = camera.center;
 			eye_ray.direction = ray_dir(x, y, camera);

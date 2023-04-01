@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/03/29 22:25:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/01 17:50:51 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,18 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	d_x_n = cross(&ray->direction, &cyl->normal);
 	pepc_x_n = cross(&pe_pc, &cyl->normal);
 	A = SQR(norm(&d_x_n));
-	B = 2 * dot(&d_x_n, &pepc_x_n);
+	B = 2.0f * dot(&d_x_n, &pepc_x_n);
 	C = SQR(norm(&pepc_x_n)) - SQR(cyl->radius);
 
 	D = SQR(B) - 4 * A * C;
 
-	if (A == 0)
+	if (A == 0.0f)
 		return (0);
 	if (D < 0)
 		return (0);
 
-	t1 = (float) (-B - sqrtf(D)) / (2 * A);
-	t2 = (float) (-B + sqrtf(D)) / (2 * A);
+	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
+	t2 = (float) (-B + sqrtf(D)) / (2.0f * A);
 
 	if ((t1 <= 0 && t2 <= 0) || !out_intp)
 		return (0);
@@ -115,10 +115,10 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	if (D < 0)
 		return (0);
 
-	t1 = (float) (-B - sqrtf(D)) / (2 * A);
-	t2 = (float) (-B + sqrtf(D)) / (2 * A);
+	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
+	t2 = (float) (-B + sqrtf(D)) / (2.0f * A);
 
-	if ((t1 <= 0 && t2 <= 0) || !out_intp)
+	if ((t1 <= 0.0f && t2 <= 0.0f) || !out_intp)
 		return (0);
 
 	alpha = atanf(r / h);
@@ -130,7 +130,7 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	t_vector	l1 = sub(&p1_pc, &h1);
 	normalize(&l1);
 
-	if (-h <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= 0)
+	if (-h <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= 0.0f)
 	{
 		out_intp->distance = t1;
 		out_intp->position = pos1;
@@ -146,7 +146,7 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	t_vector	l2 = sub(&p2_pc, &h2);
 	normalize(&l2);
 
-	if (-h <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= 0)
+	if (-h <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= 0.0f)
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;
@@ -216,13 +216,13 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray, t_int
 	float			t;
 	t_vector		td;
 
-	if (dn_dot == 0)
+	if (dn_dot == 0.0f)
 		return (0);
 
 	s_p = sub(&ray->start, &pln->position);
-	t = -dot(&s_p, &pln->normal) / dn_dot;
+	t = -1.0f * dot(&s_p, &pln->normal) / dn_dot;
 
-	if (t <= 0)
+	if (t <= 0.0f)
 		return (0);
 
 	if (!out_intp)
