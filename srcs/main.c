@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/03/30 18:17:17 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/01 10:10:04 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,11 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-int	get_color(t_vector vec)
-{
-	int r;
-	int g;
-	int b;
-	int	color;
-
-	r = (int)(256 * vec.x);
-	g = (int)(256 * vec.y);
-	b = (int)(256 * vec.z);
-	color = r << 16 | g << 8 | b;
-	return (color);
-}
-
 int	init_data(t_data *data)
 {
 
 	data->win_width = WINDOW_WIDTH;
-	data->win_height = data->win_width * ASPECT_HEIGHT / ASPECT_WIDTH;
+	data->win_height = WINDOW_HEIGHT;
 
 	data->mlx = mlx_init();
 	if (!data->mlx)
@@ -60,41 +46,6 @@ void	free_data(t_data *data)
 	mlx_destroy_window(data->mlx, data->win);
 	mlx_destroy_display(data->mlx);
 	free(data->mlx);
-}
-
-void	draw_sphere(t_data data, t_vector vec_eye, t_sphere sphere, t_light light)
-{
-	int			x;
-	int			y;
-	int			color;
-	t_vector	vec_screen;
-	float		t;
-
-	y = 0;
-	while (y < data.win_height)
-	{
-		x = 0;
-		while (x < data.win_width)
-		{
-			/* スクリーンのlocal座標(x, y)をworld座標(xw, yw, zw)に変換する */
-			vec_screen = tr_screen_dimension_local_to_world(x, y);
-
-			/* 視点位置から(xw, yw)に向かう半直線と球の交差判定を行う */
-			if (is_intersect_to_sphere(sphere, vec_eye, vec_screen, &t) == true)
-			{
-//				printf("(x,y)=(%d,%d), t:%f, ", x, y, t);
-				color = shading(vec_eye, vec_screen, light, sphere, t);
-			}
-			else
-				color = CORNFLOWERBLUE;
-			my_mlx_pixel_put(&data, x, y, color);
-
-//			t_vector pixel_color = {(float)x / (float)data.win_width, (float)y / (float)data.win_height, (float)0.25};
-//			my_mlx_pixel_put(&data, x, y, get_color(pixel_color));
-			x++;
-		}
-		y++;
-	}
 }
 
 /*

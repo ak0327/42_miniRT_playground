@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/03/30 12:40:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/01 10:07:30 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@
 //# define ASPECT_WIDTH	16
 //# define ASPECT_HEIGHT	9
 //# define WINDOW_WIDTH	384
-# define ASPECT_WIDTH	1
-# define ASPECT_HEIGHT	1
-# define WINDOW_WIDTH	512
-# define WINDOW_HEIGHT	512
+//# define ASPECT_WIDTH	1
+//# define ASPECT_HEIGHT	1
+# define WINDOW_WIDTH	960
+# define WINDOW_HEIGHT	540
 # define WINDOW_TITLE	"miniRT"
-# define SCREEN_WIDTH	2
-# define SCREEN_HEIGHT	2
+//# define SCREEN_WIDTH	2
+//# define SCREEN_HEIGHT	2
 
 /********** key hook **********/
 # define EVENT_DESTROY		33

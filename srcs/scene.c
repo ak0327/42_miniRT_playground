@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/03/30 22:47:24 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/01 10:24:12 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void scene_setting(t_scene *scene)
 	/* ************************************************** */
 	/*                    物体の設定                       */
 	/* ************************************************** */
-	scene->num_shapes_capacity = 9; /* 物体リストの最大格納数(自由に変更して良い) */
+	scene->num_shapes_capacity = 10; /* 物体リストの最大格納数(自由に変更して良い) */
 	scene->num_shapes = scene->num_shapes_capacity;	/* 物体リストに，実際に格納した物体の数 */
 
 	scene->shapes = (t_shape *)malloc(sizeof(t_shape) * scene->num_shapes_capacity);
@@ -450,6 +450,21 @@ void scene_setting(t_scene *scene)
 				  1.0f, 1.0f, 1.0f,
 				  0.0f);
 
+
+	init_shape(&scene->shapes[9], ST_CYLINDER,
+			   1.0f, 0.0f, 0.0f,	/* 法線ベクトル */
+			   20.0f, 3.0f, 0.0f,	/* 中心位置 */
+			   5.0f,				/* 高さ */
+			   3.0f);				/* 半径 */
+
+	init_material(&scene->shapes[9].material,
+				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
+				  0.7f, 0.7f, 0.0f,			/* 拡散反射係数(RGB) */
+				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
+				  8.0f,
+				  MT_DEFAULT,
+				  1.0f, 1.0f, 1.0f,
+				  0.0f);
 
 
 //	/* 平面の場合：第二引数にST_PLANEを渡す．この場合，追加で6つの実数を渡す． */

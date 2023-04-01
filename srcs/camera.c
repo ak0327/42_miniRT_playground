@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/03/30 22:31:36 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/01 10:08:35 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ t_camera	init_camera(void)
 //	SET_VECTOR(camera.center, 0.0f, 0.0f, 0.0f)
 //	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 
-	SET_VECTOR(camera.center, 5.0f, 10.0f, -20.0f)
+	SET_VECTOR(camera.center, 5.0f, 20.0f, -50.0f)
 	SET_VECTOR(camera.dir, 0.0f, -0.2f, 1.0f)
-
 
 	normalize(&camera.dir);
 	camera.fov_deg = 50;
