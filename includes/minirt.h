@@ -41,8 +41,9 @@
 //# define WINDOW_WIDTH	384
 //# define ASPECT_WIDTH	1
 //# define ASPECT_HEIGHT	1
-# define WINDOW_WIDTH	960
+# define ASPECT			(16.0f / 9.0f)
 # define WINDOW_HEIGHT	540
+# define WINDOW_WIDTH	960
 # define WINDOW_TITLE	"miniRT"
 //# define SCREEN_WIDTH	2
 //# define SCREEN_HEIGHT	2
