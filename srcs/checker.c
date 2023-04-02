@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/02 10:58:39 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/02 11:41:13 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,17 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 //				SET_COLOR(color, 0.0f, 0.2f, 0.2f);
 //				color = colorf_add(&color, &color);
 //			}
-
-		float	theta, phi, radius;
-		radius = norm(&pos_local);
-
-		theta = atan2f(pos_local.x, pos_local.z);
-		phi = acosf(pos_local.y / radius);
-
-		float	u = 1.0f - (phi / (2 * (float)M_PI) + 0.5f);
-		float	v = 1.0f - theta / (float)M_PI;
+		float radius = norm(&pos_local);
+		float theta = atan2f(pos_local.z, pos_local.x);
+		float phi = acosf(pos_local.y / radius);
+		float u = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
+		float v = 1.0f - phi / (float)M_PI;
 		condition_checker = (int)(floorf(u * 15) + floorf(v * 10)) % 2;
 		if (condition_checker)
 		{
 			SET_COLOR(color, 0.6f, 0.6f, 0.6f);
 			color = colorf_add(&color, &color);
 		}
-
 		/* ring pattern */
 //			condition_checker = (int)(floorf(sqrtf(SQR(intp.position.x) + SQR(intp.position.z)))) % 2;
 //			if (condition_checker)
@@ -83,21 +78,17 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 	}
 	else if (shape->type == ST_CYLINDER)
 	{
+		pos_local = intp.position;
 //		pos_local = sub(&intp.position, &shape->data.cylinder.position);
-		pos_local = get_local(shape->data.cylinder.position, intp.position, shape->data.cylinder.normal);
+//		pos_local = get_local(shape->data.cylinder.position, intp.position, shape->data.cylinder.normal);
 
-		float	radius = norm(&pos_local);
-		float	theta = acosf(pos_local.y / radius);
-//		float	theta = atan2f(pos_local.x, pos_local.z);
-//		float	u = theta / (2.0f * (float)M_PI);
-//		float	v = pos_local.y;
-		float	phi = atan2f(pos_local.x, pos_local.z);
+//		float radius = norm(&pos_local);
+		float theta = atan2f(pos_local.z, pos_local.x);
+//		float phi = acosf(pos_local.y / radius);
+		float u = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
+//		float v = 1.0f - phi / (float)M_PI;
+		condition_checker = (int)(floorf(u * 15) + floorf(pos_local.y)) % 2;
 
-		float	u = 1.0f - theta / (2.0f * (float)M_PI) + 0.5f;
-		float	v = 1.0f - phi / (float)M_PI;
-
-		condition_checker = (int)(floorf(u) + floorf(v)) % 2;
-//		condition_checker = (int)(floorf(u * 20) + floorf(v * 2)) % 2;
 		if (condition_checker)
 		{
 			SET_COLOR(color, 1.0f, 1.0f, 1.0f);

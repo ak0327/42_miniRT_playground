@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/02 10:43:33 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/02 11:24:17 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -419,32 +419,33 @@ void scene_setting(t_scene *scene)
 
 
 
-//	init_shape(&scene->shapes[7], ST_CYLINDER,
-//			   0.0f, 1.0f, 0.0f,	/* 法線ベクトル */
-//			   0.0f, 0.0f, 0.0f,	/* 中心位置 */
-//			   6.0f,				/* 高さ */
-//			   4.0f);				/* 半径 */
-//
-//	init_material(&scene->shapes[7].material,
-//				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
-//				  0.0f, 0.7f, 0.7f,			/* 拡散反射係数(RGB) */
-//				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
-//				  8.0f,
-//				  MT_DEFAULT,
-//				  1.0f, 1.0f, 1.0f,
-//				  0.0f);
-	init_shape(&scene->shapes[7], ST_SPHERE,
-			   0.0f, 0.0f, 0.0f,	/* 球の中心位置 */
-			   6.0f);    			/* 球の半径 */
+	init_shape(&scene->shapes[7], ST_CYLINDER,
+			   0.0f, 1.0f, 0.0f,	/* 法線ベクトル */
+			   0.0f, 0.0f, 0.0f,	/* 中心位置 */
+			   6.0f,				/* 高さ */
+			   4.0f);				/* 半径 */
 
 	init_material(&scene->shapes[7].material,
-				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
-				  0.7f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
-				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
-				  8.0f,							/* 光沢度 */
-				  MT_DEFAULT, 					/* マテリアルタイプ */
-				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-				  0.0f);					/* 絶対屈折率 */
+				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
+				  0.0f, 0.7f, 0.7f,			/* 拡散反射係数(RGB) */
+				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
+				  8.0f,
+				  MT_DEFAULT,
+				  1.0f, 1.0f, 1.0f,
+				  0.0f);
+
+//	init_shape(&scene->shapes[7], ST_SPHERE,
+//			   0.0f, 0.0f, 0.0f,	/* 球の中心位置 */
+//			   6.0f);    			/* 球の半径 */
+//
+//	init_material(&scene->shapes[7].material,
+//				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
+//				  0.7f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+//				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+//				  8.0f,							/* 光沢度 */
+//				  MT_DEFAULT, 					/* マテリアルタイプ */
+//				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
+//				  0.0f);					/* 絶対屈折率 */
 
 
 	init_shape(&scene->shapes[8], ST_CYLINDER,
