@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/01 17:45:22 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/02 21:05:52 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,13 @@ typedef struct	s_vector
 	float	y;
 	float	z;
 } t_vector;
+
+typedef struct s_matrix
+{
+	float	m11, m12, m13;
+	float	m21, m22, m23;
+	float	m31, m32, m33;
+} t_matrix;
 
 typedef struct	s_screen
 {
@@ -319,6 +326,12 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col);
 /********** checker **********/
 t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 							  t_intersection_point intp, t_shape *shape);
+
+
+/********** matrix **********/
+t_matrix	rot_matrix(t_vector E);
+t_matrix	transpose_matrix(t_matrix R);
+t_vector	get_local_axis(t_matrix T, t_vector v);
 
 
 /********** init **********/
