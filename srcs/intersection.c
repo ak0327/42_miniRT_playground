@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/01 17:50:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/02 14:34:15 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t_vector	t1d, t2d;
 	t_vector	pos1, pos2;
 	t_vector	p1_pc, p2_pc;
+	float		h;
 
 	cyl = &shape->data.cylinder;
 	cyl->normal = normalize_vec(&cyl->normal);
@@ -47,11 +48,13 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	if ((t1 <= 0 && t2 <= 0) || !out_intp)
 		return (0);
 
+	h = cyl->height;
+
 	t1d = mult(t1, &ray->direction);
 	pos1 = add(&ray->start, &t1d);
 	p1_pc = sub(&pos1, &cyl->position);
 
-	if (0 <= dot(&p1_pc, &cyl->normal) && dot(&p1_pc, &cyl->normal) <= cyl->height)
+	if (0 <= dot(&p1_pc, &cyl->normal) && dot(&p1_pc, &cyl->normal) <= h)
 	{
 		out_intp->distance = t1;
 		out_intp->position = pos1;
@@ -64,7 +67,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t2d = mult(t2, &ray->direction);
 	pos2 = add(&ray->start, &t2d);
 	p2_pc = sub(&pos2, &cyl->position);
-	if (0 <= dot(&p2_pc, &cyl->normal) && dot(&p2_pc, &cyl->normal) <= cyl->height)
+	if (0 <= dot(&p2_pc, &cyl->normal) && dot(&p2_pc, &cyl->normal) <= h)
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;

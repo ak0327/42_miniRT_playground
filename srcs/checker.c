@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/02 11:41:13 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/02 13:49:05 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 //				color = colorf_add(&color, &color);
 //			}
 		float radius = norm(&pos_local);
-		float theta = atan2f(pos_local.z, pos_local.x);
-		float phi = acosf(pos_local.y / radius);
-		float u = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
-		float v = 1.0f - phi / (float)M_PI;
-		condition_checker = (int)(floorf(u * 15) + floorf(v * 10)) % 2;
+		float theta = acosf(pos_local.y / radius);
+		float phi = atan2f(pos_local.z, pos_local.x);
+		float u = 1.0f - phi / (float)M_PI;
+		float v = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
+		condition_checker = (int)(floorf(u * 10) + floorf(v * 15)) % 2;
 		if (condition_checker)
 		{
 			SET_COLOR(color, 0.6f, 0.6f, 0.6f);
@@ -76,18 +76,18 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 //				color = colorf_add(&color, &color);
 //			}
 	}
-	else if (shape->type == ST_CYLINDER)
+	else if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
 	{
-		pos_local = intp.position;
-//		pos_local = sub(&intp.position, &shape->data.cylinder.position);
-//		pos_local = get_local(shape->data.cylinder.position, intp.position, shape->data.cylinder.normal);
+		pos_local = sub(&intp.position, &shape->data.cylinder.position);
 
-//		float radius = norm(&pos_local);
-		float theta = atan2f(pos_local.z, pos_local.x);
-//		float phi = acosf(pos_local.y / radius);
-		float u = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
-//		float v = 1.0f - phi / (float)M_PI;
-		condition_checker = (int)(floorf(u * 15) + floorf(pos_local.y)) % 2;
+		t_vector	hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
+		t_vector	r = sub(&pos_local, &hi);
+//		float		theta = atan2f(pos_local.z, pos_local.x);
+		float		theta = atan2f(r.z, r.x);
+		float		u = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
+		float		v = norm(&hi);
+
+		condition_checker = (int)(floorf(u * 15) + floorf(v)) % 2;
 
 		if (condition_checker)
 		{
