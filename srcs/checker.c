@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/01 18:00:16 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/02 10:58:39 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,14 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 //			}
 
 		float	theta, phi, radius;
-		theta = atan2f(pos_local.x, pos_local.z);
 		radius = norm(&pos_local);
-		phi = acosf(pos_local.y / radius);
-//			phi = acosf(intp.position.y / shape->data.sphere.radius);
 
-		float	u = theta / (2.0f * (float)M_PI);
-		float	v;
-//			u = 1.0f - raw_u + 0.5f;
-		v = 1.0f - phi / (float)M_PI;
-		condition_checker = (int)(floorf(u + v)) % 2;
-//			printf("(u,v)=(%f,%f), (u+v)%%2:%d\n", u, v, condition_checker);
+		theta = atan2f(pos_local.x, pos_local.z);
+		phi = acosf(pos_local.y / radius);
+
+		float	u = 1.0f - (phi / (2 * (float)M_PI) + 0.5f);
+		float	v = 1.0f - theta / (float)M_PI;
+		condition_checker = (int)(floorf(u * 15) + floorf(v * 10)) % 2;
 		if (condition_checker)
 		{
 			SET_COLOR(color, 0.6f, 0.6f, 0.6f);
@@ -89,10 +86,17 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 //		pos_local = sub(&intp.position, &shape->data.cylinder.position);
 		pos_local = get_local(shape->data.cylinder.position, intp.position, shape->data.cylinder.normal);
 
-		float	theta = atan2f(pos_local.x, pos_local.z);
-		float	u = theta / (2.0f * (float)M_PI);
-		float	v = pos_local.y;
-		condition_checker = (int)(floorf(u) + floorf(v * 2)) % 2;
+		float	radius = norm(&pos_local);
+		float	theta = acosf(pos_local.y / radius);
+//		float	theta = atan2f(pos_local.x, pos_local.z);
+//		float	u = theta / (2.0f * (float)M_PI);
+//		float	v = pos_local.y;
+		float	phi = atan2f(pos_local.x, pos_local.z);
+
+		float	u = 1.0f - theta / (2.0f * (float)M_PI) + 0.5f;
+		float	v = 1.0f - phi / (float)M_PI;
+
+		condition_checker = (int)(floorf(u) + floorf(v)) % 2;
 //		condition_checker = (int)(floorf(u * 20) + floorf(v * 2)) % 2;
 		if (condition_checker)
 		{
