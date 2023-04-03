@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/02 22:11:24 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/02 22:25:34 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,18 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 	}
 	else if (shape->type == ST_CYLINDER)
 	{
-//		t_matrix	R = rot_matrix(mult(shape->data.cylinder.height, &shape->data.cylinder.normal));
-//		t_matrix	T = transpose_matrix(R);
+		t_matrix	R = rot_matrix(mult(shape->data.cylinder.height, &shape->data.cylinder.normal));
+		t_matrix	T = transpose_matrix(R);
 
-//		t_vector	pos_origin = sub(&intp.position, &shape->data.cylinder.position);
+		t_vector	pos_origin = sub(&intp.position, &shape->data.cylinder.position);
 
-//		pos_local = get_local_axis(T, pos_origin);
+		pos_local = get_local_axis(T, pos_origin);
 
-		pos_local = sub(&intp.position, &shape->data.cylinder.position);
+//		pos_local = sub(&intp.position, &shape->data.cylinder.position);
+//		t_vector	hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
 
-		t_vector	hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
-//		t_vector	hi;
-//		SET_VECTOR(hi, 0.0f, 1.0f, 0.0f)
+		t_vector	hi;
+		SET_VECTOR(hi, 0.0f, 1.0f, 0.0f)
 		t_vector	r = sub(&pos_local, &hi);
 //		float		theta = atan2f(pos_local.z, pos_local.x);
 		float		theta = atan2f(r.z, r.x);
