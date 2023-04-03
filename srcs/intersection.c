@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 00:03:40 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 00:05:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;
-		out_intp->normal = vec_calc(cosf(alpha), &l2, sinf(alpha), &n);
+//		out_intp->normal = vec_calc(cosf(alpha), &l2, sinf(alpha), &n);
 
 		out_intp->normal = vec_calc(norm(&d) * cosf(alpha), &l, -1.0f, &d);
 
