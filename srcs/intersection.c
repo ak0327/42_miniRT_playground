@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 10:50:48 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 11:20:50 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
 	t2 = (float) (-B + sqrtf(D)) / (2.0f * A);
 
-	if ((t1 <= 0.0f && t2 <= 0.0f) || !out_intp)
+	if (t1 <= 0.0f || t2 <= 0.0f || !out_intp)
 		return (0);
 
 	t1d = mult(t1, &ray->direction);
@@ -69,7 +69,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 		out_intp->position = pos2;
 		pipc_n = mult(dot(&p2_pc, &cyl->normal), &cyl->normal);
 		out_intp->normal = sub( &pipc_n, &p2_pc);
-		normalize_vec_inv(&out_intp->normal);
+		normalize_vec(&out_intp->normal);
 		return (1);
 	}
 	return (0);
@@ -119,7 +119,7 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
 	t2 = (float) (-B + sqrtf(D)) / (2.0f * A);
 
-	if ((t1 <= 0.0f && t2 <= 0.0f) || !out_intp)
+	if (t1 <= 0.0f || t2 <= 0.0f || !out_intp)
 		return (0);
 
 	alpha = atanf(r / h);
