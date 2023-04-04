@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 10:16:50 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 10:27:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 //				color = colorf_add(&color, &color);
 //			}
 	}
-	else if (shape->type == ST_CYLINDER)
+	else if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
 	{
 		/* 参考URL(https://ototoi.hatenadiary.org/entry/20060103/p1) */
 //		t_matrix	R = rot_matrix(mult(shape->data.cylinder.height, &shape->data.cylinder.normal));
@@ -107,32 +107,41 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 
 
 		/* u,v */
-		pos_local = sub(&intp.position, &shape->data.cylinder.position);
-		t_vector	hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
-		t_vector	r = sub(&pos_local, &hi);
-		float		theta, phi;
+		t_vector	hi, d;
+		if (shape->type == ST_CYLINDER)
+		{
+			pos_local = sub(&intp.position, &shape->data.cylinder.position);
+			hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
+			d = shape->data.cylinder.normal;
+		}
+		else
+		{
+			pos_local = sub(&intp.position, &shape->data.corn.position);
+			hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
+			d = shape->data.corn.normal;
+		}
 
 		t_vector	u_vec, v_vec;
-		t_vector	d = shape->data.cylinder.normal;
+		float		theta;
+		float	u, v, uu, vv;
 
-		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));
-		u_vec.y = d.x / sqrtf(SQR(d.x) + SQR(d.y));
+		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));		// TODO: +-
+		u_vec.y = -d.x / sqrtf(SQR(d.x) + SQR(d.y));	// TODO: +-
 		u_vec.z = 0;
 		normalize(&u_vec);
 
 		v_vec = cross(&u_vec, &d);
 		normalize(&v_vec);
 
-		float	u, v, uu, vv;
 		u = dot(&u_vec, &pos_local);
 		v = dot(&v_vec, &pos_local);
 
 		theta = atan2f(v, u);
-		uu = 1.0f - theta / (float)M_PI;
+//		uu = 1.0f - theta / (float)M_PI;
+		uu = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
 		vv = norm(&hi);
 
 		condition_checker = (int)(floorf(uu * 10) + floorf(vv * 1)) % 2;
-
 
 		if (condition_checker)
 		{
