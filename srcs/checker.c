@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/03 23:40:30 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 10:16:50 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,44 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 //
 //		condition_checker = (int)(floorf(u * 15) + floorf(v)) % 2;
 
-		/* worldで解くケース */
+//		/* worldで解くケース */
+//		pos_local = sub(&intp.position, &shape->data.cylinder.position);
+//		t_vector	hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
+//		t_vector	r = sub(&pos_local, &hi);
+//		float		theta = atan2f(r.z, r.x);
+//		float		u = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
+//		float		v = norm(&hi);
+//
+//		condition_checker = (int)(floorf(u * 15) + floorf(v)) % 2;
+
+
+		/* u,v */
 		pos_local = sub(&intp.position, &shape->data.cylinder.position);
 		t_vector	hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
 		t_vector	r = sub(&pos_local, &hi);
-		float		theta = atan2f(r.z, r.x);
-		float		u = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
-		float		v = norm(&hi);
+		float		theta, phi;
 
-		condition_checker = (int)(floorf(u * 15) + floorf(v)) % 2;
+		t_vector	u_vec, v_vec;
+		t_vector	d = shape->data.cylinder.normal;
+
+		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));
+		u_vec.y = d.x / sqrtf(SQR(d.x) + SQR(d.y));
+		u_vec.z = 0;
+		normalize(&u_vec);
+
+		v_vec = cross(&u_vec, &d);
+		normalize(&v_vec);
+
+		float	u, v, uu, vv;
+		u = dot(&u_vec, &pos_local);
+		v = dot(&v_vec, &pos_local);
+
+		theta = atan2f(v, u);
+		uu = 1.0f - theta / (float)M_PI;
+		vv = norm(&hi);
+
+		condition_checker = (int)(floorf(uu * 10) + floorf(vv * 1)) % 2;
+
 
 		if (condition_checker)
 		{
