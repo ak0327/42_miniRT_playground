@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 19:24:46 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 19:46:54 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,10 +230,11 @@ typedef struct	s_shape
 
 typedef struct	s_light
 {
-	t_light_type	type;		// 点光源 or 平行光源
+	t_light_type	type;			// point, directional or spot
 	t_vector		position;		// 光源位置 or 光線方向（*光線への方向？光線からの方向？）
 	t_vector		direction;
-	t_colorf		illuminance;// 光源の照度 Ii RGB
+	t_colorf		illuminance;	// 光源の照度 Ii RGB
+	float			angle;			// spot_light, angle
 } t_light;
 
 typedef struct	s_scene
@@ -351,6 +352,7 @@ void		init_material(t_material *mat,
 void init_light(t_light *light, t_light_type lt,
 				float px, float py, float pz,
 				float dirx, float diry, float dirz,
-				float illR, float illG, float illB);
+				float illR, float illG, float illB,
+				float angle);
 
 #endif //MINIRT_H

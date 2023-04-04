@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 19:46:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 19:24:00 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 19:48:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 void init_light(t_light *light, t_light_type lt,
 				float px, float py, float pz,
 				float dirx, float diry, float dirz,
-				float illR, float illG, float illB)
+				float illR, float illG, float illB,
+				float angle)
 {
 	light->type = lt;
 	SET_VECTOR(light->position, px, py, pz);
 	SET_VECTOR(light->direction, dirx, diry, dirz);
 	SET_COLOR(light->illuminance, illR, illG, illB);
+	light->angle = angle;
 }
 
 void init_shape(t_shape *shape, t_shape_type st, ...)
