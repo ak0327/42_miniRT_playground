@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 00:05:09 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 10:50:48 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,20 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 
 	D = SQR(B) - 4 * A * C;
 
-	if (A == 0.0f)
-		return (0);
-	if (D < 0)
+	if (A == 0.0f || D < 0)
 		return (0);
 
 	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
 	t2 = (float) (-B + sqrtf(D)) / (2.0f * A);
 
-	if ((t1 <= 0 && t2 <= 0) || !out_intp)
+	if ((t1 <= 0.0f && t2 <= 0.0f) || !out_intp)
 		return (0);
-
-	h = cyl->height;
 
 	t1d = mult(t1, &ray->direction);
 	pos1 = add(&ray->start, &t1d);
 	p1_pc = sub(&pos1, &cyl->position);
 
-	if (0 <= dot(&p1_pc, &cyl->normal) && dot(&p1_pc, &cyl->normal) <= h)
+	if (0 <= dot(&p1_pc, &cyl->normal) && dot(&p1_pc, &cyl->normal) <= cyl->height)
 	{
 		out_intp->distance = t1;
 		out_intp->position = pos1;
@@ -67,13 +63,13 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t2d = mult(t2, &ray->direction);
 	pos2 = add(&ray->start, &t2d);
 	p2_pc = sub(&pos2, &cyl->position);
-	if (0 <= dot(&p2_pc, &cyl->normal) && dot(&p2_pc, &cyl->normal) <= h)
+	if (0 <= dot(&p2_pc, &cyl->normal) && dot(&p2_pc, &cyl->normal) <= cyl->height)
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;
 		pipc_n = mult(dot(&p2_pc, &cyl->normal), &cyl->normal);
 		out_intp->normal = sub( &pipc_n, &p2_pc);
-		normalize(&out_intp->normal);
+		normalize_vec_inv(&out_intp->normal);
 		return (1);
 	}
 	return (0);
