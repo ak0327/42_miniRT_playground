@@ -6,21 +6,22 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 19:46:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 19:48:09 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 21:58:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 void init_light(t_light *light, t_light_type lt,
-				float px, float py, float pz,
-				float dirx, float diry, float dirz,
+				float pos_x, float pos_y, float pos_z,
+				float dir_x, float dir_y, float dir_z,
 				float illR, float illG, float illB,
 				float angle)
 {
 	light->type = lt;
-	SET_VECTOR(light->position, px, py, pz);
-	SET_VECTOR(light->direction, dirx, diry, dirz);
+	SET_VECTOR(light->position, pos_x, pos_y, pos_z);
+	SET_VECTOR(light->direction, dir_x, dir_y, dir_z);
+	normalize(&light->direction);
 	SET_COLOR(light->illuminance, illR, illG, illB);
 	light->angle = angle;
 }
