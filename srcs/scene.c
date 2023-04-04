@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/02 14:32:04 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 19:24:38 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -664,7 +664,8 @@ void scene_setting(t_scene *scene)
 
 	/* outside */
 	init_light(&scene->lights[0], LT_POINT,
-			   50.0f, 50.0f, -50.0f, /* 点光源の位置 */
+			   50.0f, 50.0f, -50.0f, /* position */
+			   0.0f, 0.0f, 0.0f,	/* direction(do not use LT_POINT) */
 			   1.0f, 1.0f, 1.0f);   /* 点光源の照度(色) */
 
 //	init_light(&scene->lights[0], LT_POINT,

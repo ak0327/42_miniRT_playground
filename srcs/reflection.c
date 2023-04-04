@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:32:22 by takira            #+#    #+#             */
-/*   Updated: 2023/03/12 22:22:49 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 19:16:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ float	calc_nl_dot(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere
 	vec_sphere_n = sub(&vec_pi, &sphere.center);
 	normalize(&vec_sphere_n);
 
-	vec_light_dir = sub(&light.vector, &vec_pi);
+	vec_light_dir = sub(&light.position, &vec_pi);
 	normalize(&vec_light_dir);
 
 	return (CLAMP(dot(&vec_sphere_n, &vec_light_dir), 0, 1));
@@ -91,7 +91,7 @@ float	specular(float nl_dot, t_vector vec_eye, t_vector vec_screen, t_light ligh
 	vec_sphere_n = sub(&vec_pi, &sphere.center);
 	normalize(&vec_sphere_n);
 
-	vec_light_dir = sub(&light.vector, &vec_pi);
+	vec_light_dir = sub(&light.position, &vec_pi);
 	normalize(&vec_light_dir);
 
 	vec_r_tmp = mult(2 * nl_dot, &vec_sphere_n);

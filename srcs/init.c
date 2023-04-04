@@ -6,18 +6,20 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 19:46:48 by takira            #+#    #+#             */
-/*   Updated: 2023/03/29 21:50:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 19:24:00 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 void init_light(t_light *light, t_light_type lt,
-				float vx, float vy, float vz,
+				float px, float py, float pz,
+				float dirx, float diry, float dirz,
 				float illR, float illG, float illB)
 {
 	light->type = lt;
-	SET_VECTOR(light->vector, vx, vy, vz);
+	SET_VECTOR(light->position, px, py, pz);
+	SET_VECTOR(light->direction, dirx, diry, dirz);
 	SET_COLOR(light->illuminance, illR, illG, illB);
 }
 
@@ -90,15 +92,6 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 	va_end(args);
 }
 
-//void init_material(t_material *mat,
-//				   float ambR, float ambG, float ambB,
-//				   float difR, float difG, float difB,
-//				   float difR_c, float difG_c, float difB_c,
-//				   float speR, float speG, float speB,
-//				   float shns,
-//				   t_material_type type,
-//				   float refR, float refG, float refB,
-//				   float refraction_index)
 void init_material(t_material *mat,
 				   float ambR, float ambG, float ambB,
 				   float difR, float difG, float difB,

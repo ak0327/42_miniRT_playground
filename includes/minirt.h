@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/02 21:05:52 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/04 19:24:46 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef enum	e_light_type
 {
 	LT_POINT,		// 点光源
 	LT_DIRECTIONAL,	// 平行光源
+	LT_SPOT,
 } t_light_type;
 
 typedef enum	e_material_type
@@ -230,7 +231,8 @@ typedef struct	s_shape
 typedef struct	s_light
 {
 	t_light_type	type;		// 点光源 or 平行光源
-	t_vector		vector;		// 光源位置 or 光線方向（*光線への方向？光線からの方向？）
+	t_vector		position;		// 光源位置 or 光線方向（*光線への方向？光線からの方向？）
+	t_vector		direction;
 	t_colorf		illuminance;// 光源の照度 Ii RGB
 } t_light;
 
@@ -346,9 +348,9 @@ void		init_material(t_material *mat,
 				   float refR, float refG, float refB,
 				   float refraction_index);
 
-void		init_light(t_light *light, t_light_type lt,
-				float vx, float vy, float vz,
+void init_light(t_light *light, t_light_type lt,
+				float px, float py, float pz,
+				float dirx, float diry, float dirz,
 				float illR, float illG, float illB);
-
 
 #endif //MINIRT_H

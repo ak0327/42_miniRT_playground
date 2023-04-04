@@ -194,9 +194,9 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		i++;
 
 		if (light->type == LT_POINT)	// 点光源
-			light_dir = sub(&light->vector, &intp.position);
+			light_dir = sub(&light->position, &intp.position);
 		else
-			light_dir = light->vector;	// 平行光源
+			light_dir = light->position;	// 平行光源
 
 		normalize(&light_dir);
 		nl_dot = CLAMP(dot(&intp.normal, &light_dir), 0, 1);
@@ -206,7 +206,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		shadow_ray.direction = light_dir;
 		if (light->type == LT_POINT)
 		{
-			vec_pi_to_light = sub(&light->vector, &intp.position);
+			vec_pi_to_light = sub(&light->position, &intp.position);
 			dist = norm(&vec_pi_to_light) - EPSILON;
 		}
 		else
