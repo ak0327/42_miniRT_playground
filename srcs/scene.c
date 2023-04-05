@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 10:28:44 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 10:47:17 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,13 @@ void scene_setting(t_scene *scene)
 //				  MT_DEFAULT,
 //				  0.0f, 0.0f, 0.0f,
 //				  0.0f);
+
+
+
+
+
+
+
 
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 /*                          corn & cylinder  using checker ここから                        */
@@ -528,10 +535,110 @@ void scene_setting(t_scene *scene)
 //				  0.0f);
 
 
+//	scene->num_lights_capacity = 1;
+//	scene->num_lights = scene->num_lights_capacity;
+//	scene->lights = (t_light *)malloc(sizeof(t_light) * scene->num_lights_capacity);
+
+	/* outside */
+//	init_light(&scene->lights[0], LT_POINT,
+//			   50.0f, 50.0f, -50.0f, /* position */
+//			   0.0f, 0.0f, 0.0f,	/* direction(do not use LT_POINT) */
+//			   1.0f, 1.0f, 1.0f);   /* 点光源の照度(色) */
+
 
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
-/*                          spotlight                                                     */
+/*                          corn & cylinder  using checker ここまで                        */
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+
+
+
+
+
+
+
+
+
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
+/*                          spotlight   ここから                                           */
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
+
+//	scene->num_shapes_capacity = 2; /* 物体リストの最大格納数(自由に変更して良い) */
+//	scene->num_shapes = scene->num_shapes_capacity;	/* 物体リストに，実際に格納した物体の数 */
+//
+//	scene->shapes = (t_shape *)malloc(sizeof(t_shape) * scene->num_shapes_capacity);
+//
+//	init_shape(&scene->shapes[0], ST_PLANE,
+//			   0.0, 0.0, 0.0,		/* 平面が通る点の位置 */
+//			   0.0, 1.0, 0.0);		/* 平面の法線ベクトル */
+//
+//	init_material(&scene->shapes[0].material,
+//				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
+//				  0.69f, 0.69f, 0.69f,		/* 拡散反射係数(RGB) */
+//				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
+//				  8.0f,								/* 光沢度 */
+//				  MT_DEFAULT,
+//				  0.0f, 0.0f, 0.0f,
+//				  0.0f);
+//
+//		init_shape(&scene->shapes[1], ST_SPHERE,
+//			   0.0f, 5.0f, 10.0f,	/* 球の中心位置 */
+//			   5.0f);    			/* 球の半径 */
+//
+//	init_material(&scene->shapes[1].material,
+//				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
+//				  0.7f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+//				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+//				  8.0f,							/* 光沢度 */
+//				  MT_DEFAULT, 					/* マテリアルタイプ */
+//				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
+//				  0.0f);					/* 絶対屈折率 */
+//
+//
+//
+//	SET_COLOR(scene->ambient_illuminance, 0.1, 0.1, 0.1);
+//	scene->num_lights_capacity = 4;
+//	scene->num_lights = scene->num_lights_capacity;
+//	scene->lights = (t_light *)malloc(sizeof(t_light) * scene->num_lights_capacity);
+//	scene->global_refraction_index = 1.0f;
+//
+//	init_light(&scene->lights[0], LT_POINT,
+//			   50.0f, 50.0f, -50.0f, /* position */
+//			   0.0f, 0.0f, 0.0f,	/* direction(do not use LT_POINT) */
+//			   1.0f, 1.0f, 1.0f,
+//			   60.0f);   /* 点光源の照度(色) */
+//
+//
+//	init_light(&scene->lights[1], LT_SPOT,
+//			   00.0f, 50.0f, 10.0f,	/* position */
+//			   0.0f, -1.0f, 0.0f,	/* direction(do not use LT_POINT) */
+//			   0.0f, 1.0f, 0.0f,	/* 照度(色) */
+//			   35.0f);					/* projection angle of spotlight */
+//
+//
+//	init_light(&scene->lights[2], LT_SPOT,
+//			   -30.0f, 5.0f, -20.0f,	/* position */
+//			   1.0f, -0.2f, 1.0f,	/* direction(do not use LT_POINT) */
+//			   0.0f, 0.0f, 1.0f,	/* 照度(色) */
+//			   35.f);						/* projection angle of spotlight */
+//
+//	init_light(&scene->lights[3], LT_SPOT,
+//			   30.0f, 5.0f, -20.0f,	/* position */
+//			   -1.0f, -0.2f, 1.0f,	/* direction(do not use LT_POINT) */
+//			   1.0f, 0.0f, 0.0f,	/* 照度(色) */
+//			   35.f);						/* projection angle of spotlight */
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+/*                          spotlight ここまで                                             */
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+
+
+
+
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
+/*                          bump mapping   ここから                                        */
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
 	scene->num_shapes_capacity = 2; /* 物体リストの最大格納数(自由に変更して良い) */
 	scene->num_shapes = scene->num_shapes_capacity;	/* 物体リストに，実際に格納した物体の数 */
@@ -551,9 +658,9 @@ void scene_setting(t_scene *scene)
 				  0.0f, 0.0f, 0.0f,
 				  0.0f);
 
-		init_shape(&scene->shapes[1], ST_SPHERE,
-			   0.0f, 5.0f, 10.0f,	/* 球の中心位置 */
-			   5.0f);    			/* 球の半径 */
+	init_shape(&scene->shapes[1], ST_SPHERE,
+			   0.0f, 10.0f, 10.0f,	/* 球の中心位置 */
+			   10.0f);    			/* 球の半径 */
 
 	init_material(&scene->shapes[1].material,
 				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
@@ -564,39 +671,33 @@ void scene_setting(t_scene *scene)
 				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
 				  0.0f);					/* 絶対屈折率 */
 
-
-
 	SET_COLOR(scene->ambient_illuminance, 0.1, 0.1, 0.1);
-	scene->num_lights_capacity = 4;
+	scene->num_lights_capacity = 1;
 	scene->num_lights = scene->num_lights_capacity;
 	scene->lights = (t_light *)malloc(sizeof(t_light) * scene->num_lights_capacity);
-	scene->global_refraction_index = 1.0f;
 
 	init_light(&scene->lights[0], LT_POINT,
-			   50.0f, 50.0f, -50.0f, /* position */
+			   50.0f, 50.0f, -50.0f,	/* position */
 			   0.0f, 0.0f, 0.0f,	/* direction(do not use LT_POINT) */
-			   1.0f, 1.0f, 1.0f,
-			   60.0f);   /* 点光源の照度(色) */
+			   1.0f, 1.0f, 1.0f,	/* color */
+			   70.0f);					/* angle */
 
 
-	init_light(&scene->lights[1], LT_SPOT,
-			   00.0f, 50.0f, 10.0f,	/* position */
-			   0.0f, -1.0f, 0.0f,	/* direction(do not use LT_POINT) */
-			   0.0f, 1.0f, 0.0f,	/* 照度(色) */
-			   35.0f);					/* projection angle of spotlight */
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+/*                         bump mapping ここまで                                           */
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 
-	init_light(&scene->lights[2], LT_SPOT,
-			   -30.0f, 5.0f, -20.0f,	/* position */
-			   1.0f, -0.2f, 1.0f,	/* direction(do not use LT_POINT) */
-			   0.0f, 0.0f, 1.0f,	/* 照度(色) */
-			   35.f);						/* projection angle of spotlight */
 
-	init_light(&scene->lights[3], LT_SPOT,
-			   30.0f, 5.0f, -20.0f,	/* position */
-			   -1.0f, -0.2f, 1.0f,	/* direction(do not use LT_POINT) */
-			   1.0f, 0.0f, 0.0f,	/* 照度(色) */
-			   35.f);						/* projection angle of spotlight */
+
+
+
+
+
+
+
+
+
 
 
 //	init_light(&scene->lights[1], LT_SPOT,
@@ -605,11 +706,6 @@ void scene_setting(t_scene *scene)
 //			   1.0f, 0.0f, 0.0f,	/* 照度(色) */
 //			   30.f);						/* projection angle of spotlight */
 
-
-
-/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
-/*                          corn & cylinder  using checker ここまで                        */
-/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 
 

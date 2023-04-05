@@ -251,7 +251,6 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		}
 		else
 		{
-
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
 			/* 鏡面反射光 specular を計算してcolに足し合わせる */
