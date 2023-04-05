@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 22:42:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 10:25:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,10 +233,25 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 			if (alpha <= light->angle / 2.0f * (float)M_PI / 180.0f)
 			{
 				color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
+
+				if (nl_dot > 0)
+				{
+					/* 正反射ベクトルの計算 */
+					ref_dir = vec_calc(2.0f * nl_dot, &intp.normal, -1.0f, &light_dir);
+					normalize(&ref_dir);
+
+					vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
+					vr_dot_pow = powf(vr_dot, shape->material.shininess);
+
+					/* 鏡面反射光の計算 */
+					color = colorf_mul(&color, 1.0f, &shape->material.specular_ref, vr_dot_pow, &light->illuminance);
+				}
+
 			}
 		}
 		else
 		{
+
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
 			/* 鏡面反射光 specular を計算してcolに足し合わせる */

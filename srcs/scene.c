@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 22:47:44 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 10:28:44 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -567,7 +567,7 @@ void scene_setting(t_scene *scene)
 
 
 	SET_COLOR(scene->ambient_illuminance, 0.1, 0.1, 0.1);
-	scene->num_lights_capacity = 3;
+	scene->num_lights_capacity = 4;
 	scene->num_lights = scene->num_lights_capacity;
 	scene->lights = (t_light *)malloc(sizeof(t_light) * scene->num_lights_capacity);
 	scene->global_refraction_index = 1.0f;
@@ -580,17 +580,24 @@ void scene_setting(t_scene *scene)
 
 
 	init_light(&scene->lights[1], LT_SPOT,
-			   30.0f, 20.0f, 10.0f,	/* position */
-			   -1.0f, -0.5f, 0.0f,	/* direction(do not use LT_POINT) */
+			   00.0f, 50.0f, 10.0f,	/* position */
+			   0.0f, -1.0f, 0.0f,	/* direction(do not use LT_POINT) */
 			   0.0f, 1.0f, 0.0f,	/* 照度(色) */
 			   35.0f);					/* projection angle of spotlight */
 
 
 	init_light(&scene->lights[2], LT_SPOT,
-			   -30.0f, 30.0f, -20.0f,	/* position */
-			   1.0f, -1.0f, 1.0f,	/* direction(do not use LT_POINT) */
+			   -30.0f, 5.0f, -20.0f,	/* position */
+			   1.0f, -0.2f, 1.0f,	/* direction(do not use LT_POINT) */
 			   0.0f, 0.0f, 1.0f,	/* 照度(色) */
 			   35.f);						/* projection angle of spotlight */
+
+	init_light(&scene->lights[3], LT_SPOT,
+			   30.0f, 5.0f, -20.0f,	/* position */
+			   -1.0f, -0.2f, 1.0f,	/* direction(do not use LT_POINT) */
+			   1.0f, 0.0f, 0.0f,	/* 照度(色) */
+			   35.f);						/* projection angle of spotlight */
+
 
 //	init_light(&scene->lights[1], LT_SPOT,
 //			   -20.0f, 20.0f, 10.0f,	/* position */
