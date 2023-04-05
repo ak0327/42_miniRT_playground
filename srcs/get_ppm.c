@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 21:44:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 22:05:53 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	*free_split_array_ret_nullptr(char **split)
 
 void	*free_line_ret_nullptr(char *line)
 {
-	size_t idx;
-
 	if (!line)
 		return (NULL);
 	free(line);
@@ -74,7 +72,6 @@ t_img	*get_ppm(void)
 			//todo: check array len, atoi success or failure
 			img->width = ft_atoi(split[0], &is_atoi_success);
 			img->height = ft_atoi(split[1], &is_atoi_success);
-//			printf("w:%d, h:%d\n", img->width, img->height);
 			img->data = (int *)ft_calloc(sizeof(int), img->width * 3 * img->height);
 		}
 		else if (col >= 4)
@@ -122,20 +119,17 @@ void	draw_img_test(t_data data, t_img img)
 
 }
 
-t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
-							  t_intersection_point intp, t_shape *shape, t_img img)
+t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
+							t_intersection_point intp, t_shape *shape, t_img img)
 {
-	t_colorf	color;
-	t_vector	pos_local;
-	t_vector	bamp_n;
+	t_vector	bump_n;
+	int			put_size = 2;
 	int			r, g, b;
 	size_t		row, col, idx;
-	int			put_size = 2;
 
-	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
+	SET_VECTOR(bump_n, 0.0f, 0.0f, 0.0f);
 	if (shape->type == ST_PLANE)
 	{
-
 		int	u, v;
 		u = (int)intp.position.x;
 		v = (int)intp.position.z;
@@ -148,11 +142,40 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		r = img.data[idx++];
 		g = img.data[idx++];
 		b = img.data[idx];
-		bamp_n.x = (float)r; bamp_n.y = (float)g, bamp_n.z = (float)b;
-		normalize(&bamp_n);
+		bump_n.x = ((float)r - (256.0f/2.0f)) / (256.0f/2.0f);
+		bump_n.y = ((float)g - (256.0f/2.0f)) / (256.0f/2.0f);
+		bump_n.z = ((float)b - (256.0f/2.0f)) / (256.0f/2.0f);
+		normalize(&bump_n);
+	}
+	return (bump_n);
+}
 
-		intp.normal = bamp_n;
 
+
+t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
+							  t_intersection_point intp, t_shape *shape, t_img img)
+{
+	t_colorf	color;
+	t_vector	pos_local;
+	int			r, g, b;
+	size_t		row, col, idx;
+	int			put_size = 2;
+
+	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
+	if (shape->type == ST_PLANE)
+	{
+		int	u, v;
+		u = (int)intp.position.x;
+		v = (int)intp.position.z;
+		v = -v;
+
+		row = (((u * put_size)  % img.width) + img.width) % img.width;
+		col = (((v * put_size) % img.height) + img.height) % img.height;
+
+		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
+		r = img.data[idx++];
+		g = img.data[idx++];
+		b = img.data[idx];
 		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
 		return (color);
 	}

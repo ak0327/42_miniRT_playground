@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 21:34:22 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 22:11:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,10 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 	float		dist;
 	t_vector	vec_pi_to_light;
 
+	t_vector	normal = intp.normal;
+
+	if (shape->type == ST_PLANE)
+		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
@@ -200,7 +204,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 			light_dir = light->direction;	// 平行光源
 
 		normalize(&light_dir);
-		nl_dot = CLAMP(dot(&intp.normal, &light_dir), 0, 1);
+		nl_dot = CLAMP(dot(&normal, &light_dir), 0, 1);
 
 		/* shadow_rayを計算 */
 		shadow_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &light_dir);
@@ -226,8 +230,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		color = colorf_add(&color, &checker_col);
 
 		img_col = get_img_color(scene, eye_ray, intp, shape, img);
-		nl_dot = CLAMP(dot(&intp.normal, &light_dir), 0, 1);
 		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
+
 
 		// 一時的にPLANEの反射を無効化
 //		if (shape->type == ST_PLANE)
@@ -244,7 +248,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 				if (nl_dot > 0)
 				{
 					/* 正反射ベクトルの計算 */
-					ref_dir = vec_calc(2.0f * nl_dot, &intp.normal, -1.0f, &light_dir);
+					ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &light_dir);
 					normalize(&ref_dir);
 
 					vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
@@ -263,7 +267,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 			if (nl_dot > 0)
 			{
 				/* 正反射ベクトルの計算 */
-				ref_dir = vec_calc(2.0f * nl_dot, &intp.normal, -1.0f, &light_dir);
+				ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &light_dir);
 				normalize(&ref_dir);
 
 				vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);

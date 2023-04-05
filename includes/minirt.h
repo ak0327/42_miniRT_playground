@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 20:35:00 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 22:06:07 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,6 +348,8 @@ t_img		*get_ppm(void);
 void		draw_img_test(t_data data, t_img img);
 t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 						  t_intersection_point intp, t_shape *shape, t_img img);
+t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
+							t_intersection_point intp, t_shape *shape, t_img img);
 
 
 /********** init **********/
