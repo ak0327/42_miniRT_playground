@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 19:22:38 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 19:36:48 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_camera	init_camera(void)
 //	SET_VECTOR(camera.dir, 0.0f, -0.3f, 1.0f)
 
 /* bump */
-	SET_VECTOR(camera.center, 0.0f, 100.0f, -60.0f)
+	SET_VECTOR(camera.center, 0.0f, 200.0f, -200.0f)
 	SET_VECTOR(camera.dir, 0.0f, -1.0f, 1.0f)
 
 

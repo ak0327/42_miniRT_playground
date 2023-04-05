@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 19:21:52 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 19:45:40 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,26 +124,23 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 							  t_intersection_point intp, t_shape *shape, t_img img)
 {
 	t_colorf	color;
-	int			condition_checker;
 	t_vector	pos_local;
 	int			r, g, b;
 	size_t		row, col, idx;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
-	// checker_color, あとで関数に切り出す
 	if (shape->type == ST_PLANE)
 	{
-		// u,v -> 画像の解像度に合わせてimgのidxを取得
-		// とりあえずdot by botで描画する
+		int	unit = 10;
 
 		int	u, v;
 		u = (int)intp.position.x;
 		v = (int)intp.position.z;
 		v = -v;
 
-		row = (u % img.width) * 10;
-		col = (v % img.height) * 10;
+		row = ((u  % img.width) + img.width) % img.width * unit;
+		col = ((v % img.height) + img.height) % img.height * unit;
 
 		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
 		r = img.data[idx++];
