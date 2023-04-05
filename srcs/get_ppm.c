@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 22:05:53 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 23:02:41 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,17 +123,19 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 							t_intersection_point intp, t_shape *shape, t_img img)
 {
 	t_vector	bump_n;
-	int			put_size = 2;
 	int			r, g, b;
 	size_t		row, col, idx;
+	int			put_size = 2;
 
-	SET_VECTOR(bump_n, 0.0f, 0.0f, 0.0f);
+	bump_n = intp.normal;
+
 	if (shape->type == ST_PLANE)
 	{
 		int	u, v;
 		u = (int)intp.position.x;
 		v = (int)intp.position.z;
-		v = -v;
+		u = -u;//todo: 影の方向 これで良さそう なぜ？
+//		v = -v;
 
 		row = (((u * put_size)  % img.width) + img.width) % img.width;
 		col = (((v * put_size) % img.height) + img.height) % img.height;
@@ -143,8 +145,8 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		g = img.data[idx++];
 		b = img.data[idx];
 		bump_n.x = ((float)r - (256.0f/2.0f)) / (256.0f/2.0f);
-		bump_n.y = ((float)g - (256.0f/2.0f)) / (256.0f/2.0f);
-		bump_n.z = ((float)b - (256.0f/2.0f)) / (256.0f/2.0f);
+		bump_n.z = ((float)g - (256.0f/2.0f)) / (256.0f/2.0f);
+		bump_n.y = ((float)b - (256.0f/2.0f)) / (256.0f/2.0f);
 		normalize(&bump_n);
 	}
 	return (bump_n);

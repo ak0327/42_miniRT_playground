@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 21:45:22 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 22:56:55 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -675,15 +675,21 @@ void scene_setting(t_scene *scene)
 				  0.0f);					/* 絶対屈折率 */
 
 
-	SET_COLOR(scene->ambient_illuminance, 0.1, 0.1, 0.1);
+	SET_COLOR(scene->ambient_illuminance, 0.1f, 0.1f, 0.1f);
 	scene->num_lights_capacity = 1;
 	scene->num_lights = scene->num_lights_capacity;
 	scene->lights = (t_light *)malloc(sizeof(t_light) * scene->num_lights_capacity);
 
+//	init_light(&scene->lights[0], LT_POINT,
+//			   30.0f, 50.0f, -30.0f,	/* position */
+//			   -1.0f, -1.0f, 1.0f,	/* direction(do not use LT_POINT) */
+//			   0.5f, 0.5f, 0.5f,	/* color */
+//			   70.0f);					/* angle */
+
 	init_light(&scene->lights[0], LT_POINT,
-			   30.0f, 50.0f, -30.0f,	/* position */
-			   -1.0f, -1.0f, 1.0f,	/* direction(do not use LT_POINT) */
-			   0.5f, 0.5f, 0.5f,	/* color */
+			   0.0f, 50.0f, 0.0f,	/* position */
+			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
+			   1.0f, 1.0f, 1.0f,	/* color */
 			   70.0f);					/* angle */
 
 //	init_light(&scene->lights[0], LT_DIRECTIONAL,
