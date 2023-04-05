@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 19:45:40 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 21:44:47 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ void	*free_line_ret_nullptr(char *line)
 t_img	*get_ppm(void)
 {
 	t_img		*img;
-	const char	*img_path = "./img/cat.ppm";
+//	const char	*img_path = "./img/cat.ppm";
+//	const char	*img_path = "./img/bump_1.ppm";
+	const char	*img_path = "./img/normal1.ppm";
 	char		*line;
 	char		**split;
 	size_t		col;
@@ -125,30 +127,34 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 {
 	t_colorf	color;
 	t_vector	pos_local;
+	t_vector	bamp_n;
 	int			r, g, b;
 	size_t		row, col, idx;
+	int			put_size = 2;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
-
 	if (shape->type == ST_PLANE)
 	{
-		int	unit = 10;
 
 		int	u, v;
 		u = (int)intp.position.x;
 		v = (int)intp.position.z;
 		v = -v;
 
-		row = ((u  % img.width) + img.width) % img.width * unit;
-		col = ((v % img.height) + img.height) % img.height * unit;
+		row = (((u * put_size)  % img.width) + img.width) % img.width;
+		col = (((v * put_size) % img.height) + img.height) % img.height;
 
 		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
 		r = img.data[idx++];
 		g = img.data[idx++];
 		b = img.data[idx];
+		bamp_n.x = (float)r; bamp_n.y = (float)g, bamp_n.z = (float)b;
+		normalize(&bamp_n);
+
+		intp.normal = bamp_n;
 
 		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
-		color = colorf_add(&color, &color);
+		return (color);
 	}
 //	else if (shape->type == ST_SPHERE)
 //	{

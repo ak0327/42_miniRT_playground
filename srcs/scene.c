@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 19:53:21 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 21:45:22 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -653,8 +653,8 @@ void scene_setting(t_scene *scene)
 //				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
 //				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
 //				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
-				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
-				  0.5f, 0.5f, 0.5f,		/* 拡散反射係数(RGB) */
+				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
 				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
 				  1.0f,								/* 光沢度 */
 				  MT_DEFAULT,
@@ -662,17 +662,18 @@ void scene_setting(t_scene *scene)
 				  0.0f);
 
 	init_shape(&scene->shapes[1], ST_SPHERE,
-			   0.0f, 10.0f, 10.0f,	/* 球の中心位置 */
+			   0.0f, 10.0f, 0.0f,	/* 球の中心位置 */
 			   10.0f);    			/* 球の半径 */
 
 	init_material(&scene->shapes[1].material,
-				  0.01f, 0.01f, 0.01f,	/* 環境光係数(RGB)   */
+				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
 				  0.7f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
-				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+				  0.7f, 0.7f, 0.7f,		/* 鏡面反射率(RGB)   */
 				  8.0f,							/* 光沢度 */
 				  MT_DEFAULT, 					/* マテリアルタイプ */
 				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
 				  0.0f);					/* 絶対屈折率 */
+
 
 	SET_COLOR(scene->ambient_illuminance, 0.1, 0.1, 0.1);
 	scene->num_lights_capacity = 1;
