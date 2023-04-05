@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 17:23:53 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 19:28:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,6 +227,9 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 		img_col = get_img_color(scene, eye_ray, intp, shape, img);
 		color = colorf_add(&color, &img_col);
+		// 一時的にPLANEの反射を無効化
+		if (shape->type == ST_PLANE)
+			return (color);
 
 		if (light->type == LT_SPOT)
 		{
