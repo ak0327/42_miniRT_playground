@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 10:25:06 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 10:52:56 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,8 +227,6 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		if (light->type == LT_SPOT)
 		{
 			t_vector	light_to_pos = normalize_vec_inv(&light_dir);
-			float		theta = acosf(dot(&intp.normal, &light_dir));
-//			float		alpha = acosf(dot(&light_to_pos, &light->direction));
 			float		alpha = acosf(dot(&light_to_pos, &light->direction));
 			if (alpha <= light->angle / 2.0f * (float)M_PI / 180.0f)
 			{
@@ -246,7 +244,6 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 					/* 鏡面反射光の計算 */
 					color = colorf_mul(&color, 1.0f, &shape->material.specular_ref, vr_dot_pow, &light->illuminance);
 				}
-
 			}
 		}
 		else
@@ -290,8 +287,6 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	/* 視線方向に物体がなかった場合 */
 	if (!intersect_result)
 		return (0);
-
-	/* 視線方向に物体があった場合 */
 
 	/* 環境光Laを計算しcolに入れる */
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
