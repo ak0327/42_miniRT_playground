@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/01 17:51:48 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 15:58:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ void	free_data(t_data *data)
 
 /*
 
+ Left hand coordinates
+
    +y
    |  +z
    | /
@@ -73,6 +75,24 @@ int	main(void)
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+
+	/* ppm test */
+	const char	*img_path = "./img/42tokyo_252.ppm";
+	char		*line;
+
+	int	fd = open(img_path, O_RDONLY);
+	if (fd < 0)
+		return (0);
+	printf("file:%s\n", img_path);
+	while (true)
+	{
+		line = get_next_line(fd, false);
+		printf("[%s]\n", line);
+		if (!line)
+			break ;
+		free(line);
+	}
+	printf("\n");
 
 	/* init scene & camera */
 	scene_setting(&scene);

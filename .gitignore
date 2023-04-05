@@ -11,6 +11,9 @@
 !Makefile
 !Makefile.gen
 !playground
+!img
+!*.ppm
+!*.xpm
 
 .idea/
 objs/

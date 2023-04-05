@@ -32,6 +32,7 @@ SRC				= main.c \
 				  init.c \
 				  checker.c \
 				  matrix.c \
+				  get_ppm.c \
 
 
 
