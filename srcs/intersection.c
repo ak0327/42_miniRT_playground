@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 11:20:50 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:17:35 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,18 +166,6 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 		return (1);
 	}
 	return (0);
-}
-
-static int	intersection_with_hyperboloid(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
-{
-
-	return (1);
-}
-
-static int	intersection_with_paraboloid(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
-{
-
-	return (1);
 }
 
 static int	intersection_with_sphere(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)

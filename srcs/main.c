@@ -77,38 +77,38 @@ int	main(void)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	/* ppm test */
-	t_img		*img;
-	img = get_ppm();
-	draw_img_test(data, *img);
+//	t_img		*img;
+//	img = get_ppm();
+//	draw_img_test(data, *img);
 
 //	/* init scene & camera */
-//	scene_setting(&scene);
-//	camera = init_camera();
-//
-//	/* draw */
-//	y = 0;
-//	while (y < data.win_height)
-//	{
-//		x = 0;
-//		while (x < data.win_width)
-//		{
-//			color = init_color((float)(100.0f/255.0f), (float)(149.0f/255.0f), (float)(237.0f/255.0f));
-//
-//			eye_ray.start = camera.center;
-//			eye_ray.direction = ray_dir(x, y, camera);
-//
-//			raytrace(&scene, &eye_ray, &color);
-//
-//			r = (int)(255 * CLAMP(color.r, 0, 1));
-//			g = (int)(255 * CLAMP(color.g, 0, 1));
-//			b = (int)(255 * CLAMP(color.b, 0, 1));
-//
-//			my_mlx_pixel_put(&data, x, y, r << 16 | g << 8 | b);
-//
-//			x++;
-//		}
-//		y++;
-//	}
+	scene_setting(&scene);
+	camera = init_camera();
+
+	/* draw */
+	y = 0;
+	while (y < data.win_height)
+	{
+		x = 0;
+		while (x < data.win_width)
+		{
+			color = init_color((float)(100.0f/255.0f), (float)(149.0f/255.0f), (float)(237.0f/255.0f));
+
+			eye_ray.start = camera.center;
+			eye_ray.direction = ray_dir(x, y, camera);
+
+			raytrace(&scene, &eye_ray, &color);
+
+			r = (int)(255 * CLAMP(color.r, 0, 1));
+			g = (int)(255 * CLAMP(color.g, 0, 1));
+			b = (int)(255 * CLAMP(color.b, 0, 1));
+
+			my_mlx_pixel_put(&data, x, y, r << 16 | g << 8 | b);
+
+			x++;
+		}
+		y++;
+	}
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hooks(data);

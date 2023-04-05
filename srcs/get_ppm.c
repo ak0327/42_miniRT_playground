@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 17:00:19 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:11:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_img	*get_ppm(void)
 			//todo: check array len, atoi success or failure
 			img->width = ft_atoi(split[0], &is_atoi_success);
 			img->height = ft_atoi(split[1], &is_atoi_success);
-			printf("w:%d, h:%d\n", img->width, img->height);
+//			printf("w:%d, h:%d\n", img->width, img->height);
 			img->data = (int *)ft_calloc(sizeof(int), img->width * 3 * img->height);
 		}
 		else if (col >= 4)
