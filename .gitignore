@@ -5,12 +5,16 @@
 !libs
 !includes
 !minilibx-linux
+
 !*.c
 !*.h
-!README.md
 !Makefile
+
+!README.md
 !Makefile.gen
+
 !playground
+
 !img
 !*.ppm
 !*.xpm

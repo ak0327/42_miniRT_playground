@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 19:46:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 16:34:12 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,6 +266,12 @@ typedef struct	s_camera
 	float		fov_deg;
 } t_camera;
 
+typedef struct	s_img
+{
+	int	height;
+	int width;
+	int	*data;	// data=[R11,G11,B11, R12,G12,B12, ..., R21,G21,B21,..., Rhw,Ghw,Bhw]
+} t_img;
 
 
 /********** vector **********/
@@ -337,6 +343,12 @@ t_matrix	transpose_matrix(t_matrix R);
 t_vector	get_local_axis(t_matrix T, t_vector v);
 
 
+/********** img **********/
+t_img		*get_ppm(void);
+void		draw_img_test(t_data data, t_img img);
+
+
+
 /********** init **********/
 void		scene_setting(t_scene *scene);
 void		init_shape(t_shape *shape, t_shape_type st, ...);
@@ -354,5 +366,9 @@ void init_light(t_light *light, t_light_type lt,
 				float dirx, float diry, float dirz,
 				float illR, float illG, float illB,
 				float angle);
+
+
+/********** main **********/
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 #endif //MINIRT_H
