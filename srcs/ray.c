@@ -6,17 +6,17 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 11:23:58 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:23:53 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level);
+int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level, t_img img);
 
 static t_colorf	calc_perfect_reflection_color(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
-		t_intersection_point intp, t_shape *shape)
+		t_intersection_point intp, t_shape *shape, t_img img)
 {
 	t_colorf	color;
 	t_vector	eye_dir;
@@ -52,7 +52,7 @@ static t_colorf	calc_perfect_reflection_color(
 	re_ray.direction = ref_dir;
 
 	re_color = *out_col;
-	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1);
+	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1, img);
 
 	/* 完全鏡面反射を計算 */
 	color = colorf_mul(&color, 1.0f, &shape->material.reflect_ref, 1.0f, &re_color);
@@ -61,7 +61,7 @@ static t_colorf	calc_perfect_reflection_color(
 
 static t_colorf	calc_inflection_refraction_color(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
-		t_intersection_point intp, t_shape *shape)
+		t_intersection_point intp, t_shape *shape, t_img img)
 {
 	float		eta_1;			// 物質1（屈折前）の絶対屈折率
 	float		eta_2;			// 物質2（屈折後）の絶対屈折率
@@ -150,9 +150,9 @@ static t_colorf	calc_inflection_refraction_color(
 	fe_color = *out_col;
 
 	/* 再帰呼び出し（反射） */
-	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1);
+	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1, img);
 	/* 再帰呼び出し（屈折） */
-	recursive_raytrace(scene, &fe_ray, &fe_color, recursion_level + 1);
+	recursive_raytrace(scene, &fe_ray, &fe_color, recursion_level + 1, img);
 
 	/* 完全鏡面反射、屈折光を計算 */
 	color = colorf_mul(&color, 1.0f, &shape->material.reflect_ref, cr, &re_color);
@@ -161,10 +161,11 @@ static t_colorf	calc_inflection_refraction_color(
 }
 
 static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
-								 t_intersection_point intp, t_shape *shape)
+								 t_intersection_point intp, t_shape *shape, t_img img)
 {
 	t_colorf	color;
 	t_colorf	checker_col;
+	t_colorf	img_col;
 
 	size_t		i;
 	t_light		*light;
@@ -224,6 +225,9 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		checker_col = get_checker_color(scene, eye_ray, intp, shape);
 //		color = colorf_add(&color, &checker_col);
 
+		img_col = get_img_color(scene, eye_ray, intp, shape, img);
+		color = colorf_add(&color, &img_col);
+
 		if (light->type == LT_SPOT)
 		{
 			t_vector	light_to_pos = normalize_vec_inv(&light_dir);
@@ -268,7 +272,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 	return (color);
 }
 
-int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level)
+int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level, t_img img)
 {
 	int						intersect_result;	// 交差判定の結果
 	t_shape					*shape;		// 交差した物体へのポインタ
@@ -298,24 +302,24 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		perfect_reflect_color = calc_perfect_reflection_color(scene, eye_ray,
 															  out_col,
 															  recursion_level,
-															  intp, shape);
+															  intp, shape, img);
 		color = colorf_add(&color, &perfect_reflect_color);
 	}
 	else if (shape->material.type == MT_REFRACTION)
 	{
 		/* 屈折 */
-		inflection_refraction_color = calc_inflection_refraction_color(scene, eye_ray, out_col, recursion_level, intp, shape);
+		inflection_refraction_color = calc_inflection_refraction_color(scene, eye_ray, out_col, recursion_level, intp, shape, img);
 		color = colorf_add(&color, &inflection_refraction_color);
 	}
 
-	light_color = calc_light_color(scene, eye_ray,  intp, shape);
+	light_color = calc_light_color(scene, eye_ray,  intp, shape, img);
 	color = colorf_add(&color, &light_color);
 
 	*out_col = color;
 	return (1);
 }
 
-int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col)
+int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, t_img img)
 {
-	return (recursive_raytrace(scene, eye_ray, out_col, 0));
+	return (recursive_raytrace(scene, eye_ray, out_col, 0, img));
 }

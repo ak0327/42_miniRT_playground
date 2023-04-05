@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 16:34:12 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 17:23:42 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,7 +329,7 @@ int			get_nearest_shape(const t_scene *scene, const t_ray *ray, float max_dist, 
 					  t_shape **out_shape, t_intersection_point *out_intp);
 
 /********** ray **********/
-int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col);
+int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, t_img img);
 
 
 /********** checker **********/
@@ -346,7 +346,8 @@ t_vector	get_local_axis(t_matrix T, t_vector v);
 /********** img **********/
 t_img		*get_ppm(void);
 void		draw_img_test(t_data data, t_img img);
-
+t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
+						  t_intersection_point intp, t_shape *shape, t_img img);
 
 
 /********** init **********/

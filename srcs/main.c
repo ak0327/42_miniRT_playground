@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 16:33:29 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 19:09:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ int	main(void)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	/* ppm test */
-//	t_img		*img;
-//	img = get_ppm();
+	t_img		*img;
+	img = get_ppm();
 //	draw_img_test(data, *img);
 
 //	/* init scene & camera */
@@ -97,7 +97,7 @@ int	main(void)
 			eye_ray.start = camera.center;
 			eye_ray.direction = ray_dir(x, y, camera);
 
-			raytrace(&scene, &eye_ray, &color);
+			raytrace(&scene, &eye_ray, &color, *img);
 
 			r = (int)(255 * CLAMP(color.r, 0, 1));
 			g = (int)(255 * CLAMP(color.g, 0, 1));

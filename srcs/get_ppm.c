@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 17:11:43 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/05 19:21:52 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,4 +118,100 @@ void	draw_img_test(t_data data, t_img img)
 		y++;
 	}
 
+}
+
+t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
+							  t_intersection_point intp, t_shape *shape, t_img img)
+{
+	t_colorf	color;
+	int			condition_checker;
+	t_vector	pos_local;
+	int			r, g, b;
+	size_t		row, col, idx;
+
+	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
+
+	// checker_color, あとで関数に切り出す
+	if (shape->type == ST_PLANE)
+	{
+		// u,v -> 画像の解像度に合わせてimgのidxを取得
+		// とりあえずdot by botで描画する
+
+		int	u, v;
+		u = (int)intp.position.x;
+		v = (int)intp.position.z;
+		v = -v;
+
+		row = (u % img.width) * 10;
+		col = (v % img.height) * 10;
+
+		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
+		r = img.data[idx++];
+		g = img.data[idx++];
+		b = img.data[idx];
+
+		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
+		color = colorf_add(&color, &color);
+	}
+//	else if (shape->type == ST_SPHERE)
+//	{
+//		pos_local = sub(&intp.position, &shape->data.sphere.center);
+//		float radius = norm(&pos_local);
+//		float theta = acosf(pos_local.y / radius);
+//		float phi = atan2f(pos_local.z, pos_local.x);
+//		float u = 1.0f - phi / (float)M_PI;
+//		float v = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
+//		condition_checker = (int)(floorf(u * 10) + floorf(v * 15)) % 2;
+//		if (condition_checker)
+//		{
+//			SET_COLOR(color, 0.6f, 0.6f, 0.6f);
+//			color = colorf_add(&color, &color);
+//		}
+//	}
+//	else if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
+//	{
+//		/* u,v */
+//		t_vector	hi, d;
+//		if (shape->type == ST_CYLINDER)
+//		{
+//			pos_local = sub(&intp.position, &shape->data.cylinder.position);
+//			hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
+//			d = shape->data.cylinder.normal;
+//		}
+//		else
+//		{
+//			pos_local = sub(&intp.position, &shape->data.corn.position);
+//			hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
+//			d = shape->data.corn.normal;
+//		}
+//
+//		t_vector	u_vec, v_vec;
+//		float		theta;
+//		float	u, v, uu, vv;
+//
+//		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));		// TODO: +-
+//		u_vec.y = -d.x / sqrtf(SQR(d.x) + SQR(d.y));	// TODO: +-
+//		u_vec.z = 0;
+//		normalize(&u_vec);
+//
+//		v_vec = cross(&u_vec, &d);
+//		normalize(&v_vec);
+//
+//		u = dot(&u_vec, &pos_local);
+//		v = dot(&v_vec, &pos_local);
+//
+//		theta = atan2f(v, u);
+//		uu = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
+//		vv = norm(&hi);
+//
+//		condition_checker = (int)(floorf(uu * 10) + floorf(vv * 1)) % 2;
+//
+//		if (condition_checker)
+//		{
+//			SET_COLOR(color, 1.0f, 1.0f, 1.0f);
+//			color = colorf_add(&color, &color);
+//		}
+//
+//	}
+	return (color);
 }
