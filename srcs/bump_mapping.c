@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 13:36:25 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 18:17:59 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 
 //		u = 1.0f - phi / (float)M_PI;
 //		v = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
-		img_size = 2000;
-		u *= (float)img_size;
-		v *= (float)img_size;
+//		img_size = 2000;
+		u *= -(float)img.width;
+		v *= (float)img.height;
 
 		row = (((int)u % img.width) + img.width) % img.width;
 		col = (((int)v % img.height) + img.height) % img.height;
