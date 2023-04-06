@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 18:17:59 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 18:30:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,22 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 	t_vector	bump_n;
 	int			r, g, b;
 	size_t		row, col, idx;
-	int			put_size = 1;
+	int			put_size;
+	int			u, v;
+	float		fu, fv;
+	t_vector	pos_local;
+	float		radius, theta, phi;
 
 	bump_n = intp.normal;
 
 	if (shape->type == ST_PLANE)
 	{
-		int	u, v;
 		u = (int)intp.position.x;
 		v = (int)intp.position.z;
 //		u = -u;//todo: 影の方向 これで良さそう なぜ？
 		v = -v;
 
+		put_size = 10;
 		row = (((u * put_size)  % img.width) + img.width) % img.width;
 		col = (((v * put_size) % img.height) + img.height) % img.height;
 
@@ -41,7 +45,41 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		bump_n.z = ((float)g - (256.0f/2.0f)) / (256.0f/2.0f);
 		bump_n.y = ((float)b - (256.0f/2.0f)) / (256.0f/2.0f);
 		normalize(&bump_n);
+		return (bump_n);
 	}
+	if (shape->type == ST_SPHERE)
+	{
+		pos_local = sub(&intp.position, &shape->data.sphere.center);
+		radius = norm(&pos_local);
+		theta = acosf(pos_local.y / radius);
+
+		if (radius * sinf(theta) == EPSILON)
+			phi = 0.0f;
+		else
+			phi = acosf(pos_local.x / (radius * sinf(theta)));
+
+		fu = phi / (float)M_PI;		// 0 <= fu <= 1
+		fv = theta / (float)M_PI;	// 0 <= fv <= 1
+
+//		img_size = 2000;
+		fu *= -(float)img.width;
+		fv *= (float)img.height;
+
+		row = (((int)fu % img.width) + img.width) % img.width;		// 0 <= row <= img.width
+		col = (((int)fv % img.height) + img.height) % img.height;	// 0 <= col <= img.height
+
+		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
+		r = img.data[idx++];
+		g = img.data[idx++];
+		b = img.data[idx];
+		bump_n.x = ((float)r - (256.0f/2.0f)) / (256.0f/2.0f);
+		bump_n.z = ((float)g - (256.0f/2.0f)) / (256.0f/2.0f);
+		bump_n.y = ((float)b - (256.0f/2.0f)) / (256.0f/2.0f);
+		normalize(&bump_n);
+		return (bump_n);
+	}
+
+
 	return (bump_n);
 }
 
@@ -78,7 +116,6 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 	if (shape->type == ST_SPHERE)
 	{
 		pos_local = sub(&intp.position, &shape->data.sphere.center);
-//		pos_local = intp.position, &shape->data.sphere.center;
 		radius = norm(&pos_local);
 		theta = acosf(pos_local.y / radius);
 
@@ -90,16 +127,12 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		u = phi / (float)M_PI;		// 0 <= u <= 1
 		v = theta / (float)M_PI;	// 0 <= v <= 1
 
-//		u = 1.0f - phi / (float)M_PI;
-//		v = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
 //		img_size = 2000;
 		u *= -(float)img.width;
 		v *= (float)img.height;
 
-		row = (((int)u % img.width) + img.width) % img.width;
-		col = (((int)v % img.height) + img.height) % img.height;
-
-//		printf("(r,θ,φ)=(%f, %f, %f), (u,v)=(%f, %f), (r,c)=(%zu, %zu)\n", radius, theta, phi, u, v, row, col);
+		row = (((int)u % img.width) + img.width) % img.width;		// 0 <= row <= img.width
+		col = (((int)v % img.height) + img.height) % img.height;	// 0 <= col <= img.height
 
 		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
 		r = img.data[idx++];
