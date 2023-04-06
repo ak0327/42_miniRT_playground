@@ -146,7 +146,6 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		u = phi / (float)M_PI;		// 0 <= u <= 1
 		v = theta / (float)M_PI;	// 0 <= v <= 1
 
-//		img_size = 2000;
 		u *= -(float)img.width;
 		v *= (float)img.height;
 
@@ -159,27 +158,6 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		b = img.data[idx];
 		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
 		return (color);
-
-
-		//		pos_local = sub(&intp.position, &shape->data.sphere.center);
-//		radius = norm(&pos_local);
-//		theta = acosf(pos_local.y / radius);
-//		phi = atan2f(pos_local.z, pos_local.x);
-//		u = 1.0f - phi / (float)M_PI;
-//		v = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
-//
-//		row = ((((int)u * put_size)  % img.width) + img.width) % img.width;
-//		col = ((((int)v * put_size) % img.height) + img.height) % img.height;
-//
-//		printf("(r,θ,φ)=(%f, %f, %f), (u,v)=(%f, %f), (r,c)=(%zu, %zu)\n", radius, theta, phi, u, v, row, col);
-//
-//		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
-//		r = img.data[idx++];
-//		g = img.data[idx++];
-//		b = img.data[idx];
-//		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
-//		return (color);
-
 	}
 //	else if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
 //	{
