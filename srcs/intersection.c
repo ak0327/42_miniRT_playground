@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 22:43:35 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 09:56:25 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,23 +178,25 @@ static int	intersection_with_sphere(const t_shape *shape, const t_ray *ray, t_in
 
 	pe_pc = sub(&ray->start, &sph->center);
 	A = dot(&ray->direction, &ray->direction);
-	B = 2 * dot(&ray->direction, &pe_pc);
+	B = 2.0f * dot(&ray->direction, &pe_pc);
 	C = dot(&pe_pc, &pe_pc) - SQR(sph->radius);
 
-	D = SQR(B) - 4 * A * C;
+	D = SQR(B) - 4.0f * A * C;
 
+	if (A == EPSILON)
+		return (0);
 	t = -1.0f;
-	if (D == 0)
+	if (D == EPSILON)
 		t = -B / (2 * A);
-	else if (D > 0)
+	else if (D > EPSILON)
 	{
-		float t1 = (float) (-B + sqrtf(D)) / (2 * A);
-		float t2 = (float) (-B - sqrtf(D)) / (2 * A);
-		if (t1 > 0) t = t1;
-		if (t2 > 0 && t2 < t) t = t2;
+		float t1 = (float) (-B + sqrtf(D)) / (2.0f * A);
+		float t2 = (float) (-B - sqrtf(D)) / (2.0f * A);
+		if (t1 > EPSILON) t = t1;
+		if (t2 > EPSILON && t2 < t) t = t2;
 	}
 
-	if (t <= 0)
+	if (t <= EPSILON)
 		return (0);
 	if (!out_intp)
 		return (0);
@@ -215,13 +217,13 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray, t_int
 	float			t;
 	t_vector		td;
 
-	if (dn_dot == 0.0f)
+	if (dn_dot == EPSILON)
 		return (0);
 
 	s_p = sub(&ray->start, &pln->position);
 	t = -1.0f * dot(&s_p, &pln->normal) / dn_dot;
 
-	if (t <= 0.0f)
+	if (t <= EPSILON)
 		return (0);
 
 	if (!out_intp)

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 23:02:41 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 09:48:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ t_img	*get_ppm(void)
 	t_img		*img;
 //	const char	*img_path = "./img/cat.ppm";
 //	const char	*img_path = "./img/bump_1.ppm";
-	const char	*img_path = "./img/normal1.ppm";
+//	const char	*img_path = "./img/normal1.ppm";
+	const char	*img_path = "./img/normalmap_example.ppm";
 	char		*line;
 	char		**split;
 	size_t		col;
@@ -125,7 +126,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 	t_vector	bump_n;
 	int			r, g, b;
 	size_t		row, col, idx;
-	int			put_size = 2;
+	int			put_size = 1;
 
 	bump_n = intp.normal;
 
@@ -134,8 +135,8 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		int	u, v;
 		u = (int)intp.position.x;
 		v = (int)intp.position.z;
-		u = -u;//todo: 影の方向 これで良さそう なぜ？
-//		v = -v;
+//		u = -u;//todo: 影の方向 これで良さそう なぜ？
+		v = -v;
 
 		row = (((u * put_size)  % img.width) + img.width) % img.width;
 		col = (((v * put_size) % img.height) + img.height) % img.height;
@@ -161,7 +162,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 	t_vector	pos_local;
 	int			r, g, b;
 	size_t		row, col, idx;
-	int			put_size = 2;
+	int			put_size = 1;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 	if (shape->type == ST_PLANE)

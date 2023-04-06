@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 22:43:00 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 09:58:57 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ t_camera	init_camera(void)
 //	SET_VECTOR(camera.dir, 0.0f, -0.3f, 1.0f)
 
 /* bump */
-	SET_VECTOR(camera.center, 0.0f, 200.0f, -200.0f)
-	SET_VECTOR(camera.dir, 0.0f, -1.0f, 1.0f)
+	SET_VECTOR(camera.center, 0.0f, 300.0f, -600.0f)
+	SET_VECTOR(camera.dir, 0.0f, -0.5f, 1.0f)
 
 
 	normalize(&camera.dir);
-	camera.fov_deg = 60.0f;
+	camera.fov_deg = 50.0f;
 
 	theta_radians  = camera.fov_deg * (float)M_PI / 180.0f;
 	distance_camera_to_screen = WINDOW_HEIGHT * ASPECT / 2.0f / tanf(theta_radians / 2.0f);
@@ -55,9 +55,9 @@ t_camera	init_camera(void)
 	camera.v = cross(&camera.dir_camera_to_sc_center, &camera.u);
 	normalize(&camera.v);
 
-	if (camera.dir.x == 0.0f && camera.dir.y != 0.0f && camera.dir.z == 0.0f)
+	if (camera.dir.x == EPSILON && camera.dir.y != EPSILON && camera.dir.z == EPSILON)
 	{
-		if (camera.dir.y > 0.0f)
+		if (camera.dir.y > EPSILON)
 		{
 			SET_VECTOR(camera.u, -1.0f, 0.0f, 0.0f)
 			SET_VECTOR(camera.v, 0.0f, 0.0f, -1.0f)

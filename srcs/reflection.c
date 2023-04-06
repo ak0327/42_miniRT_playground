@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:32:22 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 19:16:37 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 09:52:53 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ float	specular(float nl_dot, t_vector vec_eye, t_vector vec_screen, t_light ligh
 	const float	alpha = 8.0f;
 	const float	Ii = 1.0f;
 
-	if (nl_dot <= 0)
+	if (nl_dot <= EPSILON)
 		return (0);
 
 	t_vector	vec_eye_to_screen;

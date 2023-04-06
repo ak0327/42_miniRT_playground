@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 23:00:24 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 09:53:33 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static t_colorf	calc_perfect_reflection_color(
 	vn_dot = dot(&inv_eye_dir, &n_dir);
 
 	/* vn_dot <= 0 のとき */
-	if (vn_dot <= 0)
+	if (vn_dot <= EPSILON)
 		return (color);
 
 	/* 視線ベクトルの正反射ベクトルを計算 */
@@ -94,7 +94,7 @@ static t_colorf	calc_inflection_refraction_color(
 	/* 視線ベクトルの逆ベクトルと法線ベクトルの内積 */
 	vn_dot = dot(&inv_eye_dir, &n_dir);
 
-	if (vn_dot >= 0)
+	if (vn_dot >= EPSILON)
 	{
 		eta_1 = scene->global_refraction_index;
 		eta_2 = shape->material.refraction_index;
@@ -247,7 +247,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 			{
 				color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
-				if (nl_dot > 0)
+				if (nl_dot > EPSILON)
 				{
 					/* 正反射ベクトルの計算 */
 					ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &light_dir);
@@ -266,7 +266,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
 			/* 鏡面反射光 specular を計算してcolに足し合わせる */
-			if (nl_dot > 0)
+			if (nl_dot > EPSILON)
 			{
 				/* 正反射ベクトルの計算 */
 				ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &light_dir);
