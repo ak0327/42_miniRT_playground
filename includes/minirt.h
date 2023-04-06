@@ -340,7 +340,8 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 /********** matrix **********/
 t_matrix	rot_matrix(t_vector E);
 t_matrix	transpose_matrix(t_matrix R);
-t_vector	get_local_axis(t_matrix T, t_vector v);
+t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3);
+t_vector	Mv(t_matrix T, t_vector v);
 
 
 /********** img **********/

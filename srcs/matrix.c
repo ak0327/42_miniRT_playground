@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:50:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/02 21:26:57 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 21:38:47 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,24 @@ int	get_axis(t_vector v)
 	return (plane);
 }
 
-t_vector	get_local_axis(t_matrix T, t_vector v)
+t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3)
 {
-	t_vector	local;
+	t_matrix	M;
 
-	local.x = T.m11 * v.x + T.m12 * v.y + T.m13 * v.z;
-	local.y = T.m21 * v.x + T.m22 * v.y + T.m23 * v.z;
-	local.z = T.m31 * v.x + T.m32 * v.y + T.m33 * v.z;
-	return (local);
+	M.m11 = m1.x; M.m12 = m1.y; M.m13 = m1.z;
+	M.m21 = m2.x; M.m22 = m2.y; M.m23 = m2.z;
+	M.m31 = m3.x; M.m32 = m3.y; M.m33 = m3.z;
+	return (M);
+}
+
+t_vector	Mv(t_matrix M, t_vector v)
+{
+	t_vector	Mv;
+
+	Mv.x = M.m11 * v.x + M.m12 * v.y + M.m13 * v.z;
+	Mv.y = M.m21 * v.x + M.m22 * v.y + M.m23 * v.z;
+	Mv.z = M.m31 * v.x + M.m32 * v.y + M.m33 * v.z;
+	return (Mv);
 }
 
 t_matrix	rot_matrix(t_vector E)
@@ -66,12 +76,12 @@ t_matrix	rot_matrix(t_vector E)
 	return (R);
 }
 
-t_matrix	transpose_matrix(t_matrix R)
+t_matrix	transpose_matrix(t_matrix M)
 {
-	t_matrix	T;
+	t_matrix	Mt;
 
-	T.m11 = R.m11; T.m12 = R.m21; T.m13 = R.m31;
-	T.m21 = R.m12; T.m22 = R.m22; T.m23 = R.m32;
-	T.m31 = R.m13; T.m32 = R.m23; T.m33 = R.m33;
-	return (T);
+	Mt.m11 = M.m11; Mt.m12 = M.m21; Mt.m13 = M.m31;
+	Mt.m21 = M.m12; Mt.m22 = M.m22; Mt.m23 = M.m32;
+	Mt.m31 = M.m13; Mt.m32 = M.m23; Mt.m33 = M.m33;
+	return (Mt);
 }

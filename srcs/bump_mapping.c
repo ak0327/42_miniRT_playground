@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 18:36:07 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 21:39:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		fv = theta / (float)M_PI;	// 0 <= fv <= 1
 
 //		img_size = 2000;
-		fu *= -(float)img.width;
-		fv *= (float)img.height;
+		int	frequency = 1;
+		fu *= -(float)img.width * (float)frequency;
+		fv *= (float)img.height * (float)frequency;
 
 		row = (((int)fu % img.width) + img.width) % img.width;		// 0 <= row <= img.width
 		col = (((int)fv % img.height) + img.height) % img.height;	// 0 <= col <= img.height
@@ -73,10 +74,28 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		g = img.data[idx++];
 		b = img.data[idx];
 		bump_n.x = ((float)r - (256.0f/2.0f)) / (256.0f/2.0f);
-		bump_n.z = -((float)g - (256.0f/2.0f)) / (256.0f/2.0f);
+		bump_n.z = ((float)g - (256.0f/2.0f)) / (256.0f/2.0f);
 		bump_n.y = ((float)b - (256.0f/2.0f)) / (256.0f/2.0f);
 		normalize(&bump_n);
-		return (bump_n);
+
+
+		t_vector	bump_world_n;
+		t_vector	ub, vb, wb;
+		t_vector	world_y;
+		t_matrix	Tr_matrix;
+
+		SET_VECTOR(world_y, 0.0f, 1.0f, 0.0f)
+		wb = intp.normal;
+		ub = cross(&world_y, &wb);
+		normalize(&ub);
+		vb = cross(&wb, &ub);
+		normalize(&vb);
+
+		Tr_matrix = set_matrix(ub, wb, vb);
+		Tr_matrix = transpose_matrix(Tr_matrix);
+		bump_world_n = Mv(Tr_matrix, bump_n);
+		normalize(&bump_world_n);
+		return (bump_world_n);
 	}
 
 
