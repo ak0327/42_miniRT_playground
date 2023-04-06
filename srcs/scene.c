@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 22:56:55 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 13:35:51 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -661,13 +661,17 @@ void scene_setting(t_scene *scene)
 				  0.0f, 0.0f, 0.0f,
 				  0.0f);
 
+//	init_shape(&scene->shapes[1], ST_SPHERE,
+//			   0.0f, 10.0f, 0.0f,	/* 球の中心位置 */
+//			   10.0f);    			/* 球の半径 */
+
 	init_shape(&scene->shapes[1], ST_SPHERE,
-			   0.0f, 10.0f, 0.0f,	/* 球の中心位置 */
-			   10.0f);    			/* 球の半径 */
+			   0.0f, 100.0f, 0.0f,	/* 球の中心位置 */
+			   100.0f);    			/* 球の半径 */
 
 	init_material(&scene->shapes[1].material,
 				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
-				  0.7f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
 				  0.7f, 0.7f, 0.7f,		/* 鏡面反射率(RGB)   */
 				  8.0f,							/* 光沢度 */
 				  MT_DEFAULT, 					/* マテリアルタイプ */
@@ -687,7 +691,7 @@ void scene_setting(t_scene *scene)
 //			   70.0f);					/* angle */
 
 	init_light(&scene->lights[0], LT_POINT,
-			   0.0f, 50.0f, 0.0f,	/* position */
+			   500.0f, 500.0f, -500.0f,	/* position */
 			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
 			   1.0f, 1.0f, 1.0f,	/* color */
 			   70.0f);					/* angle */

@@ -30,9 +30,11 @@ SRC				= main.c \
 				  scene.c \
 				  camera.c \
 				  init.c \
-				  checker.c \
+				  checker_texture.c \
 				  matrix.c \
 				  get_ppm.c \
+				  bump_mapping.c \
+
 
 
 

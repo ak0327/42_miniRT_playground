@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 09:53:33 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 13:35:58 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,9 +185,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 	t_vector	normal = intp.normal;
 
 
-	if (shape->type == ST_PLANE)
-		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
-
+//	if (shape->type == ST_PLANE)
+//		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
@@ -231,9 +230,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		checker_col = get_checker_color(scene, eye_ray, intp, shape);
 //		color = colorf_add(&color, &checker_col);
 
-//		img_col = get_img_color(scene, eye_ray, intp, shape, img);
-//		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
-
+		img_col = get_img_color(scene, eye_ray, intp, shape, img);
+		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 
 		// 一時的にPLANEの反射を無効化
 //		if (shape->type == ST_PLANE)
