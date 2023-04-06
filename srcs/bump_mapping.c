@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 22:39:03 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 22:53:57 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,17 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		normalize(&ub);
 		vb = cross(&ub, &wb);
 		normalize(&vb);
+
+		if (wb.x == world_y.x && wb.y == world_y.y && wb.z == world_y.z)
+		{
+			SET_VECTOR(ub, 1.0f, 0.0f, 0.0f);
+			SET_VECTOR(vb, 0.0f, 0.0f, 1.0f);
+		}
+		if (wb.x == world_y.x && wb.y == -world_y.y && wb.z == world_y.z)
+		{
+			SET_VECTOR(ub, -1.0f, 0.0f, 0.0f);
+			SET_VECTOR(vb, 0.0f, 0.0f, -1.0f);
+		}
 
 		Tr_matrix = set_matrix(ub, wb, vb);
 		Tr_matrix = transpose_matrix(Tr_matrix);
