@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 21:39:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 22:09:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		r = img.data[idx++];
 		g = img.data[idx++];
 		b = img.data[idx];
-		bump_n.x = ((float)r - (256.0f/2.0f)) / (256.0f/2.0f);
+		bump_n.x = -((float)r - (256.0f/2.0f)) / (256.0f/2.0f);
 		bump_n.z = ((float)g - (256.0f/2.0f)) / (256.0f/2.0f);
 		bump_n.y = ((float)b - (256.0f/2.0f)) / (256.0f/2.0f);
 		normalize(&bump_n);
