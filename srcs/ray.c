@@ -187,13 +187,12 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 //	if (shape->type == ST_PLANE)
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
-	if (shape->type == ST_SPHERE)
-		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
+//	if (shape->type == ST_SPHERE)
+//		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
+
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
-
 	inv_eye_dir = normalize_vec_inv(&eye_ray->direction);
-
 
 	i = 0;
 	while (i < scene->num_lights)
@@ -234,8 +233,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		color = colorf_add(&color, &checker_col);
 
 		/* image texture */
-//		img_col = get_img_color(scene, eye_ray, intp, shape, img);
-//		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
+		img_col = get_img_color(scene, eye_ray, intp, shape, img);
+		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 
 		if (light->type == LT_SPOT)
 		{

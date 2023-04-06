@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 22:53:57 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 23:57:40 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		bump_n.y = ((float)b - (256.0f/2.0f)) / (256.0f/2.0f);
 		normalize(&bump_n);
 
-
+		/* (u,v,w)->(x,y,z) */
 		t_vector	bump_world_n;
 		t_vector	ub, vb, wb;
 		t_vector	world_y;
@@ -170,50 +170,49 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
 		return (color);
 	}
-//	else if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
-//	{
-//		/* u,v */
-//		t_vector	hi, d;
-//		if (shape->type == ST_CYLINDER)
-//		{
-//			pos_local = sub(&intp.position, &shape->data.cylinder.position);
-//			hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
-//			d = shape->data.cylinder.normal;
-//		}
-//		else
-//		{
-//			pos_local = sub(&intp.position, &shape->data.corn.position);
-//			hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
-//			d = shape->data.corn.normal;
-//		}
-//
-//		t_vector	u_vec, v_vec;
-//		float		theta;
-//		float	u, v, uu, vv;
-//
-//		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));		// TODO: +-
-//		u_vec.y = -d.x / sqrtf(SQR(d.x) + SQR(d.y));	// TODO: +-
-//		u_vec.z = 0;
-//		normalize(&u_vec);
-//
-//		v_vec = cross(&u_vec, &d);
-//		normalize(&v_vec);
-//
-//		u = dot(&u_vec, &pos_local);
-//		v = dot(&v_vec, &pos_local);
-//
-//		theta = atan2f(v, u);
+	if (shape->type == ST_CYLINDER)
+ 	{
+		/* u,v */
+		t_vector	hi, d;
+		float		uu, vv;
+		t_vector	u_vec, v_vec;
+
+		pos_local = sub(&intp.position, &shape->data.cylinder.position);
+		hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
+		d = shape->data.cylinder.normal;
+
+		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));		// TODO: +-
+		u_vec.y = -d.x / sqrtf(SQR(d.x) + SQR(d.y));	// TODO: +-
+		u_vec.z = 0;
+		normalize(&u_vec);
+
+		v_vec = cross(&u_vec, &d);
+		normalize(&v_vec);
+
+		u = dot(&u_vec, &pos_local);
+		v = dot(&v_vec, &pos_local);
+
+		theta = atan2f(v, u);
 //		uu = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
-//		vv = norm(&hi);
-//
-//		condition_checker = (int)(floorf(uu * 10) + floorf(vv * 1)) % 2;
-//
-//		if (condition_checker)
-//		{
-//			SET_COLOR(color, 1.0f, 1.0f, 1.0f);
-//			color = colorf_add(&color, &color);
-//		}
-//
-//	}
+		uu = theta * 2 / (2.0f * (float)M_PI);
+		vv = norm(&hi) / shape->data.cylinder.height;
+
+//		printf("(u,v)=(%f,%f), (uu,vv)=(%f,%f)\n", u, v, uu, vv);
+
+		uu *= (float)img.width;
+		vv *= -(float)img.height;
+
+		row = (((int)uu % img.width) + img.width) % img.width;		// 0 <= row <= img.width
+		col = (((int)vv % img.height) + img.height) % img.height;	// 0 <= col <= img.height
+
+		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
+		r = img.data[idx++];
+		g = img.data[idx++];
+		b = img.data[idx];
+		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
+		return (color);
+
+
+	}
 	return (color);
 }
