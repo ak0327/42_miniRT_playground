@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 13:35:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/06 13:39:01 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -671,8 +671,8 @@ void scene_setting(t_scene *scene)
 
 	init_material(&scene->shapes[1].material,
 				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
-				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
-				  0.7f, 0.7f, 0.7f,		/* 鏡面反射率(RGB)   */
+				  0.5f, 0.5f, 0.5f,		/* 拡散反射係数(RGB) */
+				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
 				  8.0f,							/* 光沢度 */
 				  MT_DEFAULT, 					/* マテリアルタイプ */
 				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
@@ -691,7 +691,7 @@ void scene_setting(t_scene *scene)
 //			   70.0f);					/* angle */
 
 	init_light(&scene->lights[0], LT_POINT,
-			   500.0f, 500.0f, -500.0f,	/* position */
+			   200.0f, 300.0f, -500.0f,	/* position */
 			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
 			   1.0f, 1.0f, 1.0f,	/* color */
 			   70.0f);					/* angle */
