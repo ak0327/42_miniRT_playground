@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 19:05:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 12:39:39 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 //	if (shape->type == ST_SPHERE)
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
-
+	if (shape->type == ST_CYLINDER)
+		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 	inv_eye_dir = normalize_vec_inv(&eye_ray->direction);
@@ -233,8 +234,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		color = colorf_add(&color, &checker_col);
 
 		/* image texture */
-		img_col = get_img_color(scene, eye_ray, intp, shape, img);
-		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
+//		img_col = get_img_color(scene, eye_ray, intp, shape, img);
+//		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 
 		if (light->type == LT_SPOT)
 		{

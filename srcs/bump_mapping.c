@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 12:28:14 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 13:06:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 	size_t		row, col, idx;
 	int			put_size;
 	int			u, v;
-	float		fu, fv;
+	float		fu, fv, fw;
 	t_vector	pos_local;
 	float		radius, theta, phi;
 
@@ -61,7 +61,6 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		fu = phi / (float)M_PI;		// 0 <= fu <= 1
 		fv = theta / (float)M_PI;	// 0 <= fv <= 1
 
-//		img_size = 2000;
 		int	frequency = 1;
 		fu *= -(float)img.width * (float)frequency;
 		fv *= (float)img.height * (float)frequency;
@@ -83,6 +82,92 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		t_vector	eu, ev, ew;
 		t_vector	ey;
 		t_matrix	Tr_matrix;
+
+		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f)
+		ew = intp.normal;
+		eu = cross(&ew, &ey);
+		normalize(&eu);
+		ev = cross(&eu, &ew);
+		normalize(&ev);
+
+		if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
+		{
+			SET_VECTOR(eu, 1.0f, 0.0f, 0.0f);
+			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
+		}
+		if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
+		{
+			SET_VECTOR(eu, -1.0f, 0.0f, 0.0f);
+			SET_VECTOR(ev, 0.0f, 0.0f, -1.0f);
+		}
+
+		Tr_matrix = set_matrix(eu, ew, ev);
+		Tr_matrix = transpose_matrix(Tr_matrix);
+		bump_normal_world = Mv(Tr_matrix, bump_normal_local);
+		normalize(&bump_normal_world);
+		return (bump_normal_world);
+	}
+
+	if (shape->type == ST_CYLINDER)
+	{
+		/* u,v */
+		float		uu, vv;
+		t_vector	eu, ev, ew;
+		t_vector	ex, ey;
+		t_vector	pos_uv;
+		t_matrix	M;
+		int			frequency = 1;
+
+		pos_local = sub(&intp.position, &shape->data.cylinder.position);
+
+		SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
+		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
+
+		ew = shape->data.cylinder.normal;
+		ev = cross(&ex, &ew);
+		eu = cross(&ew, &ev);
+
+		if (ew.x == ex.x && ew.y == ex.y && ew.z == ex.z)
+		{
+			SET_VECTOR(eu, 0.0f, -1.0f, 0.0f);
+			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
+		}
+		if (ew.x == -ex.x && ew.y == ex.y && ew.z == ex.z)
+		{
+			SET_VECTOR(eu, 0.0f, 1.0f, 0.0f);
+			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
+		}
+
+		M = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
+//		M = transpose_matrix(M);				// (u,w,v)->(x,y,z)への変換matrix
+
+		pos_uv = Mv(M, pos_local);			// pos(x,y,z)->pos(u,v,w)
+
+		fu = pos_uv.x; //このuは結局xになっているのでは？
+		fv = pos_uv.z;
+		fw = pos_uv.y;
+
+		theta = acosf(fu / shape->data.cylinder.radius);	// 0 <= theta <= pi
+		uu = theta / (float)M_PI;							// 0 <= uu <= 1
+		vv = fw / shape->data.cylinder.height;				// 0 <= vv <= 1
+
+		uu *= -(float)img.width * (float)frequency;
+		vv *= -(float)img.height * (float)frequency;
+
+		row = (((int)uu % img.width) + img.width) % img.width;		// 0 <= row <= img.width
+		col = (((int)vv % img.height) + img.height) % img.height;	// 0 <= col <= img.height
+
+		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
+		r = img.data[idx++];
+		g = img.data[idx++];
+		b = img.data[idx];
+		bump_normal_local.x = ((float)r - (256.0f / 2.0f)) / (256.0f / 2.0f);
+		bump_normal_local.z = ((float)g - (256.0f / 2.0f)) / (256.0f / 2.0f);
+		bump_normal_local.y = ((float)b - (256.0f / 2.0f)) / (256.0f / 2.0f);
+
+		// ここから、交点の法線ベクトルnの方向を加味した座標変換が必要かも？
+		t_matrix	Tr_matrix;
+		t_vector	bump_normal_world;
 
 		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f)
 		ew = intp.normal;
@@ -173,22 +258,19 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 	if (shape->type == ST_CYLINDER)
  	{
 		/* u,v */
-		float		uu, vv, ww;
+		float		uu, vv;
 		t_vector	eu, ev, ew;
-		t_vector	ex, ey;
+		t_vector	ex;
 		t_vector	pos_uv;
 		t_matrix	M;
 
 		pos_local = sub(&intp.position, &shape->data.cylinder.position);
 
 		SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
-		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
 
 		ew = shape->data.cylinder.normal;
 		ev = cross(&ex, &ew);
-		normalize(&ev);
 		eu = cross(&ew, &ev);
-		normalize(&eu);
 
 		if (ew.x == ex.x && ew.y == ex.y && ew.z == ex.z)
 		{
@@ -201,18 +283,18 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
 		}
 
-		M = set_matrix(eu, ew, ev);	// (i,j,k)->(u,w,v)への変換matrix
-//		M = transpose_matrix(M);				// (u,w,v)->(i,j,k)への変換matrix
+		M = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
+//		M = transpose_matrix(M);				// (u,w,v)->(x,y,z)への変換matrix
 
-		pos_uv = Mv(M, pos_local);
+		pos_uv = Mv(M, pos_local);			// pos(x,y,z)->pos(u,v,w)
 
 		u = pos_uv.x; //このuは結局xになっているのでは？
 		v = pos_uv.z;
 		w = pos_uv.y;
 
-		theta = acosf(u / shape->data.cylinder.radius);
-		uu = theta / (float)M_PI;
-		vv = w / shape->data.cylinder.height;
+		theta = acosf(u / shape->data.cylinder.radius);		// 0 <= theta <= pi
+		uu = theta / (float)M_PI;							// 0 <= uu <= 1
+		vv = w / shape->data.cylinder.height;				// 0 <= vv <= 1
 
 		uu *= -(float)img.width;
 		vv *= -(float)img.height;
