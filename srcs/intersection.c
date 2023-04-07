@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 19:58:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 20:04:04 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 		out_intp->distance = t2;
 		out_intp->position = pos2;
 		pipc_n = mult(dot(&p2_pc, &cyl->normal), &cyl->normal);
-		out_intp->normal = sub( &pipc_n, &p2_pc);
-		normalize_vec(&out_intp->normal);
+		out_intp->normal = sub(&p2_pc, &pipc_n);
+		out_intp->normal = normalize_vec_inv(&out_intp->normal);
 		return (1);
 	}
 	return (0);
@@ -164,7 +164,7 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 
 		out_intp->normal = vec_calc(norm(&d) * cosf(alpha), &l, -1.0f, &d);
 
-		normalize_vec_inv(&out_intp->normal);
+		out_intp->normal = normalize_vec_inv(&out_intp->normal);
 		return (1);
 	}
 	return (0);
