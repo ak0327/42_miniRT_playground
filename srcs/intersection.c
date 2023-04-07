@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 17:58:16 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 19:58:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t_vector	p1_pc, p2_pc;
 
 	cyl = &shape->data.cylinder;
-	cyl->normal = normalize_vec(&cyl->normal);
 	pe_pc = sub(&ray->start, &cyl->position);
 
 	d_x_n = cross(&ray->direction, &cyl->normal);
@@ -42,14 +41,16 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
 	t2 = (float) (-B + sqrtf(D)) / (2.0f * A);
 
-	if (t1 <= 0.0f || t2 <= 0.0f || !out_intp)
+//	if (t1 <= 0.0f || t2 <= 0.0f)
+//		return (0);
+	if (!out_intp)
 		return (0);
 
 	t1d = mult(t1, &ray->direction);
 	pos1 = add(&ray->start, &t1d);
 	p1_pc = sub(&pos1, &cyl->position);
 
-	if (0.0f <= dot(&p1_pc, &cyl->normal) && dot(&p1_pc, &cyl->normal) <= cyl->height)
+	if (t1 > 0.0f && 0.0f <= dot(&p1_pc, &cyl->normal) && dot(&p1_pc, &cyl->normal) <= cyl->height)
 	{
 		out_intp->distance = t1;
 		out_intp->position = pos1;
@@ -62,7 +63,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t2d = mult(t2, &ray->direction);
 	pos2 = add(&ray->start, &t2d);
 	p2_pc = sub(&pos2, &cyl->position);
-	if (0.0f <= dot(&p2_pc, &cyl->normal) && dot(&p2_pc, &cyl->normal) <= cyl->height)
+	if (t2 > 0.0f && 0.0f <= dot(&p2_pc, &cyl->normal) && dot(&p2_pc, &cyl->normal) <= cyl->height)
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;
@@ -118,7 +119,9 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
 	t2 = (float) (-B + sqrtf(D)) / (2.0f * A);
 
-	if (t1 <= 0.0f || t2 <= 0.0f || !out_intp)
+//	if (t1 <= 0.0f || t2 <= 0.0f)
+//		return (0);
+	if (!out_intp)
 		return (0);
 
 	alpha = atanf(r / h);
@@ -132,7 +135,7 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 
 	l = normalize_vec(&p1_pc);
 
-	if (-h <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= 0.0f)
+	if (t1 > 0.0f && -h <= dot(&p1_pc, &n) && dot(&p1_pc, &n) <= 0.0f)
 	{
 		out_intp->distance = t1;
 		out_intp->position = pos1;
@@ -153,7 +156,7 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 
 	l = normalize_vec(&p2_pc);
 
-	if (-h <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= 0.0f)
+	if (t2 > 0.0f && -h <= dot(&p2_pc, &n) && dot(&p2_pc, &n) <= 0.0f)
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;
