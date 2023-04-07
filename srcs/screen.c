@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:30:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/01 17:51:17 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 20:49:51 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,17 @@
  */
 t_vector	ray_dir(int x, int y, t_camera camera)
 {
+//	t_vector	ray_dir;
+//
+//	float	screen_u, screen_v, screen_w;
+//	screen_u = (float)x + WINDOW_WIDTH / 2.0f;
+//	screen_v = (float)y
+//
+//	return (ray_dir);
+
+
+
+
 	float screen_x = (float)x - (WINDOW_WIDTH - 1.0f) / 2.0f;
 	float screen_y = (WINDOW_HEIGHT - 1.0f) / 2.0f - (float)y;
 

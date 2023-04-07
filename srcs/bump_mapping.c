@@ -274,7 +274,9 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
 		return (color);
 	}
-	if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
+
+	if (shape->type == ST_CYLINDER)
+//	if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
  	{
 		/* u,v */
 		float		uu, vv;

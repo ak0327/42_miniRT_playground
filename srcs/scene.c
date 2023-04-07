@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 19:11:35 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 22:06:01 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -713,10 +713,10 @@ void scene_setting(t_scene *scene)
 
 
 	init_shape(&scene->shapes[1], ST_CORN,
-			   0.8f, 1.0f, 0.0f,	/* 法線ベクトル */
-			   -50.0f, 120.0f, 0.0f,	/* 中心位置 */
-			   100.0f,				/* 高さ */
-			   50.0f);				/* 半径 */
+			   0.8f, 1.0f, -0.5f,	/* 法線ベクトル */
+			   -50.0f, 160.0f, 0.0f,	/* 中心位置 */
+			   130.0f,				/* 高さ */
+			   65.0f);				/* 半径 */
 
 	init_material(&scene->shapes[1].material,
 				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
@@ -729,14 +729,14 @@ void scene_setting(t_scene *scene)
 
 
 	init_shape(&scene->shapes[2],  ST_CYLINDER,
-			   0.6f, 1.0f, 0.0f,	/* 法線ベクトル */
+			   0.0f, 1.0f, 0.3f,	/* 法線ベクトル */
 			   50.0f, 50.0f, 0.0f,	/* 中心位置 */
 			   100.0f,				/* 高さ */
 			   50.0f);				/* 半径 */
 
 	init_material(&scene->shapes[2].material,
 				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
-				  0.5f, 0.5f, 0.5f,			/* 拡散反射係数(RGB) */
+				  0.5f, 0.3f, 0.3f,			/* 拡散反射係数(RGB) */
 				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
 				  8.0f,
 				  MT_DEFAULT,
@@ -757,11 +757,11 @@ void scene_setting(t_scene *scene)
 //			   70.0f);					/* angle */
 
 	// cylinder
-//	init_light(&scene->lights[0], LT_POINT,
-//			   -200.0f, 500.0f, -100.0f,	/* position */
-//			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
-//			   1.0f, 1.0f, 1.0f,	/* color */
-//			   70.0f);					/* angle */
+	init_light(&scene->lights[0], LT_POINT,
+			   -200.0f, 500.0f, -100.0f,	/* position */
+			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
+			   1.0f, 1.0f, 1.0f,	/* color */
+			   70.0f);					/* angle */
 
 //	init_light(&scene->lights[0], LT_POINT,
 //			   0.0f, 500.0f, 0.0f,	/* position */
@@ -777,11 +777,11 @@ void scene_setting(t_scene *scene)
 //			   1.0f, 1.0f, 1.0f,	/* color */
 //			   70.0f);					/* angle */
 
-	init_light(&scene->lights[0], LT_DIRECTIONAL,
-			   0.0f, 500.0f, 0.0f,	/* position */
-			   0.0f, -1.0f, 0.0f,	/* direction(do not use LT_POINT) */
-			   1.0f, 1.0f, 1.0f,	/* color */
-			   70.0f);					/* angle */
+//	init_light(&scene->lights[0], LT_DIRECTIONAL,
+//			   0.0f, 500.0f, 0.0f,	/* position */
+//			   0.0f, -1.0f, 0.0f,	/* direction(do not use LT_POINT) */
+//			   1.0f, 1.0f, 1.0f,	/* color */
+//			   70.0f);					/* angle */
 
 
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */

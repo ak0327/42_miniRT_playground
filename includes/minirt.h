@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 18:01:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 20:41:05 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,11 +258,12 @@ typedef struct	s_intersection_point
 
 typedef struct	s_camera
 {
-	t_vector	center;
+	t_vector	pos;
 	t_vector	dir;
 	t_vector	u;
 	t_vector	v;
 	t_vector	dir_camera_to_sc_center;
+	t_matrix	transpose_matrix_w2c;
 	float		fov_deg;
 } t_camera;
 

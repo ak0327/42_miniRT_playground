@@ -94,7 +94,7 @@ int	main(void)
 		{
 			color = init_color((float)(100.0f/255.0f), (float)(149.0f/255.0f), (float)(237.0f/255.0f));
 
-			eye_ray.start = camera.center;
+			eye_ray.start = camera.pos;
 			eye_ray.direction = ray_dir(x, y, camera);
 
 			raytrace(&scene, &eye_ray, &color, *img);

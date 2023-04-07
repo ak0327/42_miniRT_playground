@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 19:11:00 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 21:50:50 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //	if (shape->type == ST_SPHERE)
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 //	if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
-//		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
+	if (shape->type == ST_CYLINDER)
+		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 	inv_eye_dir = normalize_vec_inv(&eye_ray->direction);
@@ -230,12 +231,18 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		/* shadow_rayが物体に遮られなかった場合 */
 
 		/* checker */
-//		checker_col = get_checker_color(scene, eye_ray, intp, shape);
-//		color = colorf_add(&color, &checker_col);
+		if (shape->type == ST_CORN || shape->type == ST_PLANE)
+		{
+			checker_col = get_checker_color(scene, eye_ray, intp, shape);
+			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&checker_col);
+		}
 
 		/* image texture */
-//		img_col = get_img_color(scene, eye_ray, intp, shape, img);
-//		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
+//		if (shape->type == ST_CYLINDER)
+//		{
+//			img_col = get_img_color(scene, eye_ray, intp, shape, img);
+//			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
+//		}
 
 		if (light->type == LT_SPOT)
 		{

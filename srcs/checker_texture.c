@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 11:29:21 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 22:06:58 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 	if (shape->type == ST_PLANE)
 	{
 		// 斜めにするとチェッカーにならない -> local座標に落とし込まないといけない？一旦これでOKとする
-		condition_checker = (int)(floorf(intp.position.x) + floorf(intp.position.z)) % 2;
+		condition_checker = (int)(floorf(intp.position.x / 100) + floorf(intp.position.z / 100)) % 2;
 		if (condition_checker)
 		{
 			SET_COLOR(color, 0.3f, 0.3f, 0.3f);
@@ -78,33 +78,6 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 	}
 	else if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
 	{
-		/* 参考URL(https://ototoi.hatenadiary.org/entry/20060103/p1) */
-//		t_matrix	R = rot_matrix(mult(shape->data.cylinder.height, &shape->data.cylinder.normal));
-//		t_matrix	T = transpose_matrix(R);
-//
-//		t_vector	pos_origin = sub(&intp.position, &shape->data.cylinder.position);
-//
-//		pos_local = get_local_axis(T, pos_origin);
-//
-//		t_vector	hi;
-//		SET_VECTOR(hi, 0.0f, 1.0f, 0.0f)
-//		t_vector	r = sub(&pos_local, &hi);
-//		float		theta = atan2f(r.z, r.x);
-//		float		u = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
-//		float		v = norm(&hi);
-//
-//		condition_checker = (int)(floorf(u * 15) + floorf(v)) % 2;
-
-//		/* worldで解くケース */
-//		pos_local = sub(&intp.position, &shape->data.cylinder.position);
-//		t_vector	hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
-//		t_vector	r = sub(&pos_local, &hi);
-//		float		theta = atan2f(r.z, r.x);
-//		float		u = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
-//		float		v = norm(&hi);
-//
-//		condition_checker = (int)(floorf(u * 15) + floorf(v)) % 2;
-
 
 		/* u,v */
 		t_vector	hi, d;
@@ -123,7 +96,7 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 
 		t_vector	u_vec, v_vec;
 		float		theta;
-		float	u, v, uu, vv;
+		float		u, v, uu, vv;
 
 		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));		// TODO: +-
 		u_vec.y = -d.x / sqrtf(SQR(d.x) + SQR(d.y));	// TODO: +-
@@ -141,14 +114,16 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 		uu = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
 		vv = norm(&hi);
 
-		condition_checker = (int)(floorf(uu * 10) + floorf(vv * 1)) % 2;
+		condition_checker = (int)(floorf(uu * 10) + floorf(vv / 10)) % 2;
 
 		if (condition_checker)
 		{
-			SET_COLOR(color, 1.0f, 1.0f, 1.0f);
-			color = colorf_add(&color, &color);
+			SET_COLOR(color, 0.0f, 0.3f, 0.6f);
 		}
-
+		else
+		{
+			SET_COLOR(color, 0.3f, 0.6f, 0.0f);
+		}
 	}
 	return (color);
 }
