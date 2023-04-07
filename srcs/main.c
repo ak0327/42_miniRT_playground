@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/05 19:09:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 00:05:18 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,7 @@ int	main(void)
 
 			eye_ray.start = camera.pos;
 			eye_ray.direction = ray_dir(x, y, camera);
-
 			raytrace(&scene, &eye_ray, &color, *img);
-
 			r = (int)(255 * CLAMP(color.r, 0, 1));
 			g = (int)(255 * CLAMP(color.g, 0, 1));
 			b = (int)(255 * CLAMP(color.b, 0, 1));

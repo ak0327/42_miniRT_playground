@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 20:41:05 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 23:59:47 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,8 @@ typedef struct	s_camera
 	t_vector	v;
 	t_vector	dir_camera_to_sc_center;
 	t_matrix	transpose_matrix_w2c;
+	t_matrix	transpose_matrix_c2w;
+	float		distance_camera_to_screen;
 	float		fov_deg;
 } t_camera;
 
