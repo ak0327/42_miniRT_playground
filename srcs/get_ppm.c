@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 17:30:55 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 17:33:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void	*free_line_ret_nullptr(char *line)
 t_img	*get_ppm(void)
 {
 	t_img		*img;
-	const char	*img_path = "./img/cat.ppm";
+//	const char	*img_path = "./img/cat.ppm";
 //	const char	*img_path = "./img/bump_1.ppm";
 //	const char	*img_path = "./img/normal1.ppm";
-//	const char	*img_path = "./img/normalmap_example.ppm";
+	const char	*img_path = "./img/normalmap_example.ppm";
 	char		*line;
 	char		**split;
 	size_t		col;

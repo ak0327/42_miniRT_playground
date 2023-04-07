@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 09:56:25 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 17:58:16 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t_vector	t1d, t2d;
 	t_vector	pos1, pos2;
 	t_vector	p1_pc, p2_pc;
-	float		h;
 
 	cyl = &shape->data.cylinder;
 	cyl->normal = normalize_vec(&cyl->normal);
@@ -37,7 +36,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 
 	D = SQR(B) - 4 * A * C;
 
-	if (A == 0.0f || D < 0)
+	if (A == 0.0f || D < 0.0f)
 		return (0);
 
 	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
@@ -50,7 +49,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	pos1 = add(&ray->start, &t1d);
 	p1_pc = sub(&pos1, &cyl->position);
 
-	if (0 <= dot(&p1_pc, &cyl->normal) && dot(&p1_pc, &cyl->normal) <= cyl->height)
+	if (0.0f <= dot(&p1_pc, &cyl->normal) && dot(&p1_pc, &cyl->normal) <= cyl->height)
 	{
 		out_intp->distance = t1;
 		out_intp->position = pos1;
@@ -63,7 +62,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t2d = mult(t2, &ray->direction);
 	pos2 = add(&ray->start, &t2d);
 	p2_pc = sub(&pos2, &cyl->position);
-	if (0 <= dot(&p2_pc, &cyl->normal) && dot(&p2_pc, &cyl->normal) <= cyl->height)
+	if (0.0f <= dot(&p2_pc, &cyl->normal) && dot(&p2_pc, &cyl->normal) <= cyl->height)
 	{
 		out_intp->distance = t2;
 		out_intp->position = pos2;
@@ -106,14 +105,14 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	t_vector		l;
 
 	A = squared_norm(&cross_d_n) - SQR(r / h) * SQR(dot_d_n);
-	B = 2 * dot(&cross_d_n, &cross_pepc_n) - 2 * SQR(r / h) * dot_d_n * dot_pepc_n;
+	B = 2.0f * dot(&cross_d_n, &cross_pepc_n) - 2.0f * SQR(r / h) * dot_d_n * dot_pepc_n;
 	C = squared_norm(&cross_pepc_n) - SQR(r / h) * SQR(dot_pepc_n);
 
-	D = SQR(B) - 4 * A * C;
+	D = SQR(B) - 4.0f * A * C;
 
-	if (A == 0)
+	if (A == 0.0f)
 		return (0);
-	if (D < 0)
+	if (D < 0.0f)
 		return (0);
 
 	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
@@ -183,20 +182,20 @@ static int	intersection_with_sphere(const t_shape *shape, const t_ray *ray, t_in
 
 	D = SQR(B) - 4.0f * A * C;
 
-	if (A == EPSILON)
+	if (A == 0.0f)
 		return (0);
 	t = -1.0f;
-	if (D == EPSILON)
-		t = -B / (2 * A);
-	else if (D > EPSILON)
+	if (D == 0.0f)
+		t = -B / (2.0f * A);
+	else if (D > 0.0f)
 	{
 		float t1 = (float) (-B + sqrtf(D)) / (2.0f * A);
 		float t2 = (float) (-B - sqrtf(D)) / (2.0f * A);
-		if (t1 > EPSILON) t = t1;
-		if (t2 > EPSILON && t2 < t) t = t2;
+		if (t1 > 0.0f) t = t1;
+		if (t2 > 0.0f && t2 < t) t = t2;
 	}
 
-	if (t <= EPSILON)
+	if (t <= 0.0f)
 		return (0);
 	if (!out_intp)
 		return (0);
@@ -217,13 +216,13 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray, t_int
 	float			t;
 	t_vector		td;
 
-	if (dn_dot == EPSILON)
+	if (dn_dot == 0.0f)
 		return (0);
 
 	s_p = sub(&ray->start, &pln->position);
 	t = -1.0f * dot(&s_p, &pln->normal) / dn_dot;
 
-	if (t <= EPSILON)
+	if (t <= 0.0f)
 		return (0);
 
 	if (!out_intp)

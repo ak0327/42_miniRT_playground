@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 17:23:09 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:07:03 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -714,9 +714,9 @@ void scene_setting(t_scene *scene)
 
 	init_shape(&scene->shapes[1], ST_CORN,
 			   0.0f, 1.0f, 0.0f,	/* 法線ベクトル */
-			   0.0f, 200.0f, 0.0f,	/* 中心位置 */
-			   200.0f,				/* 高さ */
-			   100.0f);				/* 半径 */
+			   0.0f, 150.0f, 0.0f,	/* 中心位置 */
+			   150.0f,				/* 高さ */
+			   75.0f);				/* 半径 */
 
 	init_material(&scene->shapes[1].material,
 				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
@@ -730,9 +730,9 @@ void scene_setting(t_scene *scene)
 
 	init_shape(&scene->shapes[2], ST_CORN,
 			   0.5f, 1.0f, 0.0f,	/* 法線ベクトル */
-			   250.0f, 300.0f, 0.0f,	/* 中心位置 */
-			   200.0f,				/* 高さ */
-			   100.0f);				/* 半径 */
+			   250.0f, 200.0f, 0.0f,	/* 中心位置 */
+			   150.0f,				/* 高さ */
+			   75.0f);				/* 半径 */
 
 	init_material(&scene->shapes[2].material,
 				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
@@ -757,11 +757,18 @@ void scene_setting(t_scene *scene)
 //			   70.0f);					/* angle */
 
 	// cylinder
+//	init_light(&scene->lights[0], LT_POINT,
+//			   -200.0f, 500.0f, -100.0f,	/* position */
+//			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
+//			   1.0f, 1.0f, 1.0f,	/* color */
+//			   70.0f);					/* angle */
+
 	init_light(&scene->lights[0], LT_POINT,
-			   -200.0f, 500.0f, -100.0f,	/* position */
+			   125.0f, 500.0f, -100.0f,	/* position */
 			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
 			   1.0f, 1.0f, 1.0f,	/* color */
 			   70.0f);					/* angle */
+
 
 	// sphere from up
 //	init_light(&scene->lights[0], LT_POINT,

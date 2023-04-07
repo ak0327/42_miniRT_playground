@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 13:06:23 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 17:59:59 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		return (bump_normal_world);
 	}
 
-	if (shape->type == ST_CYLINDER)
+	if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
 	{
 		/* u,v */
 		float		uu, vv;
@@ -118,12 +118,31 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		t_matrix	M;
 		int			frequency = 1;
 
-		pos_local = sub(&intp.position, &shape->data.cylinder.position);
+		t_vector	hi, d;
+		float		h;
+
+		if (shape->type == ST_CYLINDER)
+		{
+			pos_local = sub(&intp.position, &shape->data.cylinder.position);
+			hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
+			d = shape->data.cylinder.normal;
+			h = shape->data.cylinder.height;
+			radius = shape->data.cylinder.radius;
+		}
+		else
+		{
+			pos_local = sub(&intp.position, &shape->data.corn.position);
+			hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
+			d = shape->data.corn.normal;
+			h = shape->data.corn.height;
+			radius = shape->data.corn.radius * norm(&hi) / h;
+		}
+
 
 		SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
 		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
 
-		ew = shape->data.cylinder.normal;
+		ew = d;
 		ev = cross(&ex, &ew);
 		eu = cross(&ew, &ev);
 
@@ -147,9 +166,9 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		fv = pos_uv.z;
 		fw = pos_uv.y;
 
-		theta = acosf(fu / shape->data.cylinder.radius);	// 0 <= theta <= pi
+		theta = acosf(fu / radius);	// 0 <= theta <= pi
 		uu = theta / (float)M_PI;							// 0 <= uu <= 1
-		vv = fw / shape->data.cylinder.height;				// 0 <= vv <= 1
+		vv = fw / h;				// 0 <= vv <= 1
 
 		uu *= -(float)img.width * (float)frequency;
 		vv *= -(float)img.height * (float)frequency;
@@ -234,7 +253,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		radius = norm(&pos_local);
 		theta = acosf(pos_local.y / radius);
 
-		if (radius * sinf(theta) == EPSILON)
+		if (radius * sinf(theta) == 0.0f)
 			phi = 0.0f;
 		else
 			phi = acosf(pos_local.x / (radius * sinf(theta)));
@@ -265,7 +284,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		t_matrix	M;
 
 		t_vector	hi, d;
-		float		h, r;
+		float		h;
 
 		if (shape->type == ST_CYLINDER)
 		{
@@ -273,7 +292,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 			hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
 			d = shape->data.cylinder.normal;
 			h = shape->data.cylinder.height;
-			r = shape->data.cylinder.radius;
+			radius = shape->data.cylinder.radius;
 		}
 		else
 		{
@@ -281,7 +300,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 			hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
 			d = shape->data.corn.normal;
 			h = shape->data.corn.height;
-			r = shape->data.corn.radius * norm(&hi) / h;
+			radius = shape->data.corn.radius * norm(&hi) / h;
 		}
 
 //		pos_local = sub(&intp.position, &shape->data.cylinder.position);
@@ -312,7 +331,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		v = pos_uv.z;
 		w = pos_uv.y;
 
-		theta = acosf(u / r);		// 0 <= theta <= pi
+		theta = acosf(u / radius);		// 0 <= theta <= pi
 		uu = theta / (float)M_PI;							// 0 <= uu <= 1
 		vv = w / h;				// 0 <= vv <= 1
 

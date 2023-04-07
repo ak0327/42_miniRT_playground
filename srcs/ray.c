@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 17:31:07 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:00:41 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static t_colorf	calc_perfect_reflection_color(
 	vn_dot = dot(&inv_eye_dir, &n_dir);
 
 	/* vn_dot <= 0 のとき */
-	if (vn_dot <= EPSILON)
+	if (vn_dot <= 0.0f)
 		return (color);
 
 	/* 視線ベクトルの正反射ベクトルを計算 */
@@ -94,7 +94,7 @@ static t_colorf	calc_inflection_refraction_color(
 	/* 視線ベクトルの逆ベクトルと法線ベクトルの内積 */
 	vn_dot = dot(&inv_eye_dir, &n_dir);
 
-	if (vn_dot >= EPSILON)
+	if (vn_dot >= 0.0f)
 	{
 		eta_1 = scene->global_refraction_index;
 		eta_2 = shape->material.refraction_index;
@@ -189,7 +189,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 //	if (shape->type == ST_SPHERE)
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
-	if (shape->type == ST_CYLINDER)
+	if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
 		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
@@ -234,8 +234,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		color = colorf_add(&color, &checker_col);
 
 		/* image texture */
-		img_col = get_img_color(scene, eye_ray, intp, shape, img);
-		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
+//		img_col = get_img_color(scene, eye_ray, intp, shape, img);
+//		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 
 		if (light->type == LT_SPOT)
 		{
@@ -246,7 +246,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
-			if (nl_dot <= EPSILON)
+			if (nl_dot <= 0.0f)
 				continue ;
 
 			/* 正反射ベクトルの計算 */
@@ -264,7 +264,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
 
 			/* 鏡面反射光 specular を計算してcolに足し合わせる */
-			if (nl_dot <= EPSILON)
+			if (nl_dot <= 0.0f)
 				continue ;
 
 			/* 正反射ベクトルの計算 */
