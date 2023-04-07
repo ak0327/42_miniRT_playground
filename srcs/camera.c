@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 18:08:10 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:36:19 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,12 @@ t_camera	init_camera(void)
 //	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 
 //	cylinder
-	SET_VECTOR(camera.center, 125.0f, 100.0f, -400.0f)
+	SET_VECTOR(camera.center, 0.0f, 80.0f, -400.0f)
 	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 
+
 	normalize(&camera.dir);
-	camera.fov_deg = 60.0f;
+	camera.fov_deg = 50.0f;
 
 	theta_radians  = camera.fov_deg * (float)M_PI / 180.0f;
 	distance_camera_to_screen = WINDOW_HEIGHT * ASPECT / 2.0f / tanf(theta_radians / 2.0f);

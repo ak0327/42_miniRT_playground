@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 18:00:41 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 19:11:00 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 	size_t		i;
 	t_light		*light;
-	t_vector	light_dir; 	// 入射ベクトル
+	t_vector	dir_pos_to_light; 	// 入射ベクトル
 	float		nl_dot;		// 法線ベクトルと入射ベクトルの内積
 	t_vector	ref_dir;
 	float		vr_dot;
@@ -189,8 +189,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 //	if (shape->type == ST_SPHERE)
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
-	if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
-		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
+//	if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
+//		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 	inv_eye_dir = normalize_vec_inv(&eye_ray->direction);
@@ -203,16 +203,16 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		i++;
 
 		if (light->type == LT_POINT || light->type == LT_SPOT)
-			light_dir = sub(&light->position, &intp.position);
+			dir_pos_to_light = sub(&light->position, &intp.position);
 		else
-			light_dir = light->direction;	// 平行光源
+			dir_pos_to_light = normalize_vec_inv(&light->direction);	// 平行光源
 
-		normalize(&light_dir);
-		nl_dot = CLAMP(dot(&normal, &light_dir), 0, 1);
+		normalize(&dir_pos_to_light);
+		nl_dot = CLAMP(dot(&normal, &dir_pos_to_light), 0, 1);
 
 		/* shadow_rayを計算 */
-		shadow_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &light_dir);
-		shadow_ray.direction = light_dir;
+		shadow_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &dir_pos_to_light);
+		shadow_ray.direction = dir_pos_to_light;
 		if (light->type == LT_POINT)
 		{
 			vec_pi_to_light = sub(&light->position, &intp.position);
@@ -239,7 +239,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 		if (light->type == LT_SPOT)
 		{
-			t_vector	light_to_pos = normalize_vec_inv(&light_dir);
+			t_vector	light_to_pos = normalize_vec_inv(&dir_pos_to_light);
 			float		alpha = acosf(dot(&light_to_pos, &light->direction));
 			if (alpha > light->angle / 2.0f * (float)M_PI / 180.0f)
 				continue ;
@@ -250,7 +250,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 				continue ;
 
 			/* 正反射ベクトルの計算 */
-			ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &light_dir);
+			ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &dir_pos_to_light);
 			normalize(&ref_dir);
 
 			vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
@@ -268,7 +268,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 				continue ;
 
 			/* 正反射ベクトルの計算 */
-			ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &light_dir);
+			ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &dir_pos_to_light);
 			normalize(&ref_dir);
 
 			vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
