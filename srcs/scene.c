@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 13:09:30 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 17:23:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -679,9 +679,42 @@ void scene_setting(t_scene *scene)
 //				  0.0f);					/* 絶対屈折率 */
 
 
-	init_shape(&scene->shapes[1], ST_CYLINDER,
+//	init_shape(&scene->shapes[1], ST_CYLINDER,
+//			   0.0f, 1.0f, 0.0f,	/* 法線ベクトル */
+//			   0.0f, 0.0f, 0.0f,	/* 中心位置 */
+//			   200.0f,				/* 高さ */
+//			   100.0f);				/* 半径 */
+//
+//	init_material(&scene->shapes[1].material,
+//				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
+//				  0.5f, 0.5f, 0.5f,			/* 拡散反射係数(RGB) */
+//				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
+//				  8.0f,
+//				  MT_DEFAULT,
+//				  1.0f, 1.0f, 1.0f,
+//				  0.0f);
+//
+//
+//	init_shape(&scene->shapes[2], ST_CYLINDER,
+//			   0.5f, 1.0f, 0.0f,	/* 法線ベクトル */
+//			   250.0f, 100.0f, 0.0f,	/* 中心位置 */
+//			   200.0f,				/* 高さ */
+//			   100.0f);				/* 半径 */
+//
+//	init_material(&scene->shapes[2].material,
+//				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
+//				  0.5f, 0.5f, 0.5f,			/* 拡散反射係数(RGB) */
+//				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
+//				  8.0f,
+//				  MT_DEFAULT,
+//				  1.0f, 1.0f, 1.0f,
+//				  0.0f);
+
+
+
+	init_shape(&scene->shapes[1], ST_CORN,
 			   0.0f, 1.0f, 0.0f,	/* 法線ベクトル */
-			   0.0f, 0.0f, 0.0f,	/* 中心位置 */
+			   0.0f, 200.0f, 0.0f,	/* 中心位置 */
 			   200.0f,				/* 高さ */
 			   100.0f);				/* 半径 */
 
@@ -695,9 +728,9 @@ void scene_setting(t_scene *scene)
 				  0.0f);
 
 
-	init_shape(&scene->shapes[2], ST_CYLINDER,
+	init_shape(&scene->shapes[2], ST_CORN,
 			   0.5f, 1.0f, 0.0f,	/* 法線ベクトル */
-			   250.0f, 100.0f, 0.0f,	/* 中心位置 */
+			   250.0f, 300.0f, 0.0f,	/* 中心位置 */
 			   200.0f,				/* 高さ */
 			   100.0f);				/* 半径 */
 

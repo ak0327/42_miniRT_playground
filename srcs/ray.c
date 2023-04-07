@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 12:39:39 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 17:31:07 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,8 +234,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		color = colorf_add(&color, &checker_col);
 
 		/* image texture */
-//		img_col = get_img_color(scene, eye_ray, intp, shape, img);
-//		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
+		img_col = get_img_color(scene, eye_ray, intp, shape, img);
+		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 
 		if (light->type == LT_SPOT)
 		{

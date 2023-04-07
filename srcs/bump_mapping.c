@@ -255,7 +255,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
 		return (color);
 	}
-	if (shape->type == ST_CYLINDER)
+	if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
  	{
 		/* u,v */
 		float		uu, vv;
@@ -264,11 +264,31 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		t_vector	pos_uv;
 		t_matrix	M;
 
-		pos_local = sub(&intp.position, &shape->data.cylinder.position);
+		t_vector	hi, d;
+		float		h, r;
+
+		if (shape->type == ST_CYLINDER)
+		{
+			pos_local = sub(&intp.position, &shape->data.cylinder.position);
+			hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
+			d = shape->data.cylinder.normal;
+			h = shape->data.cylinder.height;
+			r = shape->data.cylinder.radius;
+		}
+		else
+		{
+			pos_local = sub(&intp.position, &shape->data.corn.position);
+			hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
+			d = shape->data.corn.normal;
+			h = shape->data.corn.height;
+			r = shape->data.corn.radius * norm(&hi) / h;
+		}
+
+//		pos_local = sub(&intp.position, &shape->data.cylinder.position);
 
 		SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
 
-		ew = shape->data.cylinder.normal;
+		ew = d;
 		ev = cross(&ex, &ew);
 		eu = cross(&ew, &ev);
 
@@ -292,9 +312,9 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		v = pos_uv.z;
 		w = pos_uv.y;
 
-		theta = acosf(u / shape->data.cylinder.radius);		// 0 <= theta <= pi
+		theta = acosf(u / r);		// 0 <= theta <= pi
 		uu = theta / (float)M_PI;							// 0 <= uu <= 1
-		vv = w / shape->data.cylinder.height;				// 0 <= vv <= 1
+		vv = w / h;				// 0 <= vv <= 1
 
 		uu *= -(float)img.width;
 		vv *= -(float)img.height;
