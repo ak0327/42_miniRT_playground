@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 23:57:40 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 10:40:14 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,29 +80,29 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 
 		/* (u,v,w)->(x,y,z) */
 		t_vector	bump_world_n;
-		t_vector	ub, vb, wb;
-		t_vector	world_y;
+		t_vector	eu, ev, ew;
+		t_vector	ey;
 		t_matrix	Tr_matrix;
 
-		SET_VECTOR(world_y, 0.0f, 1.0f, 0.0f)
-		wb = intp.normal;
-		ub = cross(&wb, &world_y);
-		normalize(&ub);
-		vb = cross(&ub, &wb);
-		normalize(&vb);
+		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f)
+		ew = intp.normal;
+		eu = cross(&ew, &ey);
+		normalize(&eu);
+		ev = cross(&eu, &ew);
+		normalize(&ev);
 
-		if (wb.x == world_y.x && wb.y == world_y.y && wb.z == world_y.z)
+		if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
 		{
-			SET_VECTOR(ub, 1.0f, 0.0f, 0.0f);
-			SET_VECTOR(vb, 0.0f, 0.0f, 1.0f);
+			SET_VECTOR(eu, 1.0f, 0.0f, 0.0f);
+			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
 		}
-		if (wb.x == world_y.x && wb.y == -world_y.y && wb.z == world_y.z)
+		if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
 		{
-			SET_VECTOR(ub, -1.0f, 0.0f, 0.0f);
-			SET_VECTOR(vb, 0.0f, 0.0f, -1.0f);
+			SET_VECTOR(eu, -1.0f, 0.0f, 0.0f);
+			SET_VECTOR(ev, 0.0f, 0.0f, -1.0f);
 		}
 
-		Tr_matrix = set_matrix(ub, wb, vb);
+		Tr_matrix = set_matrix(eu, ew, ev);
 		Tr_matrix = transpose_matrix(Tr_matrix);
 		bump_world_n = Mv(Tr_matrix, bump_n);
 		normalize(&bump_world_n);
@@ -176,13 +176,53 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		t_vector	hi, d;
 		float		uu, vv;
 		t_vector	u_vec, v_vec;
+		t_vector	eu, ev, ew;
+		t_vector	ey;
+		t_vector	pos_uv;
+		float		l;
+		t_matrix	M;
 
 		pos_local = sub(&intp.position, &shape->data.cylinder.position);
 		hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
 		d = shape->data.cylinder.normal;
 
-		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));		// TODO: +-
-		u_vec.y = -d.x / sqrtf(SQR(d.x) + SQR(d.y));	// TODO: +-
+//		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
+//		ew = shape->data.cylinder.normal;
+//		eu = cross(&ey, &ew);
+//		ev = cross(&eu, &ew);
+//
+//		if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
+//		{
+//			SET_VECTOR(eu, 1.0f, 0.0f, 0.0f);
+//			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
+//		}
+//		if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
+//		{
+//			SET_VECTOR(eu, -1.0f, 0.0f, 0.0f);
+//			SET_VECTOR(ev, 0.0f, 0.0f, -1.0f);
+//		}
+//
+//		M = set_matrix(eu, ew, ev);	// (i,j,k)->(u,w,v)への変換matrix
+////		M = transpose_matrix(M);				// (u,w,v)->(i,j,k)への変換matrix
+//
+//		pos_uv = Mv(M, pos_local);
+//
+//		u = pos_uv.x;
+//		v = pos_uv.z;
+//		l = sqrtf(SQR(u) + SQR(v));
+//		if (l == 0)
+//			theta = 0;
+//		else
+//			theta = acosf(u / l);
+//
+//		uu = theta / (float)M_PI;						// 0 <= uu <= 1
+//		vv = pos_uv.y / shape->data.cylinder.height;
+
+//		printf("(u,v)=(%f,%f), (uu,vv)=(%f,%f), theta:%f\n", u, v, uu, vv, theta * 180 / (float)M_PI);
+
+
+		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));
+		u_vec.y = -d.x / sqrtf(SQR(d.x) + SQR(d.y));
 		u_vec.z = 0;
 		normalize(&u_vec);
 
@@ -197,7 +237,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		uu = theta * 2 / (2.0f * (float)M_PI);
 		vv = norm(&hi) / shape->data.cylinder.height;
 
-//		printf("(u,v)=(%f,%f), (uu,vv)=(%f,%f)\n", u, v, uu, vv);
+		//		printf("(u,v)=(%f,%f), (uu,vv)=(%f,%f)\n", u, v, uu, vv);
 
 		uu *= (float)img.width;
 		vv *= -(float)img.height;

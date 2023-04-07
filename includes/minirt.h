@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 09:53:55 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 10:17:27 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ typedef struct	s_sphere
 
 typedef struct	s_cylinder
 {
-	t_vector	normal;		// 単位法線ベクトル
+	t_vector	normal;		// 単位法線ベクトル todo:direction
 	t_vector	position;	// 中心位置ベクトル
 	float		height;
 	float		radius;
@@ -171,7 +171,7 @@ typedef struct	s_cylinder
 
 typedef struct	s_corn
 {
-	t_vector	normal;		// 単位法線ベクトル
+	t_vector	normal;		// 単位法線ベクトル todo:direction
 	t_vector	position;	// 中心位置ベクトル
 	float		height;
 	float		radius;
@@ -179,7 +179,7 @@ typedef struct	s_corn
 
 typedef struct	s_hyperboloid
 {
-	t_vector	normal;		// 単位法線ベクトル
+	t_vector	normal;		// 単位法線ベクトル todo:direction
 	t_vector	position;	// 中心位置ベクトル
 	float		height;
 	float		radius;
@@ -187,7 +187,7 @@ typedef struct	s_hyperboloid
 
 typedef struct	s_paraboloid
 {
-	t_vector	normal;		// 単位法線ベクトル
+	t_vector	normal;		// 単位法線ベクトル todo:direction
 	t_vector	position;	// 中心位置ベクトル
 	float		height;
 	float		radius;
