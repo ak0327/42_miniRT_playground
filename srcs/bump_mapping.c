@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 12:24:53 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/07 12:28:14 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		uu = theta / (float)M_PI;
 		vv = w / shape->data.cylinder.height;
 
-		uu *= (float)img.width;
+		uu *= -(float)img.width;
 		vv *= -(float)img.height;
 
 		row = (((int)uu % img.width) + img.width) % img.width;		// 0 <= row <= img.width
