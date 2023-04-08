@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 10:05:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 10:42:07 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_camera	init_camera(void)
 
 	fov_radians  = camera.fov_deg * (float)M_PI / 180.0f;
 	camera.distance_camera_to_sc = (WINDOW_HEIGHT * ASPECT / 2.0f) / tanf(fov_radians / 2.0f);
-	camera.dir_camera_to_sc_center = mult(camera.distance_camera_to_sc, &camera.dir);
+	camera.vec_camera_to_sc_center = mult(camera.distance_camera_to_sc, &camera.dir);
 
 	t_vector	ex, ey, ez;
 	SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
@@ -55,9 +55,9 @@ t_camera	init_camera(void)
 	t_vector	eu, ev, ew;
 
 	ew = normalize_vec_inv(&camera.dir);
-	eu = cross(&ey, &ew);
+	eu = cross(&ew, &ey);
 	normalize(&eu);
-	ev = cross(&ew, &eu);
+	ev = cross(&eu, &ew);
 	normalize(&ev);
 
 	if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
@@ -72,28 +72,5 @@ t_camera	init_camera(void)
 	}
 	camera.transpose_matrix_w2c = set_matrix(eu, ew, ev);
 	camera.transpose_matrix_c2w = transpose_matrix(camera.transpose_matrix_w2c);
-
-
-//	camera.u.x = camera.dir_camera_to_sc_center.z / sqrtf(SQR(camera.dir_camera_to_sc_center.x) + SQR(camera.dir_camera_to_sc_center.z));
-//	camera.u.y = 0.0f;
-//	camera.u.z = -1.0f * camera.dir_camera_to_sc_center.x / sqrtf(SQR(camera.dir_camera_to_sc_center.x) + SQR(camera.dir_camera_to_sc_center.z));
-//	normalize(&camera.u);
-//
-//	camera.v = cross(&camera.dir_camera_to_sc_center, &camera.u);
-//	normalize(&camera.v);
-//
-//	if (camera.dir.x == 0.0f && camera.dir.y != 0.0f && camera.dir.z == 0.0f)
-//	{
-//		if (camera.dir.y > 0.0f)
-//		{
-//			SET_VECTOR(camera.u, -1.0f, 0.0f, 0.0f)
-//			SET_VECTOR(camera.v, 0.0f, 0.0f, -1.0f)
-//		}
-//		else
-//		{
-//			SET_VECTOR(camera.u, 1.0f, 0.0f, 0.0f)
-//			SET_VECTOR(camera.v, 0.0f, 0.0f, 1.0f)
-//		}
-//	}
 	return (camera);
 }

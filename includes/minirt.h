@@ -262,7 +262,7 @@ typedef struct	s_camera
 	t_vector	dir;
 	t_vector	u;
 	t_vector	v;
-	t_vector	dir_camera_to_sc_center;
+	t_vector	vec_camera_to_sc_center;
 	t_matrix	transpose_matrix_w2c;
 	t_matrix	transpose_matrix_c2w;
 	float		distance_camera_to_sc;
@@ -344,7 +344,7 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 t_matrix	rot_matrix(t_vector E);
 t_matrix	transpose_matrix(t_matrix R);
 t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3);
-t_vector	Mv(t_matrix T, t_vector v);
+t_vector	matrix_x_vec(t_matrix T, t_vector v);
 
 
 /********** img **********/

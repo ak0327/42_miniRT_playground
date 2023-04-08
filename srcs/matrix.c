@@ -38,13 +38,13 @@ t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3)
 	return (M);
 }
 
-t_vector	Mv(t_matrix M, t_vector v)
+t_vector	matrix_x_vec(t_matrix T, t_vector v)
 {
 	t_vector	Mv;
 
-	Mv.x = M.m11 * v.x + M.m12 * v.y + M.m13 * v.z;
-	Mv.y = M.m21 * v.x + M.m22 * v.y + M.m23 * v.z;
-	Mv.z = M.m31 * v.x + M.m32 * v.y + M.m33 * v.z;
+	Mv.x = T.m11 * v.x + T.m12 * v.y + T.m13 * v.z;
+	Mv.y = T.m21 * v.x + T.m22 * v.y + T.m23 * v.z;
+	Mv.z = T.m31 * v.x + T.m32 * v.y + T.m33 * v.z;
 	return (Mv);
 }
 

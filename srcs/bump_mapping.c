@@ -103,7 +103,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 
 		Tr_matrix = set_matrix(eu, ew, ev);
 		Tr_matrix = transpose_matrix(Tr_matrix);
-		bump_normal_world = Mv(Tr_matrix, bump_normal_local);
+		bump_normal_world = matrix_x_vec(Tr_matrix, bump_normal_local);
 		normalize(&bump_normal_world);
 		return (bump_normal_world);
 	}
@@ -160,7 +160,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		M = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
 //		M = transpose_matrix(M);				// (u,w,v)->(x,y,z)への変換matrix
 
-		pos_uv = Mv(M, pos_local);			// pos(x,y,z)->pos(u,v,w)
+		pos_uv = matrix_x_vec(M, pos_local);			// pos(x,y,z)->pos(u,v,w)
 
 		fu = pos_uv.x; //このuは結局xになっているのでは？
 		fv = pos_uv.z;
@@ -208,7 +208,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 
 		Tr_matrix = set_matrix(eu, ew, ev);
 		Tr_matrix = transpose_matrix(Tr_matrix);
-		bump_normal_world = Mv(Tr_matrix, bump_normal_local);
+		bump_normal_world = matrix_x_vec(Tr_matrix, bump_normal_local);
 		normalize(&bump_normal_world);
 		return (bump_normal_world);
 	}
@@ -327,7 +327,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 		M = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
 //		M = transpose_matrix(M);				// (u,w,v)->(x,y,z)への変換matrix
 
-		pos_uv = Mv(M, pos_local);			// pos(x,y,z)->pos(u,v,w)
+		pos_uv = matrix_x_vec(M, pos_local);			// pos(x,y,z)->pos(u,v,w)
 
 		u = pos_uv.x; //このuは結局xになっているのでは？
 		v = pos_uv.z;
