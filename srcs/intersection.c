@@ -6,13 +6,14 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 10:48:31 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 22:34:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray,
+										 t_intersection_point *out_intp)
 {
 	t_cylinder	*cyl;
 	float		A, B, C, D;
@@ -33,7 +34,7 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	B = 2.0f * dot(&d_x_n, &pepc_x_n);
 	C = SQR(norm(&pepc_x_n)) - SQR(cyl->radius);
 
-	D = SQR(B) - 4 * A * C;
+	D = SQR(B) - 4.0f * A * C;
 
 	if (A == 0.0f || D < 0.0f)
 		return (0);
@@ -41,8 +42,6 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray, t_inters
 	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
 	t2 = (float) (-B + sqrtf(D)) / (2.0f * A);
 
-//	if (t1 <= 0.0f || t2 <= 0.0f)
-//		return (0);
 	if (!out_intp)
 		return (0);
 
@@ -80,7 +79,8 @@ static float	sign(t_vector p1, t_vector p2, t_vector p3)
 	return ((p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y));
 }
 
-static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+static int	intersection_with_corn(const t_shape *shape, const t_ray *ray,
+									 t_intersection_point *out_intp)
 {
 	const t_corn	*corn = &shape->data.corn;
 	t_vector		di = ray->direction;
@@ -111,18 +111,11 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 
 	D = SQR(B) - 4.0f * A * C;
 
-	if (A == 0.0f)
-		return (0);
-	if (D < 0.0f)
+	if (A == 0.0f || D < 0.0f || !out_intp)
 		return (0);
 
 	t1 = (float) (-B - sqrtf(D)) / (2.0f * A);
 	t2 = (float) (-B + sqrtf(D)) / (2.0f * A);
-
-//	if (t1 <= 0.0f || t2 <= 0.0f)
-//		return (0);
-	if (!out_intp)
-		return (0);
 
 	alpha = atanf(r / h);
 
@@ -166,7 +159,8 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray, t_inte
 	return (0);
 }
 
-static int	intersection_with_sphere(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+static int	intersection_with_sphere(const t_shape *shape, const t_ray *ray,
+									   t_intersection_point *out_intp)
 {
 	const t_sphere	*sph = &shape->data.sphere;
 	t_vector		pe_pc;
@@ -190,13 +184,13 @@ static int	intersection_with_sphere(const t_shape *shape, const t_ray *ray, t_in
 	{
 		float t1 = (float) (-B + sqrtf(D)) / (2.0f * A);
 		float t2 = (float) (-B - sqrtf(D)) / (2.0f * A);
-		if (t1 > 0.0f) t = t1;
-		if (t2 > 0.0f && t2 < t) t = t2;
+		if (t1 > 0.0f)
+			t = t1;
+		if (t2 > 0.0f && t2 < t)
+			t = t2;
 	}
 
-	if (t <= 0.0f)
-		return (0);
-	if (!out_intp)
+	if (t <= 0.0f || !out_intp)
 		return (0);
 
 	out_intp->distance = t;
@@ -207,7 +201,8 @@ static int	intersection_with_sphere(const t_shape *shape, const t_ray *ray, t_in
 	return (1);
 }
 
-static int	intersection_with_plane(const t_shape *shape, const t_ray *ray, t_intersection_point *out_intp)
+static int	intersection_with_plane(const t_shape *shape, const t_ray *ray,
+									  t_intersection_point *out_intp)
 {
 	const t_plane	*pln = &shape->data.plane;
 	float 			dn_dot = dot(&ray->direction, &pln->normal);
@@ -221,10 +216,7 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray, t_int
 	s_p = sub(&ray->start, &pln->position);
 	t = -1.0f * dot(&s_p, &pln->normal) / dn_dot;
 
-	if (t <= 0.0f)
-		return (0);
-
-	if (!out_intp)
+	if (t <= 0.0f || !out_intp)
 		return (0);
 
 	out_intp->distance = t;
@@ -234,8 +226,7 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray, t_int
 	return (1);
 }
 
-int intersection_test(t_shape *shape,
-					  const t_ray *ray,
+int intersection_test(t_shape *shape, const t_ray *ray,
 					  t_intersection_point *out_intp)
 {
 	if (shape->type == ST_PLANE)
@@ -249,12 +240,9 @@ int intersection_test(t_shape *shape,
 	return (0);
 }
 
-int get_nearest_shape(const t_scene *scene,
-					  const t_ray *ray,
-					  float max_dist,
-					  int exit_once_found,
-					  t_shape **out_shape,
-					  t_intersection_point *out_intp)
+int get_nearest_shape(const t_scene *scene, const t_ray *ray,
+					  float max_dist, int exit_once_found,
+					  t_shape **out_shape, t_intersection_point *out_intp)
 {
 	size_t					i;
 	t_shape					*nearest_shape = NULL;
