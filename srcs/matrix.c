@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:50:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/06 21:38:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 15:20:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,13 @@ t_matrix	get_tr_matrix_world2tangent()
 
 t_matrix	get_tr_matrix_world2obj(t_vector w_dir)
 {
-	t_vector	eu, ev, ew, ex;
+	t_vector	eu, ev, ew;
+	t_vector	ex, ey, ez;
 	t_matrix	Tr;
 
 	SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
+	SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
+	SET_VECTOR(ez, 0.0f, 0.0f, 1.0f);
 
 	ew = normalize_vec(&w_dir);
 	ev = cross(&ex, &ew);
@@ -46,13 +49,13 @@ t_matrix	get_tr_matrix_world2obj(t_vector w_dir)
 
 	if (ew.x == ex.x && ew.y == ex.y && ew.z == ex.z)
 	{
-		SET_VECTOR(eu, 0.0f, -1.0f, 0.0f);
-		SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
+		eu = normalize_vec_inv(&ey);
+		ev = ez;
 	}
 	if (ew.x == -ex.x && ew.y == ex.y && ew.z == ex.z)
 	{
-		SET_VECTOR(eu, 0.0f, 1.0f, 0.0f);
-		SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
+		eu = ey;
+		ev = ez;
 	}
 
 	Tr = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix

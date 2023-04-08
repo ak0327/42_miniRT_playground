@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 14:56:05 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 16:33:01 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@
 //#define EPSILON			(1.0f / 512.0f)
 //#define EPSILON			(1.0f / 256.0f)
 //#define EPSILON			(1.0f / 128.0f)
-#define EPSILON			(1.0f / 64.0f)
+//#define EPSILON			(1.0f / 64.0f)
+#define EPSILON			(1.0f / 32.0f)
 
 #define MAX_RECURSION	8
 
@@ -349,9 +350,9 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape);
 
 /********** texture_map **********/
 t_texture_map	get_cylindrical_map(t_vector pos_local, t_matrix Tr, float h);
+t_texture_map	get_conical_map(t_vector pos_local, t_matrix Tr, float h);
 t_texture_map	get_spherical_map(t_vector pos_local);
-
-
+t_texture_map	get_planar_map(t_vector pos_local, t_matrix Tr);
 
 
 /********** matrix **********/

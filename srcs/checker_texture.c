@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 14:51:14 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 16:46:49 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,50 +24,56 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 	t_matrix		Tr_matrix;
 	float			ra, ga, ba;
 	float			rb, gb, bb;
+	float			u_mag, v_mag;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
-	// checker_color, あとで関数に切り出す
 	if (shape->type == ST_PLANE)
 	{
-		// 斜めにするとチェッカーにならない -> local座標に落とし込まないといけない？一旦これでOKとする
-		condition_checker = (int)(floorf(intp.position.x / 100) + floorf(intp.position.z / 100)) % 2;
+		pos_local = sub(&intp.position, &shape->data.plane.position);
+		u_mag = 1.0f / 50.0f;
+		v_mag = 1.0f / 50.0f;
+		Tr_matrix = get_tr_matrix_world2obj(shape->data.cylinder.normal);
+		pattern_map = get_planar_map(pos_local, Tr_matrix);
+
 		ra = 0.3f; ga = 0.3f; ba = 0.3f;
 		rb = 0.0f; gb = 0.0f; bb = 0.0f;
 	}
 	else if (shape->type == ST_SPHERE)
 	{
 		pos_local = sub(&intp.position, &shape->data.sphere.center);
-
+		u_mag = 10.0f;
+		v_mag = 20.0f;
 		pattern_map = get_spherical_map(pos_local);
-		condition_checker = (int)(floorf(pattern_map.u * 10) + floorf(pattern_map.v * 20)) % 2;
 		ra = 0.2f; ga = 0.3f; ba = 0.6f;
 		rb = 0.8f; gb = 0.8f; bb = 0.8f;
 	}
-
 	else if (shape->type == ST_CYLINDER)
 	{
 		pos_local = sub(&intp.position, &shape->data.cylinder.position);
-
+		u_mag = 10.0f;
+		v_mag = 5.0f;
 		Tr_matrix = get_tr_matrix_world2obj(shape->data.cylinder.normal);
 		pattern_map = get_cylindrical_map(pos_local, Tr_matrix, shape->data.cylinder.height);
-		condition_checker = (int)(floorf(pattern_map.u * 10) + floorf(pattern_map.v * 10)) % 2;
 		ra = 0.2f; ga = 0.7f; ba = 0.2f;
 		rb = 0.8f; gb = 0.8f; bb = 0.8f;
 	}
-	else
+	else if (shape->type == ST_CORN)
 	{
 		pos_local = sub(&intp.position, &shape->data.corn.position);
-
+		u_mag = 10.0f;
+		v_mag = 10.0f;
 		Tr_matrix = get_tr_matrix_world2obj(shape->data.corn.normal);
-		pattern_map = get_cylindrical_map(pos_local, Tr_matrix, shape->data.corn.height);
-		condition_checker = (int)(floorf(pattern_map.u * 10) + floorf(pattern_map.v * 10)) % 2;
+		pattern_map = get_conical_map(pos_local, Tr_matrix, shape->data.corn.height);
 		ra = 0.7f; ga = 0.4f; ba = 0.2f;
 		rb = 0.8f; gb = 0.8f; bb = 0.8f;
 	}
-	if (condition_checker)
-		SET_COLOR(color, ra, ga, ba)
 	else
+		return (color);
+
+	SET_COLOR(color, ra, ga, ba)
+	condition_checker = (int)(floorf(pattern_map.u * u_mag) + floorf(pattern_map.v * v_mag)) % 2;
+	if (condition_checker)
 		SET_COLOR(color, rb, gb, bb)
 	return (color);
 }
