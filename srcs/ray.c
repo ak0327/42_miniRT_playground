@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 21:56:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 22:36:16 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,10 +189,10 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //		normal = get_bump_normal(intp, shape, img);
 	if (shape->type == ST_SPHERE)
 		normal = get_bump_normal(intp, shape, img);
-//	if (shape->type == ST_CYLINDER)
-//		normal = get_bump_normal(intp, shape, img);
-//	if (shape->type == ST_CORN)
-//		normal = get_bump_normal(intp, shape, img);
+	if (shape->type == ST_CYLINDER)
+		normal = get_bump_normal(intp, shape, img);
+	if (shape->type == ST_CORN)
+		normal = get_bump_normal(intp, shape, img);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 	inv_eye_dir = normalize_vec_inv(&eye_ray->direction);
