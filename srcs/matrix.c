@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:50:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 16:01:57 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 17:34:22 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,35 @@ int	get_axis(t_vector v)
 t_matrix	get_tr_matrix_world2tangent()
 {
 
+}
+
+t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir)
+{
+	t_vector	eu, ev, ew;
+	t_vector	ex, ey, ez;
+	t_matrix	Tr;
+
+	SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
+	SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
+	SET_VECTOR(ez, 0.0f, 0.0f, 1.0f);
+
+	ew = normalize_vec(&w_dir);
+	eu = cross(&ew, &ez);
+	ev = cross(&eu, &ew);
+
+	if (ew.x == ez.x && ew.y == ez.y && ew.z == ez.z)
+	{
+		eu = ex;
+		ev = normalize_vec_inv(&ey);
+	}
+	if (ew.x == ez.x && ew.y == ez.y && ew.z == -ez.z)
+	{
+		eu = ex;
+		ev = ey;
+	}
+
+	Tr = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
+	return (Tr);
 }
 
 t_matrix	get_tr_matrix_world2obj(t_vector w_dir)

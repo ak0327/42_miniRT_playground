@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 16:48:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 17:28:49 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 	if (shape->type == ST_PLANE)
 	{
 		pos_local = sub(&intp.position, &shape->data.plane.position);
-		u_mag = 1.0f / 50.0f;
-		v_mag = 1.0f / 50.0f;
-		Tr_matrix = get_tr_matrix_world2obj(shape->data.cylinder.normal);
+		u_mag = 1.0f/50.0f;
+		v_mag = 1.0f/50.0f;
+		Tr_matrix = get_tr_matrix_world2obj_plane(shape->data.plane.normal);
 		pattern_map = get_planar_map(pos_local, Tr_matrix);
 
 		ra = 0.3f; ga = 0.3f; ba = 0.3f;
@@ -52,7 +52,7 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 	{
 		pos_local = sub(&intp.position, &shape->data.cylinder.position);
 		u_mag = 10.0f;
-		v_mag = 5.0f;
+		v_mag = 7.0f;
 		Tr_matrix = get_tr_matrix_world2obj(shape->data.cylinder.normal);
 		pattern_map = get_cylindrical_map(pos_local, Tr_matrix, shape->data.cylinder.height);
 		ra = 0.2f; ga = 0.7f; ba = 0.2f;
