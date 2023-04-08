@@ -269,6 +269,13 @@ typedef struct	s_camera
 	float		fov_deg;
 } t_camera;
 
+typedef struct	s_texture_map
+{
+	float	u;
+	float	v;
+} t_texture_map;
+
+
 typedef struct	s_img
 {
 	int	height;
@@ -339,6 +346,10 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, t_im
 t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 							  t_intersection_point intp, t_shape *shape);
 
+/********** texture_map **********/
+
+
+
 
 /********** matrix **********/
 t_matrix	rot_matrix(t_vector E);
@@ -355,6 +366,10 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 						  t_intersection_point intp, t_shape *shape, t_img img);
 t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 							t_intersection_point intp, t_shape *shape, t_img img);
+
+
+
+
 
 
 /********** init **********/

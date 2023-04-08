@@ -12,21 +12,8 @@
 
 #include "minirt.h"
 
-t_vector	get_local(t_vector pc, t_vector pi, t_vector d)
-{
-	t_vector	local;
-	t_vector	pi_pc = sub(&pi, &pc);
-	t_vector	world_normal;
-	t_vector	normal;
 
-	SET_VECTOR(world_normal, 0.0f, 1.0f, 0.0f);
-	normal = sub(&world_normal, &d);
 
-	local.x = normal.x * pi_pc.x;
-	local.y = normal.y * pi_pc.y;
-	local.z = normal.z * pi_pc.z;
-	return (local);
-}
 
 t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 							  t_intersection_point intp, t_shape *shape)
@@ -78,6 +65,8 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 	}
 	else if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
 	{
+		t_texture_map	map;
+
 		t_vector	u_vec, v_vec;
 		float		theta;
 		float		uu, vv;

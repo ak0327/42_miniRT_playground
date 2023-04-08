@@ -34,6 +34,8 @@ SRC				= main.c \
 				  matrix.c \
 				  get_ppm.c \
 				  bump_mapping.c \
+				  texture_map.c \
+
 
 
 
