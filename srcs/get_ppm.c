@@ -36,13 +36,8 @@ void	*free_line_ret_nullptr(char *line)
 	return (NULL);
 }
 
-int	get_img(t_img *img)
+int	get_img(t_img *img, const char *img_path)
 {
-//	t_img		*img;
-//	const char	*img_path = "./img/cat.ppm";
-//	const char	*img_path = "./img/bump_1.ppm";
-//	const char	*img_path = "./img/normal1.ppm";
-	const char	*img_path = "./img/normalmap_example.ppm";
 	char		*line;
 	char		**split;
 	size_t		col;

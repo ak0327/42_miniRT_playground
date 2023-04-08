@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 10:10:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 10:18:02 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,19 @@ int	main(void)
 	int			r, g, b;
 
 	t_camera	camera;
+	t_img		img;
+
+//	const char	*img_path = "./img/cat.ppm";
+//	const char	*img_path = "./img/bump_1.ppm";
+//	const char	*img_path = "./img/normal1.ppm";
+	const char	*img_path = "./img/normalmap_example.ppm";
 
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	/* ppm test */
-	t_img		img;
-	if (get_img(&img) == FAILURE)
+	if (get_img(&img, img_path) == FAILURE)
 	{
 		free_data(&data);
 		return (EXIT_FAILURE);
