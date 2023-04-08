@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 22:07:00 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 13:56:22 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,36 +78,41 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 	}
 	else if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
 	{
+		t_vector	u_vec, v_vec;
+		float		theta;
+		float		uu, vv;
 
-		/* u,v */
+		t_vector	eu, ev, ew, ex;
+		t_vector	pos_uv;
+		t_matrix	Tr;
+		float		radius;
+		float		u, v, w;
+
 		t_vector	hi, d;
+		float		h;
+
 		if (shape->type == ST_CYLINDER)
 		{
 			pos_local = sub(&intp.position, &shape->data.cylinder.position);
 			hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
 			d = shape->data.cylinder.normal;
+			h = shape->data.cylinder.height;
+			radius = shape->data.cylinder.radius;
 		}
 		else
 		{
 			pos_local = sub(&intp.position, &shape->data.corn.position);
 			hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
 			d = shape->data.corn.normal;
+			h = shape->data.corn.height;
+			radius = shape->data.corn.radius * norm(&hi) / h;
 		}
 
-		t_vector	u_vec, v_vec;
-		float		theta;
-		float		u, v, uu, vv;
+		Tr = get_tr_matrix_world2obj(d);
+		pos_uv = mul_matrix_vec(Tr, pos_local);			// pos(x,y,z)->pos(u,v,w)
 
-		u_vec.x = d.y / sqrtf(SQR(d.x) + SQR(d.y));		// TODO: +-
-		u_vec.y = -d.x / sqrtf(SQR(d.x) + SQR(d.y));	// TODO: +-
-		u_vec.z = 0;
-		normalize(&u_vec);
-
-		v_vec = cross(&u_vec, &d);
-		normalize(&v_vec);
-
-		u = dot(&u_vec, &pos_local);
-		v = dot(&v_vec, &pos_local);
+		u = pos_uv.x;
+		v = pos_uv.z;
 
 		theta = atan2f(v, u);
 //		uu = 1.0f - theta / (float)M_PI;
@@ -115,15 +120,10 @@ t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
 		vv = norm(&hi);
 
 		condition_checker = (int)(floorf(uu * 10) + floorf(vv / 10)) % 2;
-
 		if (condition_checker)
-		{
-			SET_COLOR(color, 0.0f, 0.3f, 0.6f);
-		}
+			SET_COLOR(color, 0.0f, 0.3f, 0.6f)
 		else
-		{
-			SET_COLOR(color, 0.3f, 0.6f, 0.0f);
-		}
+			SET_COLOR(color, 0.3f, 0.6f, 0.0f)
 	}
 	return (color);
 }

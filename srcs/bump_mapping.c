@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 17:59:59 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 13:35:50 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 
 		Tr_matrix = set_matrix(eu, ew, ev);
 		Tr_matrix = transpose_matrix(Tr_matrix);
-		bump_normal_world = matrix_x_vec(Tr_matrix, bump_normal_local);
+		bump_normal_world = mul_matrix_vec(Tr_matrix, bump_normal_local);
 		normalize(&bump_normal_world);
 		return (bump_normal_world);
 	}
@@ -160,7 +160,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 		M = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
 //		M = transpose_matrix(M);				// (u,w,v)->(x,y,z)への変換matrix
 
-		pos_uv = matrix_x_vec(M, pos_local);			// pos(x,y,z)->pos(u,v,w)
+		pos_uv = mul_matrix_vec(M, pos_local);			// pos(x,y,z)->pos(u,v,w)
 
 		fu = pos_uv.x; //このuは結局xになっているのでは？
 		fv = pos_uv.z;
@@ -208,7 +208,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 
 		Tr_matrix = set_matrix(eu, ew, ev);
 		Tr_matrix = transpose_matrix(Tr_matrix);
-		bump_normal_world = matrix_x_vec(Tr_matrix, bump_normal_local);
+		bump_normal_world = mul_matrix_vec(Tr_matrix, bump_normal_local);
 		normalize(&bump_normal_world);
 		return (bump_normal_world);
 	}
@@ -280,10 +280,9 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
  	{
 		/* u,v */
 		float		uu, vv;
-		t_vector	eu, ev, ew;
-		t_vector	ex;
+		t_vector	eu, ev, ew, ex;
 		t_vector	pos_uv;
-		t_matrix	M;
+		t_matrix	Tr;
 
 		t_vector	hi, d;
 		float		h;
@@ -305,37 +304,17 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 			radius = shape->data.corn.radius * norm(&hi) / h;
 		}
 
-//		pos_local = sub(&intp.position, &shape->data.cylinder.position);
+		Tr = get_tr_matrix_world2obj(d);
 
-		SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
+		pos_uv = mul_matrix_vec(Tr, pos_local);	// pos(x,y,z)->pos(u,v,w)
 
-		ew = d;
-		ev = cross(&ex, &ew);
-		eu = cross(&ew, &ev);
-
-		if (ew.x == ex.x && ew.y == ex.y && ew.z == ex.z)
-		{
-			SET_VECTOR(eu, 0.0f, -1.0f, 0.0f);
-			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
-		}
-		if (ew.x == -ex.x && ew.y == ex.y && ew.z == ex.z)
-		{
-			SET_VECTOR(eu, 0.0f, 1.0f, 0.0f);
-			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
-		}
-
-		M = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
-//		M = transpose_matrix(M);				// (u,w,v)->(x,y,z)への変換matrix
-
-		pos_uv = matrix_x_vec(M, pos_local);			// pos(x,y,z)->pos(u,v,w)
-
-		u = pos_uv.x; //このuは結局xになっているのでは？
+		u = pos_uv.x;
 		v = pos_uv.z;
 		w = pos_uv.y;
 
 		theta = acosf(u / radius);		// 0 <= theta <= pi
-		uu = theta / (float)M_PI;							// 0 <= uu <= 1
-		vv = w / h;				// 0 <= vv <= 1
+		uu = theta / (float)M_PI;		// 0 <= uu <= 1
+		vv = w / h;						// 0 <= vv <= 1
 
 		uu *= -(float)img.width;
 		vv *= -(float)img.height;

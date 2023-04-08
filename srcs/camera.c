@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 10:42:07 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 13:39:28 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,5 @@ t_camera	init_camera(void)
 	}
 	camera.transpose_matrix_w2c = set_matrix(eu, ew, ev);
 	camera.transpose_matrix_c2w = transpose_matrix(camera.transpose_matrix_w2c);
-1	return (camera);
+	return (camera);
 }

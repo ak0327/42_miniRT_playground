@@ -28,6 +28,38 @@ int	get_axis(t_vector v)
 	return (plane);
 }
 
+t_matrix	get_tr_matrix_world2tangent()
+{
+
+}
+
+t_matrix	get_tr_matrix_world2obj(t_vector w_dir)
+{
+	t_vector	eu, ev, ew, ex;
+	t_matrix	Tr;
+
+	SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
+
+	ew = normalize_vec(&w_dir);
+	ev = cross(&ex, &ew);
+	eu = cross(&ew, &ev);
+
+	if (ew.x == ex.x && ew.y == ex.y && ew.z == ex.z)
+	{
+		SET_VECTOR(eu, 0.0f, -1.0f, 0.0f);
+		SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
+	}
+	if (ew.x == -ex.x && ew.y == ex.y && ew.z == ex.z)
+	{
+		SET_VECTOR(eu, 0.0f, 1.0f, 0.0f);
+		SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
+	}
+
+	Tr = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
+	return (Tr);
+}
+
+
 t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3)
 {
 	t_matrix	M;
@@ -38,7 +70,7 @@ t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3)
 	return (M);
 }
 
-t_vector	matrix_x_vec(t_matrix T, t_vector v)
+t_vector	mul_matrix_vec(t_matrix T, t_vector v)
 {
 	t_vector	Mv;
 

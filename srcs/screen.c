@@ -31,7 +31,7 @@ t_vector	ray_dir(int i, int j, t_camera camera)
 	screen_local.y = 0.0f;
 	screen_local.z = WINDOW_HEIGHT / 2.0f - (float)j;
 
-	screen_world = matrix_x_vec(camera.transpose_matrix_c2w, screen_local);
+	screen_world = mul_matrix_vec(camera.transpose_matrix_c2w, screen_local);
 	ray_dir = add(&camera.vec_camera_to_sc_center, &screen_world);
 
 	normalize(&ray_dir);
