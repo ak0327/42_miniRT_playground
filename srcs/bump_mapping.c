@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 13:35:50 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 21:27:29 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 	int			u, v;
 	float		fu, fv, fw;
 	t_vector	pos_local;
+	t_texture_map	pattern_map;
+
 	float		radius, theta, phi;
 
 	bump_normal_local = intp.normal;
@@ -49,23 +51,27 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 	if (shape->type == ST_SPHERE)
 	{
 		pos_local = sub(&intp.position, &shape->data.sphere.center);
-		radius = norm(&pos_local);
-		theta = acosf(pos_local.y / radius);
-
-		if (radius * sinf(theta) == EPSILON)
-			phi = 0.0f;
-		else
-			phi = acosf(pos_local.x / (radius * sinf(theta)));
-
-		fu = phi / (float)M_PI;		// 0 <= fu <= 1
-		fv = theta / (float)M_PI;	// 0 <= fv <= 1
-
+//		radius = norm(&pos_local);
+//		theta = acosf(pos_local.y / radius);
+//
+//		if (radius * sinf(theta) == EPSILON)
+//			phi = 0.0f;
+//		else
+//			phi = acosf(pos_local.x / (radius * sinf(theta)));
+//
+//		fu = phi / (float)M_PI;		// 0 <= fu <= 1
+//		fv = theta / (float)M_PI;	// 0 <= fv <= 1
+//
 		int	frequency = 1;
-		fu *= -(float)img.width * (float)frequency;
-		fv *= (float)img.height * (float)frequency;
+//		fu *= -(float)img.width * (float)frequency;
+//		fv *= (float)img.height * (float)frequency;
 
-		row = (((int)fu % img.width) + img.width) % img.width;		// 0 <= row <= img.width
-		col = (((int)fv % img.height) + img.height) % img.height;	// 0 <= col <= img.height
+		pattern_map = get_spherical_map(pos_local);
+		pattern_map.u *= -(float)img.width * (float)frequency;
+		pattern_map.v *= (float)img.height * (float)frequency;
+
+		row = (((int)pattern_map.u % img.width) + img.width) % img.width;		// 0 <= row <= img.width
+		col = (((int)pattern_map.v % img.height) + img.height) % img.height;	// 0 <= col <= img.height
 
 		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
 		r = img.data[idx++];
@@ -78,29 +84,7 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 
 		/* (u,v,w)->(x,y,z) */
 		t_vector	bump_normal_world;
-//		t_vector	eu, ev, ew;
-//		t_vector	ey;
 		t_matrix	Tr_matrix;
-
-//		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f)
-//		ew = intp.normal;
-//		eu = cross(&ew, &ey);
-//		normalize(&eu);
-//		ev = cross(&eu, &ew);
-//		normalize(&ev);
-//
-//		if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
-//		{
-//			SET_VECTOR(eu, 1.0f, 0.0f, 0.0f);
-//			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
-//		}
-//		if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
-//		{
-//			SET_VECTOR(eu, -1.0f, 0.0f, 0.0f);
-//			SET_VECTOR(ev, 0.0f, 0.0f, -1.0f);
-//		}
-
-//		Tr_matrix = set_matrix(eu, ew, ev);
 		Tr_matrix = get_tr_matrix_world2tangent(intp.normal);
 		Tr_matrix = transpose_matrix(Tr_matrix);
 		bump_normal_world = mul_matrix_vec(Tr_matrix, bump_normal_local);

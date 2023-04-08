@@ -6,14 +6,11 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 21:07:42 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 21:26:35 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-
-
 
 t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 {
@@ -43,7 +40,7 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 	{
 		pos_local = sub(&intp.position, &shape->data.sphere.center);
 		u_mag = 10.0f;
-		v_mag = 20.0f;
+		v_mag = 10.0f;
 		pattern_map = get_spherical_map(pos_local);
 		ra = 0.2f; ga = 0.3f; ba = 0.6f;
 		rb = 0.8f; gb = 0.8f; bb = 0.8f;
@@ -77,7 +74,6 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 		SET_COLOR(color, rb, gb, bb)
 	return (color);
 }
-
 
 /* ring pattern */
 //			condition_checker = (int)(floorf(sqrtf(SQR(intp.position.x) + SQR(intp.position.z)))) % 2;
