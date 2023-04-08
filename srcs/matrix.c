@@ -33,6 +33,37 @@ t_matrix	get_tr_matrix_world2tangent()
 
 }
 
+t_matrix	get_tr_matrix_world2obj_camera(t_vector w_dir)
+{
+	t_vector	eu, ev, ew;
+	t_vector	ex, ey, ez;
+	t_matrix	Tr;
+
+	SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
+	SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
+	SET_VECTOR(ez, 0.0f, 0.0f, 1.0f);
+
+	ew = w_dir;
+	eu = cross(&ew, &ey);
+	normalize(&eu);
+	ev = cross(&eu, &ew);
+	normalize(&ev);
+
+	if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
+	{
+		eu = ex;
+		ev = ez;
+	}
+	if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
+	{
+		eu = ex;
+		ev = normalize_vec_inv(&ez);
+	}
+
+	Tr = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
+	return (Tr);
+}
+
 t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir)
 {
 	t_vector	eu, ev, ew;

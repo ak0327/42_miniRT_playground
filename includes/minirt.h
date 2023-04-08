@@ -362,6 +362,7 @@ t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3);
 t_vector	mul_matrix_vec(t_matrix T, t_vector v);
 t_matrix	get_tr_matrix_world2obj(t_vector w_dir);
 t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir);
+t_matrix	get_tr_matrix_world2obj_camera(t_vector w_dir);
 
 
 /********** img **********/
