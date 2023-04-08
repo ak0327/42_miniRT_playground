@@ -72,5 +72,5 @@ t_camera	init_camera(void)
 	}
 	camera.transpose_matrix_w2c = set_matrix(eu, ew, ev);
 	camera.transpose_matrix_c2w = transpose_matrix(camera.transpose_matrix_w2c);
-	return (camera);
+1	return (camera);
 }
