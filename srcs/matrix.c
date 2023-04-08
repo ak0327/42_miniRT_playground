@@ -6,27 +6,11 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:50:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 17:34:22 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 20:22:34 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-int	get_axis(t_vector v)
-{
-	int		plane;
-	float	tmp[3];
-
-	tmp[0] = v.x;
-	tmp[1] = v.y;
-	tmp[2] = v.z;
-	plane = 0;
-	if (tmp[plane] > tmp[1])
-		plane = 1;
-	if (tmp[plane] > tmp[2])
-		plane = 2;
-	return (plane);
-}
 
 t_matrix	get_tr_matrix_world2tangent()
 {
@@ -76,7 +60,9 @@ t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir)
 
 	ew = normalize_vec(&w_dir);
 	eu = cross(&ew, &ez);
+	normalize(&eu);
 	ev = cross(&eu, &ew);
+	normalize(&ev);
 
 	if (ew.x == ez.x && ew.y == ez.y && ew.z == ez.z)
 	{
@@ -88,7 +74,6 @@ t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir)
 		eu = ex;
 		ev = ey;
 	}
-
 	Tr = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
 	return (Tr);
 }
@@ -105,7 +90,9 @@ t_matrix	get_tr_matrix_world2obj(t_vector w_dir)
 
 	ew = normalize_vec(&w_dir);
 	ev = cross(&ex, &ew);
+	normalize(&ev);
 	eu = cross(&ew, &ev);
+	normalize(&eu);
 
 	if (ew.x == ex.x && ew.y == ex.y && ew.z == ex.z)
 	{
@@ -117,11 +104,9 @@ t_matrix	get_tr_matrix_world2obj(t_vector w_dir)
 		eu = ey;
 		ev = ez;
 	}
-
 	Tr = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
 	return (Tr);
 }
-
 
 t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3)
 {
@@ -141,34 +126,6 @@ t_vector	mul_matrix_vec(t_matrix T, t_vector v)
 	Mv.y = T.m21 * v.x + T.m22 * v.y + T.m23 * v.z;
 	Mv.z = T.m31 * v.x + T.m32 * v.y + T.m33 * v.z;
 	return (Mv);
-}
-
-t_matrix	rot_matrix(t_vector E)
-{
-	t_vector	tx, ty, tz;
-	float		iX, iY, iZ;
-	int			axis;
-	t_matrix	R;
-
-	ty = E;
-	SET_VECTOR(tx, 0.0f, 0.0f, 0.0f);
-	axis = get_axis(E);
-	if (axis == 0)
-		tx.x = 1;
-	else if (axis == 1)
-		tx.y = 1;
-	else
-		tx.z = 1;
-	t_vector	tmp;
-	tmp = mult(dot(&ty, &tx), &ty);
-	tx = sub(&tx, &tmp);
-	tx = normalize_vec(&tx);
-
-	tz = cross(&ty, &tx);
-	R.m11 = tx.x; R.m12 = tx.y; R.m13 = tx.z;
-	R.m21 = ty.x; R.m22 = ty.y; R.m23 = ty.z;
-	R.m31 = tz.x; R.m32 = tz.y; R.m33 = tz.z;
-	return (R);
 }
 
 t_matrix	transpose_matrix(t_matrix M)
