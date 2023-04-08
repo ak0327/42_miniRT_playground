@@ -6,13 +6,13 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 22:25:37 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 22:44:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_colorf	get_checker_on_plane(t_intersection_point intp, t_shape *shape)
+static t_colorf	get_checker_color_on_plane(t_intersection_point intp, t_shape *shape)
 {
 	t_colorf		color;
 	int				condition_checker;
@@ -39,7 +39,7 @@ static t_colorf	get_checker_on_plane(t_intersection_point intp, t_shape *shape)
 	return (color);
 }
 
-static t_colorf	get_checker_on_sphere(t_intersection_point intp, t_shape *shape)
+static t_colorf	get_checker_color_on_sphere(t_intersection_point intp, t_shape *shape)
 {
 	t_colorf		color;
 	int				condition_checker;
@@ -63,7 +63,7 @@ static t_colorf	get_checker_on_sphere(t_intersection_point intp, t_shape *shape)
 	return (color);
 }
 
-static t_colorf	get_checker_on_cylinder(t_intersection_point intp, t_shape *shape)
+static t_colorf	get_checker_color_on_cylinder(t_intersection_point intp, t_shape *shape)
 {
 	t_colorf		color;
 	int				condition_checker;
@@ -89,7 +89,7 @@ static t_colorf	get_checker_on_cylinder(t_intersection_point intp, t_shape *shap
 	return (color);
 }
 
-static t_colorf	get_checker_on_corn(t_intersection_point intp, t_shape *shape)
+static t_colorf	get_checker_color_on_corn(t_intersection_point intp, t_shape *shape)
 {
 	t_colorf		color;
 	int				condition_checker;
@@ -121,13 +121,13 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f)
 
 	if (shape->type == ST_PLANE)
-		return (get_checker_on_plane(intp, shape));
+		return (get_checker_color_on_plane(intp, shape));
 	else if (shape->type == ST_SPHERE)
-		return (get_checker_on_sphere(intp, shape));
+		return (get_checker_color_on_sphere(intp, shape));
 	else if (shape->type == ST_CYLINDER)
-		return (get_checker_on_cylinder(intp, shape));
+		return (get_checker_color_on_cylinder(intp, shape));
 	else if (shape->type == ST_CORN)
-		return (get_checker_on_corn(intp, shape));
+		return (get_checker_color_on_corn(intp, shape));
 	return (color);
 }
 

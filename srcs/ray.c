@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 22:36:16 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 22:39:12 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,12 +187,12 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 //	if (shape->type == ST_PLANE)
 //		normal = get_bump_normal(intp, shape, img);
-	if (shape->type == ST_SPHERE)
-		normal = get_bump_normal(intp, shape, img);
-	if (shape->type == ST_CYLINDER)
-		normal = get_bump_normal(intp, shape, img);
-	if (shape->type == ST_CORN)
-		normal = get_bump_normal(intp, shape, img);
+//	if (shape->type == ST_SPHERE)
+//		normal = get_bump_normal(intp, shape, img);
+//	if (shape->type == ST_CYLINDER)
+//		normal = get_bump_normal(intp, shape, img);
+//	if (shape->type == ST_CORN)
+//		normal = get_bump_normal(intp, shape, img);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 	inv_eye_dir = normalize_vec_inv(&eye_ray->direction);
@@ -237,8 +237,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //			checker_col = get_checker_color(intp, shape);
 //			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&checker_col);
 //		}
-		checker_col = get_checker_color(intp, shape);
-		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&checker_col);
+//		checker_col = get_checker_color(intp, shape);
+//		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&checker_col);
 
 
 		/* image texture */
@@ -247,6 +247,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 //			img_col = get_img_color(intp, shape, img);
 //			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 //		}
+		img_col = get_img_color(intp, shape, img);
+		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 
 		if (light->type == LT_SPOT)
 		{

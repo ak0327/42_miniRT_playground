@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 20:52:50 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 22:39:36 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ int	main(void)
 	t_camera	camera;
 	t_img		img;
 
-//	const char	*img_path = "./img/cat.ppm";
+	const char	*img_path = "./img/cat.ppm";
 //	const char	*img_path = "./img/bump_1.ppm";
 //	const char	*img_path = "./img/normal1.ppm";
-	const char	*img_path = "./img/normalmap_example.ppm";
+//	const char	*img_path = "./img/normalmap_example.ppm";
 //	const char	*img_path = "./img/small_earth_daymap.ppm";
 
 	if (init_data(&data) == FAILURE)

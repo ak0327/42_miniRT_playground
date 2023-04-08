@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 22:02:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 22:40:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,22 @@ t_colorf	get_img_color(t_intersection_point intp, t_shape *shape, t_img img)
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
-	if (shape->type == ST_SPHERE)
+	if (shape->type == ST_PLANE)
+		return (get_image_color_on_plane(intp, shape));
+	else if (shape->type == ST_SPHERE)
+		return (get_image_color_on_sphere(intp, shape));
+	else if (shape->type == ST_CYLINDER)
+		return (get_image_color_on_cylinder(intp, shape));
+	else if (shape->type == ST_CORN)
+		return (get_image_color_on_corn(intp, shape));
+	return (color);
+
+	if (shape->type == ST_PLANE)
+	{
+
+	}
+
+	else if (shape->type == ST_SPHERE)
 	{
 		pos_local = sub(&intp.position, &shape->data.sphere.center);
 		radius = norm(&pos_local);
@@ -208,7 +223,7 @@ t_colorf	get_img_color(t_intersection_point intp, t_shape *shape, t_img img)
 		return (color);
 	}
 
-	if (shape->type == ST_CYLINDER)
+	else if (shape->type == ST_CYLINDER)
  	{
 		pos_local = sub(&intp.position, &shape->data.cylinder.position);
 		hi = mult(dot(&pos_local, &shape->data.cylinder.normal), &shape->data.cylinder.normal);
@@ -221,7 +236,6 @@ t_colorf	get_img_color(t_intersection_point intp, t_shape *shape, t_img img)
 		pos_uv = mul_matrix_vec(Tr, pos_local);	// pos(x,y,z)->pos(u,v,w)
 
 		u = pos_uv.x;
-		v = pos_uv.z;
 		w = pos_uv.y;
 
 		theta = acosf(u / radius);		// 0 <= theta <= pi
@@ -241,7 +255,7 @@ t_colorf	get_img_color(t_intersection_point intp, t_shape *shape, t_img img)
 		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
 		return (color);
 	}
-	if (shape->type == ST_CORN)
+	else if (shape->type == ST_CORN)
 	{
 		pos_local = sub(&intp.position, &shape->data.corn.position);
 		hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
@@ -254,7 +268,6 @@ t_colorf	get_img_color(t_intersection_point intp, t_shape *shape, t_img img)
 		pos_uv = mul_matrix_vec(Tr, pos_local);	// pos(x,y,z)->pos(u,v,w)
 
 		u = pos_uv.x;
-		v = pos_uv.z;
 		w = pos_uv.y;
 
 		theta = acosf(u / radius);		// 0 <= theta <= pi
