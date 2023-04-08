@@ -369,10 +369,8 @@ t_matrix	get_tr_matrix_world2tangent(t_vector w_dir);
 /********** img **********/
 int			get_img(t_img *img, const char *img_path);
 void		draw_img_test(t_data data, t_img img);
-t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
-						  t_intersection_point intp, t_shape *shape, t_img img);
-t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
-							t_intersection_point intp, t_shape *shape, t_img img);
+t_colorf	get_img_color(t_intersection_point intp, t_shape *shape, t_img img);
+t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape, t_img img);
 
 
 
