@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 14:34:38 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 14:51:14 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,11 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 	else if (shape->type == ST_SPHERE)
 	{
 		pos_local = sub(&intp.position, &shape->data.sphere.center);
-		float radius = norm(&pos_local);
-		float theta = acosf(pos_local.y / radius);
-		float phi = atan2f(pos_local.z, pos_local.x);
-		float u = 1.0f - phi / (float)M_PI;
-		float v = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
-		condition_checker = (int)(floorf(u * 10) + floorf(v * 15)) % 2;
-		ra = 0.6f; ga = 0.6f; ba = 0.6f;
-		rb = 0.3f; gb = 0.6f; bb = 0.0f;
+
+		pattern_map = get_spherical_map(pos_local);
+		condition_checker = (int)(floorf(pattern_map.u * 10) + floorf(pattern_map.v * 20)) % 2;
+		ra = 0.2f; ga = 0.3f; ba = 0.6f;
+		rb = 0.8f; gb = 0.8f; bb = 0.8f;
 	}
 
 	else if (shape->type == ST_CYLINDER)
@@ -55,8 +52,8 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 		Tr_matrix = get_tr_matrix_world2obj(shape->data.cylinder.normal);
 		pattern_map = get_cylindrical_map(pos_local, Tr_matrix, shape->data.cylinder.height);
 		condition_checker = (int)(floorf(pattern_map.u * 10) + floorf(pattern_map.v * 10)) % 2;
-		ra = 0.3f; ga = 0.3f; ba = 0.6f;
-		rb = 0.3f; gb = 0.6f; bb = 0.0f;
+		ra = 0.2f; ga = 0.7f; ba = 0.2f;
+		rb = 0.8f; gb = 0.8f; bb = 0.8f;
 	}
 	else
 	{
@@ -65,8 +62,8 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 		Tr_matrix = get_tr_matrix_world2obj(shape->data.corn.normal);
 		pattern_map = get_cylindrical_map(pos_local, Tr_matrix, shape->data.corn.height);
 		condition_checker = (int)(floorf(pattern_map.u * 10) + floorf(pattern_map.v * 10)) % 2;
-		ra = 0.3f; ga = 0.3f; ba = 0.6f;
-		rb = 0.3f; gb = 0.6f; bb = 0.0f;
+		ra = 0.7f; ga = 0.4f; ba = 0.2f;
+		rb = 0.8f; gb = 0.8f; bb = 0.8f;
 	}
 	if (condition_checker)
 		SET_COLOR(color, ra, ga, ba)

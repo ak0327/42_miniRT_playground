@@ -30,9 +30,17 @@ t_texture_map	get_planar_map()
 
 }
 
-t_texture_map	get_spherical_map()
+t_texture_map	get_spherical_map(t_vector pos_local)
 {
+	t_texture_map	map;
 
+	float radius = norm(&pos_local);
+	float theta = acosf(pos_local.y / radius);
+	float phi = atan2f(pos_local.z, pos_local.x);
+
+	map.u = 1.0f - phi / (float)M_PI;
+	map.v = 1.0f - (theta / (2.0f * (float)M_PI) + 0.5f);
+	return (map);
 }
 
 t_texture_map	get_conical_map()

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 22:06:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 14:52:48 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -640,7 +640,7 @@ void scene_setting(t_scene *scene)
 /*                          bump mapping   ここから                                        */
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
-	scene->num_shapes_capacity = 3; /* 物体リストの最大格納数(自由に変更して良い) */
+	scene->num_shapes_capacity = 4; /* 物体リストの最大格納数(自由に変更して良い) */
 	scene->num_shapes = scene->num_shapes_capacity;	/* 物体リストに，実際に格納した物体の数 */
 
 	scene->shapes = (t_shape *)malloc(sizeof(t_shape) * scene->num_shapes_capacity);
@@ -713,8 +713,8 @@ void scene_setting(t_scene *scene)
 
 
 	init_shape(&scene->shapes[1], ST_CORN,
-			   0.8f, 1.0f, -0.5f,	/* 法線ベクトル */
-			   -50.0f, 160.0f, 0.0f,	/* 中心位置 */
+			   -0.2f, 1.0f, 0.0f,	/* 法線ベクトル */
+			   -150.0f, 150.0f, 0.0f,	/* 中心位置 */
 			   130.0f,				/* 高さ */
 			   65.0f);				/* 半径 */
 
@@ -730,18 +730,32 @@ void scene_setting(t_scene *scene)
 
 	init_shape(&scene->shapes[2],  ST_CYLINDER,
 			   0.0f, 1.0f, 0.3f,	/* 法線ベクトル */
-			   50.0f, 50.0f, 0.0f,	/* 中心位置 */
+			   100.0f, 50.0f, 0.0f,	/* 中心位置 */
 			   100.0f,				/* 高さ */
 			   50.0f);				/* 半径 */
 
 	init_material(&scene->shapes[2].material,
-				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
-				  0.5f, 0.3f, 0.3f,			/* 拡散反射係数(RGB) */
-				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
+				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+				  0.5f, 0.5f, 0.5f,		/* 拡散反射係数(RGB) */
+				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
 				  8.0f,
 				  MT_DEFAULT,
 				  1.0f, 1.0f, 1.0f,
 				  0.0f);
+
+
+	init_shape(&scene->shapes[3], ST_SPHERE,
+			   0.0f, 50.0f, -150.0f,	/* 球の中心位置 */
+			   50.0f);    			/* 球の半径 */
+
+	init_material(&scene->shapes[3].material,
+				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+				  0.5f, 0.5f, 0.5f,		/* 拡散反射係数(RGB) */
+				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+				  8.0f,							/* 光沢度 */
+				  MT_DEFAULT, 					/* マテリアルタイプ */
+				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
+				  0.0f);					/* 絶対屈折率 */
 
 
 
@@ -758,7 +772,7 @@ void scene_setting(t_scene *scene)
 
 	// cylinder
 	init_light(&scene->lights[0], LT_POINT,
-			   -200.0f, 500.0f, -100.0f,	/* position */
+			   -200.0f, 500.0f, -300.0f,	/* position */
 			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
 			   1.0f, 1.0f, 1.0f,	/* color */
 			   70.0f);					/* angle */
