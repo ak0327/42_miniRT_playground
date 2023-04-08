@@ -6,18 +6,13 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:50:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 20:22:34 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 20:36:21 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_matrix	get_tr_matrix_world2tangent()
-{
-
-}
-
-t_matrix	get_tr_matrix_world2obj_camera(t_vector w_dir)
+t_matrix	get_tr_matrix_world2tangent(t_vector w_dir)
 {
 	t_vector	eu, ev, ew;
 	t_vector	ex, ey, ez;
@@ -29,9 +24,35 @@ t_matrix	get_tr_matrix_world2obj_camera(t_vector w_dir)
 
 	ew = w_dir;
 	eu = cross(&ew, &ey);
-	normalize(&eu);
 	ev = cross(&eu, &ew);
-	normalize(&ev);
+
+	if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
+	{
+		eu = ex;
+		ev = ez;
+	}
+	if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
+	{
+		eu = normalize_vec_inv(&ex);
+		ev = normalize_vec_inv(&ez);
+	}
+	Tr = set_matrix(eu, ew, ev);
+	return(Tr);
+}
+
+t_matrix	get_tr_matrix_world2obj_vup(t_vector w_dir)
+{
+	t_vector	eu, ev, ew;
+	t_vector	ex, ey, ez;
+	t_matrix	Tr;
+
+	SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
+	SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
+	SET_VECTOR(ez, 0.0f, 0.0f, 1.0f);
+
+	ew = w_dir;
+	eu = cross(&ew, &ey);
+	ev = cross(&eu, &ew);
 
 	if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
 	{
@@ -60,9 +81,7 @@ t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir)
 
 	ew = normalize_vec(&w_dir);
 	eu = cross(&ew, &ez);
-	normalize(&eu);
 	ev = cross(&eu, &ew);
-	normalize(&ev);
 
 	if (ew.x == ez.x && ew.y == ez.y && ew.z == ez.z)
 	{
@@ -90,9 +109,7 @@ t_matrix	get_tr_matrix_world2obj(t_vector w_dir)
 
 	ew = normalize_vec(&w_dir);
 	ev = cross(&ex, &ew);
-	normalize(&ev);
 	eu = cross(&ew, &ev);
-	normalize(&eu);
 
 	if (ew.x == ex.x && ew.y == ex.y && ew.z == ex.z)
 	{

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 14:50:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 20:38:56 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,10 +187,11 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 //	if (shape->type == ST_PLANE)
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
-//	if (shape->type == ST_SPHERE)
-//		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
-//	if (shape->type == ST_CYLINDER || shape->type == ST_CORN)
+	if (shape->type == ST_SPHERE)
+		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 //	if (shape->type == ST_CYLINDER)
+//		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
+//	if (shape->type == ST_CORN)
 //		normal = get_bump_normal(scene, eye_ray, intp, shape, img);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);

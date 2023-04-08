@@ -30,7 +30,6 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 	{
 		u = (int)intp.position.x;
 		v = (int)intp.position.z;
-//		u = -u;//todo: 影の方向 これで良さそう なぜ？
 		v = -v;
 
 		put_size = 10;
@@ -79,29 +78,30 @@ t_vector	get_bump_normal(const t_scene *scene, const t_ray *eye_ray,
 
 		/* (u,v,w)->(x,y,z) */
 		t_vector	bump_normal_world;
-		t_vector	eu, ev, ew;
-		t_vector	ey;
+//		t_vector	eu, ev, ew;
+//		t_vector	ey;
 		t_matrix	Tr_matrix;
 
-		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f)
-		ew = intp.normal;
-		eu = cross(&ew, &ey);
-		normalize(&eu);
-		ev = cross(&eu, &ew);
-		normalize(&ev);
+//		SET_VECTOR(ey, 0.0f, 1.0f, 0.0f)
+//		ew = intp.normal;
+//		eu = cross(&ew, &ey);
+//		normalize(&eu);
+//		ev = cross(&eu, &ew);
+//		normalize(&ev);
+//
+//		if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
+//		{
+//			SET_VECTOR(eu, 1.0f, 0.0f, 0.0f);
+//			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
+//		}
+//		if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
+//		{
+//			SET_VECTOR(eu, -1.0f, 0.0f, 0.0f);
+//			SET_VECTOR(ev, 0.0f, 0.0f, -1.0f);
+//		}
 
-		if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
-		{
-			SET_VECTOR(eu, 1.0f, 0.0f, 0.0f);
-			SET_VECTOR(ev, 0.0f, 0.0f, 1.0f);
-		}
-		if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
-		{
-			SET_VECTOR(eu, -1.0f, 0.0f, 0.0f);
-			SET_VECTOR(ev, 0.0f, 0.0f, -1.0f);
-		}
-
-		Tr_matrix = set_matrix(eu, ew, ev);
+//		Tr_matrix = set_matrix(eu, ew, ev);
+		Tr_matrix = get_tr_matrix_world2tangent(intp.normal);
 		Tr_matrix = transpose_matrix(Tr_matrix);
 		bump_normal_world = mul_matrix_vec(Tr_matrix, bump_normal_local);
 		normalize(&bump_normal_world);
@@ -231,22 +231,7 @@ t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 	float		radius, theta, phi;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
-//	if (shape->type == ST_PLANE)
-//	{
-//		u = intp.position.x;
-//		v = intp.position.z;
-//		v = -v;
-//
-//		row = ((((int)u * put_size)  % img.width) + img.width) % img.width;
-//		col = ((((int)v * put_size) % img.height) + img.height) % img.height;
-//
-//		idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
-//		r = img.data[idx++];
-//		g = img.data[idx++];
-//		b = img.data[idx];
-//		SET_COLOR(color, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f);
-//		return (color);
-//	}
+
 	if (shape->type == ST_SPHERE)
 	{
 		pos_local = sub(&intp.position, &shape->data.sphere.center);
