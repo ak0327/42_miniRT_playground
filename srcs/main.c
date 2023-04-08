@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 00:05:18 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 10:10:51 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,13 @@ void	free_data(t_data *data)
 	free(data->mlx);
 }
 
+void	free_img(t_img *img)
+{
+	if (!img || !img->data)
+		return ;
+	free(img->data);
+}
+
 /*
 
  Left hand coordinates
@@ -67,7 +74,7 @@ int	main(void)
 
 	t_scene		scene;
 
-	int			x, y;
+	int			i, j;
 	int			r, g, b;
 
 	t_camera	camera;
@@ -77,8 +84,12 @@ int	main(void)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	/* ppm test */
-	t_img		*img;
-	img = get_ppm();
+	t_img		img;
+	if (get_img(&img) == FAILURE)
+	{
+		free_data(&data);
+		return (EXIT_FAILURE);
+	}
 //	draw_img_test(data, *img);
 
 //	/* init scene & camera */
@@ -86,33 +97,33 @@ int	main(void)
 	camera = init_camera();
 
 	/* draw */
-	y = 0;
-	while (y < data.win_height)
+	j = 0;
+	while (j < data.win_height)
 	{
-		x = 0;
-		while (x < data.win_width)
+		i = 0;
+		while (i < data.win_width)
 		{
 			color = init_color((float)(100.0f/255.0f), (float)(149.0f/255.0f), (float)(237.0f/255.0f));
 
 			eye_ray.start = camera.pos;
-			eye_ray.direction = ray_dir(x, y, camera);
-			raytrace(&scene, &eye_ray, &color, *img);
+			eye_ray.direction = ray_dir(i, j, camera);
+			raytrace(&scene, &eye_ray, &color, img);
 			r = (int)(255 * CLAMP(color.r, 0, 1));
 			g = (int)(255 * CLAMP(color.g, 0, 1));
 			b = (int)(255 * CLAMP(color.b, 0, 1));
 
-			my_mlx_pixel_put(&data, x, y, r << 16 | g << 8 | b);
+			my_mlx_pixel_put(&data, i, j, r << 16 | g << 8 | b);
 
-			x++;
+			i++;
 		}
-		y++;
+		j++;
 	}
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hooks(data);
 	mlx_loop(data.mlx);
-
 	free_data(&data);
+	free_img(&img);
 	free(scene.lights);
 	free(scene.shapes);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:30:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 00:27:14 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 09:25:18 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  */
 
 // ray_dir : camera_pos(x,y,z) -> screen(x,y,z)
-t_vector	ray_dir(int x, int y, t_camera camera)
+t_vector	ray_dir(int i, int j, t_camera camera)
 {
 	t_vector	ray_dir;
 	t_vector	screen_local;
@@ -29,14 +29,15 @@ t_vector	ray_dir(int x, int y, t_camera camera)
 	t_vector	screen_world_tmp;
 	t_vector	screen_center;
 
-	screen_local.x = (float)x + WINDOW_WIDTH / 2.0f;
+	screen_local.x = (float)i + WINDOW_WIDTH / 2.0f;
 	screen_local.y = 0.0f;
-	screen_local.z = WINDOW_HEIGHT / 2.0f - (float)y;
+	screen_local.z = WINDOW_HEIGHT / 2.0f - (float)j;
 
-	screen_world_tmp = Mv(camera.transpose_matrix_c2w, screen_local);
-	screen_center = vec_calc(1.0f, &camera.pos, camera.distance_camera_to_screen, &camera.dir_camera_to_sc_center);
-	screen_world = add(&screen_center, &screen_world_tmp);
-	ray_dir = sub(&screen_world, &camera.pos);
+	screen_world = Mv(camera.transpose_matrix_c2w, screen_local);
+//	screen_world = add(&screen_center, &screen_world_tmp);
+//	ray_dir = sub(&screen_world, &camera.pos);
+
+	ray_dir = vec_calc(1.0f, &screen_world, camera.distance_camera_to_sc, &camera.dir_camera_to_sc_center);
 	normalize(&ray_dir);
 	return (ray_dir);
 

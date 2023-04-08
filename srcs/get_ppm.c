@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 17:33:43 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 10:14:56 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	*free_line_ret_nullptr(char *line)
 	return (NULL);
 }
 
-t_img	*get_ppm(void)
+int	get_img(t_img *img)
 {
-	t_img		*img;
+//	t_img		*img;
 //	const char	*img_path = "./img/cat.ppm";
 //	const char	*img_path = "./img/bump_1.ppm";
 //	const char	*img_path = "./img/normal1.ppm";
@@ -53,11 +53,12 @@ t_img	*get_ppm(void)
 
 	fd = open(img_path, O_RDONLY);
 	if (fd < 0)
-		return (NULL);
-	img = (t_img *)malloc(sizeof(t_img));
-	if (!img)
-		return (NULL);
+		return (FAILURE);
+//	img = (t_img *)malloc(sizeof(t_img));
+//	if (!img)
+//		return (NULL);
 
+	img->data = NULL;
 	col = 0;
 	idx = 0;
 	while (true)
@@ -67,7 +68,12 @@ t_img	*get_ppm(void)
 			break ;
 		split = ft_split(line, ' ');
 		if (!split)
-			return (NULL); // free
+		{
+			free(line);
+			if (img->data)
+				free(img->data);
+			return (FAILURE);
+		}
 		if (col == 2)
 		{
 			//todo: check array len, atoi success or failure
@@ -89,7 +95,7 @@ t_img	*get_ppm(void)
 		split = free_split_array_ret_nullptr(split);
 		col++;
 	}
-	return (img);
+	return (SUCCESS);
 }
 
 void	draw_img_test(t_data data, t_img img)

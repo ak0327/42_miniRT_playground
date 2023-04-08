@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 00:06:55 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 10:05:54 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_camera	init_camera(void)
 {
 	t_camera	camera;
-	float		theta_radians;
+	float		fov_radians;
 
 //	SET_VECTOR(camera.pos, 0.0f, 5.0f, -10.0f)
 //	SET_VECTOR(camera.dir, 0.0f, -0.2f, 1.0f)
@@ -43,9 +43,9 @@ t_camera	init_camera(void)
 	normalize(&camera.dir);
 	camera.fov_deg = 50.0f;
 
-	theta_radians  = camera.fov_deg * (float)M_PI / 180.0f;
-	camera.distance_camera_to_screen = WINDOW_HEIGHT * ASPECT / 2.0f / tanf(theta_radians / 2.0f);
-	camera.dir_camera_to_sc_center = mult(camera.distance_camera_to_screen, &camera.dir);
+	fov_radians  = camera.fov_deg * (float)M_PI / 180.0f;
+	camera.distance_camera_to_sc = (WINDOW_HEIGHT * ASPECT / 2.0f) / tanf(fov_radians / 2.0f);
+	camera.dir_camera_to_sc_center = mult(camera.distance_camera_to_sc, &camera.dir);
 
 	t_vector	ex, ey, ez;
 	SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
@@ -55,8 +55,10 @@ t_camera	init_camera(void)
 	t_vector	eu, ev, ew;
 
 	ew = normalize_vec_inv(&camera.dir);
-	eu = cross(&ew, &ey);
-	ev = cross(&eu, &ew);
+	eu = cross(&ey, &ew);
+	normalize(&eu);
+	ev = cross(&ew, &eu);
+	normalize(&ev);
 
 	if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
 	{

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 23:59:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 10:15:16 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,7 +265,7 @@ typedef struct	s_camera
 	t_vector	dir_camera_to_sc_center;
 	t_matrix	transpose_matrix_w2c;
 	t_matrix	transpose_matrix_c2w;
-	float		distance_camera_to_screen;
+	float		distance_camera_to_sc;
 	float		fov_deg;
 } t_camera;
 
@@ -348,7 +348,7 @@ t_vector	Mv(t_matrix T, t_vector v);
 
 
 /********** img **********/
-t_img		*get_ppm(void);
+int			get_img(t_img *img);
 void		draw_img_test(t_data data, t_img img);
 t_colorf	get_img_color(const t_scene *scene, const t_ray *eye_ray,
 						  t_intersection_point intp, t_shape *shape, t_img img);
