@@ -342,8 +342,7 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, t_im
 
 
 /********** checker **********/
-t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
-							  t_intersection_point intp, t_shape *shape);
+t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape);
 
 /********** texture_map **********/
 t_texture_map	get_cylindrical_map(t_vector pos_local, t_matrix Tr, float h);

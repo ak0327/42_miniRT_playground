@@ -15,19 +15,13 @@
 
 
 
-t_colorf	get_checker_color(const t_scene *scene, const t_ray *eye_ray,
-							  t_intersection_point intp, t_shape *shape)
+t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)
 {
 	t_colorf		color;
 	int				condition_checker;
 	t_vector		pos_local;
-
 	t_texture_map	pattern_map;
-
 	t_matrix		Tr_matrix;
-	t_vector		d;
-	float			h;
-	float			u_amp, v_amp;
 	float			ra, ga, ba;
 	float			rb, gb, bb;
 

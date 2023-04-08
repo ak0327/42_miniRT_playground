@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/07 21:50:50 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 14:36:38 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 		/* checker */
 		if (shape->type == ST_CORN || shape->type == ST_PLANE)
 		{
-			checker_col = get_checker_color(scene, eye_ray, intp, shape);
+			checker_col = get_checker_color(intp, shape);
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&checker_col);
 		}
 
