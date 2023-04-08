@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 14:52:48 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 16:53:52 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -640,7 +640,7 @@ void scene_setting(t_scene *scene)
 /*                          bump mapping   ここから                                        */
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
-	scene->num_shapes_capacity = 4; /* 物体リストの最大格納数(自由に変更して良い) */
+	scene->num_shapes_capacity = 6; /* 物体リストの最大格納数(自由に変更して良い) */
 	scene->num_shapes = scene->num_shapes_capacity;	/* 物体リストに，実際に格納した物体の数 */
 
 	scene->shapes = (t_shape *)malloc(sizeof(t_shape) * scene->num_shapes_capacity);
@@ -756,6 +756,44 @@ void scene_setting(t_scene *scene)
 				  MT_DEFAULT, 					/* マテリアルタイプ */
 				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
 				  0.0f);					/* 絶対屈折率 */
+
+
+	init_shape(&scene->shapes[4], ST_PLANE,
+			   -200.0, 0.0, 200.0,		/* 平面が通る点の位置 */
+			   1.0, 0.0, -1.0);		/* 平面の法線ベクトル */
+
+	init_material(&scene->shapes[4].material,
+//				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
+//				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+//				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
+				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
+				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
+				  1.0f,								/* 光沢度 */
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f,
+				  0.0f);
+
+
+
+	init_shape(&scene->shapes[5], ST_PLANE,
+			   400.0, 0.0, 200.0,		/* 平面が通る点の位置 */
+			   -1.0, 0.0, -0.2);		/* 平面の法線ベクトル */
+
+	init_material(&scene->shapes[5].material,
+//				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
+//				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+//				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
+				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
+				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
+				  1.0f,								/* 光沢度 */
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f,
+				  0.0f);
+
+
+
 
 
 
