@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_mappihng.c                                   :+:      :+:    :+:   */
+/*   get_img_color.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 22:45:27 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 14:01:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 14:43:55 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ static t_colorf	get_image_color_on_plane(t_intersection_point intp, t_shape *sha
 	Tr_matrix = get_tr_matrix_world2obj_yup(shape->data.plane.normal);
 	pattern_map = get_planar_map(pos_local, Tr_matrix);
 
-	row = (((int)pattern_map.u % img.width) + img.width) % img.width;		// 0 <= row <= img.width
-	col = ((-(int)pattern_map.v % img.height) + img.height) % img.height;	// 0 <= col <= img.height
+	row = ((((int)pattern_map.u * put_size) % img.width) + img.width) % img.width;		// 0 <= row <= img.width
+	col = (((-(int)pattern_map.v * put_size) % img.height) + img.height) % img.height;	// 0 <= col <= img.height
 
 	idx = ((col * img.width + row) * 3) % (img.width * img.height * 3);
 	r = img.data[idx++];
@@ -48,6 +48,7 @@ static t_colorf	get_image_color_on_sphere(t_intersection_point intp, t_shape *sh
 	int			img_size;
 	float		u, v;
 	float		radius, theta, phi;
+	int			frequency = 1;
 
 	pos_local = sub(&intp.position, &shape->data.sphere.center);
 	radius = norm(&pos_local);
@@ -61,8 +62,8 @@ static t_colorf	get_image_color_on_sphere(t_intersection_point intp, t_shape *sh
 	u = phi / (float)M_PI;		// 0 <= u <= 1
 	v = theta / (float)M_PI;	// 0 <= v <= 1
 
-	u *= -(float)img.width;
-	v *= (float)img.height;
+	u *= -(float)img.width * (float)frequency;
+	v *= (float)img.height * (float)frequency;
 
 	row = (((int)u % img.width) + img.width) % img.width;		// 0 <= row <= img.width
 	col = (((int)v % img.height) + img.height) % img.height;	// 0 <= col <= img.height
@@ -87,6 +88,7 @@ static t_colorf	get_image_color_on_cylinder(t_intersection_point intp, t_shape *
 	float		u, v;
 	t_vector	pos_uv;
 	t_matrix	Tr_matrix;
+	int			frequency = 1;
 
 	pos_local = sub(&intp.position, &shape->data.cylinder.position);
 	radius = shape->data.cylinder.radius;
@@ -99,8 +101,8 @@ static t_colorf	get_image_color_on_cylinder(t_intersection_point intp, t_shape *
 	u = theta / (float)M_PI;						// 0 <= u <= 1
 	v = pos_uv.y / shape->data.cylinder.height;		// 0 <= v <= 1
 
-	u *= -(float)img.width;
-	v *= -(float)img.height;
+	u *= -(float)img.width * (float)frequency;
+	v *= -(float)img.height * (float)frequency;
 
 	row = (((int)u % img.width) + img.width) % img.width;		// 0 <= row <= img.width
 	col = (((int)v % img.height) + img.height) % img.height;	// 0 <= col <= img.height
@@ -128,6 +130,7 @@ static t_colorf	get_image_color_on_corn(t_intersection_point intp, t_shape *shap
 	t_matrix	Tr_matrix;
 
 	t_vector	hi;
+	int			frequency = 1;
 
 	pos_local = sub(&intp.position, &shape->data.corn.position);
 	hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
@@ -140,8 +143,8 @@ static t_colorf	get_image_color_on_corn(t_intersection_point intp, t_shape *shap
 	u = theta / (float)M_PI;						// 0 <= u <= 1
 	v = pos_uv.y / shape->data.corn.height;			// 0 <= v <= 1
 
-	u *= -(float)img.width;
-	v *= -(float)img.height;
+	u *= -(float)img.width * (float)frequency;
+	v *= -(float)img.height * (float)frequency;
 
 	row = (((int)u % img.width) + img.width) % img.width;		// 0 <= row <= img.width
 	col = (((int)v % img.height) + img.height) % img.height;	// 0 <= col <= img.height

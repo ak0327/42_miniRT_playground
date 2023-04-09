@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 14:06:46 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 14:46:16 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,8 +185,8 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 	t_vector	normal = intp.normal;
 
 
-//	if (shape->type == ST_PLANE)
-//		normal = get_bump_normal(intp, shape, img);
+	if (shape->type == ST_PLANE)
+		normal = get_bump_normal(intp, shape, img);
 	if (shape->type == ST_SPHERE)
 		normal = get_bump_normal(intp, shape, img);
 	if (shape->type == ST_CYLINDER)
