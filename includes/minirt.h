@@ -341,7 +341,7 @@ int			get_nearest_shape(const t_scene *scene, const t_ray *ray, float max_dist, 
 					  t_shape **out_shape, t_intersection_point *out_intp);
 
 /********** ray **********/
-int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, t_img img);
+int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, t_img bump_img, t_img texture_img);
 
 
 /********** checker **********/
