@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 10:14:56 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/08 23:26:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	draw_img_test(t_data data, t_img img)
 		x = 0;
 		while (x < data.win_width)
 		{
-			r = 0; g = 0, b = 0;
+			r = 0; g = 0; b = 0;
 			if ((idx / 3) / img.width < y && (idx / 3)  < img.width * img.height)
 			{
 				r = img.data[idx++];

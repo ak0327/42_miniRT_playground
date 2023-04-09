@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:50:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 20:36:21 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 09:18:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_matrix	get_tr_matrix_world2tangent(t_vector w_dir)
 {
-	t_vector	eu, ev, ew;
+	t_vector	eu, ew, ev;
 	t_vector	ex, ey, ez;
 	t_matrix	Tr;
 
@@ -22,27 +22,27 @@ t_matrix	get_tr_matrix_world2tangent(t_vector w_dir)
 	SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
 	SET_VECTOR(ez, 0.0f, 0.0f, 1.0f);
 
-	ew = w_dir;
-	eu = cross(&ew, &ey);
-	ev = cross(&eu, &ew);
+	ev = w_dir;
+	eu = cross(&ev, &ey);
+	ew = cross(&eu, &ev);
 
-	if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
+	if (ev.x == ey.x && ev.y == ey.y && ev.z == ey.z)
 	{
 		eu = ex;
-		ev = ez;
+		ew = ez;
 	}
-	if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
+	if (ev.x == ey.x && ev.y == -ey.y && ev.z == ey.z)
 	{
 		eu = normalize_vec_inv(&ex);
-		ev = normalize_vec_inv(&ez);
+		ew = normalize_vec_inv(&ez);
 	}
-	Tr = set_matrix(eu, ew, ev);
+	Tr = set_matrix(eu, ev, ew);
 	return(Tr);
 }
 
 t_matrix	get_tr_matrix_world2obj_vup(t_vector w_dir)
 {
-	t_vector	eu, ev, ew;
+	t_vector	eu, ew, ev;
 	t_vector	ex, ey, ez;
 	t_matrix	Tr;
 
@@ -50,28 +50,28 @@ t_matrix	get_tr_matrix_world2obj_vup(t_vector w_dir)
 	SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
 	SET_VECTOR(ez, 0.0f, 0.0f, 1.0f);
 
-	ew = w_dir;
-	eu = cross(&ew, &ey);
-	ev = cross(&eu, &ew);
+	ev = w_dir;
+	eu = cross(&ev, &ey);
+	ew = cross(&eu, &ev);
 
-	if (ew.x == ey.x && ew.y == ey.y && ew.z == ey.z)
+	if (ev.x == ey.x && ev.y == ey.y && ev.z == ey.z)
 	{
 		eu = ex;
-		ev = ez;
+		ew = ez;
 	}
-	if (ew.x == ey.x && ew.y == -ey.y && ew.z == ey.z)
+	if (ev.x == ey.x && ev.y == -ey.y && ev.z == ey.z)
 	{
 		eu = ex;
-		ev = normalize_vec_inv(&ez);
+		ew = normalize_vec_inv(&ez);
 	}
 
-	Tr = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
+	Tr = set_matrix(eu, ev, ew);	// (x,y,z)->(u,w,v)への変換matrix
 	return (Tr);
 }
 
 t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir)
 {
-	t_vector	eu, ev, ew;
+	t_vector	eu, ew, ev;
 	t_vector	ex, ey, ez;
 	t_matrix	Tr;
 
@@ -79,27 +79,27 @@ t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir)
 	SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
 	SET_VECTOR(ez, 0.0f, 0.0f, 1.0f);
 
-	ew = normalize_vec(&w_dir);
-	eu = cross(&ew, &ez);
-	ev = cross(&eu, &ew);
+	ev = normalize_vec(&w_dir);
+	eu = cross(&ev, &ez);
+	ew = cross(&eu, &ev);
 
-	if (ew.x == ez.x && ew.y == ez.y && ew.z == ez.z)
+	if (ev.x == ez.x && ev.y == ez.y && ev.z == ez.z)
 	{
 		eu = ex;
-		ev = normalize_vec_inv(&ey);
+		ew = normalize_vec_inv(&ey);
 	}
-	if (ew.x == ez.x && ew.y == ez.y && ew.z == -ez.z)
+	if (ev.x == ez.x && ev.y == ez.y && ev.z == -ez.z)
 	{
 		eu = ex;
-		ev = ey;
+		ew = ey;
 	}
-	Tr = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
+	Tr = set_matrix(eu, ev, ew);	// (x,y,z)->(u,v,w)への変換matrix
 	return (Tr);
 }
 
 t_matrix	get_tr_matrix_world2obj(t_vector w_dir)
 {
-	t_vector	eu, ev, ew;
+	t_vector	eu, ew, ev;
 	t_vector	ex, ey, ez;
 	t_matrix	Tr;
 
@@ -107,21 +107,21 @@ t_matrix	get_tr_matrix_world2obj(t_vector w_dir)
 	SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
 	SET_VECTOR(ez, 0.0f, 0.0f, 1.0f);
 
-	ew = normalize_vec(&w_dir);
-	ev = cross(&ex, &ew);
-	eu = cross(&ew, &ev);
+	ev = normalize_vec(&w_dir);
+	ew = cross(&ex, &ev);
+	eu = cross(&ev, &ew);
 
-	if (ew.x == ex.x && ew.y == ex.y && ew.z == ex.z)
+	if (ev.x == ex.x && ev.y == ex.y && ev.z == ex.z)
 	{
 		eu = normalize_vec_inv(&ey);
-		ev = ez;
+		ew = ez;
 	}
-	if (ew.x == -ex.x && ew.y == ex.y && ew.z == ex.z)
+	if (ev.x == -ex.x && ev.y == ex.y && ev.z == ex.z)
 	{
 		eu = ey;
-		ev = ez;
+		ew = ez;
 	}
-	Tr = set_matrix(eu, ew, ev);	// (x,y,z)->(u,w,v)への変換matrix
+	Tr = set_matrix(eu, ev, ew);	// (x,y,z)->(u,v,w)への変換matrix
 	return (Tr);
 }
 
