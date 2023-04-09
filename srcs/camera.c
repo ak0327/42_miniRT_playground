@@ -71,7 +71,7 @@ t_camera	init_camera(void)
 //		ev = normalize_vec_inv(&ez);
 //	}
 //	camera.transpose_matrix_w2c = set_matrix(eu, ew, ev);
-	camera.transpose_matrix_w2c = get_tr_matrix_world2obj_vup(
+	camera.transpose_matrix_w2c = get_tr_matrix_world2obj_yup(
 			normalize_vec_inv(&camera.dir));
 	camera.transpose_matrix_c2w = transpose_matrix(camera.transpose_matrix_w2c);
 	return (camera);

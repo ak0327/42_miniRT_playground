@@ -92,7 +92,7 @@ t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape, t_img img)
 		h = shape->data.cylinder.height;
 		radius = shape->data.cylinder.radius;
 
-		Tr_matrix = get_tr_matrix_world2obj(d);
+		Tr_matrix = get_tr_matrix_world2obj_zup(d);
 		pos_uv = mul_matrix_vec(Tr_matrix, pos_local);			// pos(x,y,z)->pos(u,v,w)
 
 		theta = acosf(pos_uv.x / radius);	// 0 <= theta <= pi
@@ -128,7 +128,7 @@ t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape, t_img img)
 		h = shape->data.corn.height;
 		radius = shape->data.corn.radius * norm(&hi) / h;
 
-		Tr_matrix = get_tr_matrix_world2obj(d);
+		Tr_matrix = get_tr_matrix_world2obj_zup(d);
 		pos_uv = mul_matrix_vec(Tr_matrix, pos_local);			// pos(x,y,z)->pos(u,v,w)
 
 		theta = acosf(pos_uv.x / radius);	// 0 <= theta <= pi

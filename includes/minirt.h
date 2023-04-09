@@ -360,9 +360,9 @@ t_matrix	rot_matrix(t_vector E);
 t_matrix	transpose_matrix(t_matrix R);
 t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3);
 t_vector	mul_matrix_vec(t_matrix T, t_vector v);
-t_matrix	get_tr_matrix_world2obj(t_vector w_dir);
+t_matrix	get_tr_matrix_world2obj_zup(t_vector w_dir);
 t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir);
-t_matrix	get_tr_matrix_world2obj_vup(t_vector w_dir);
+t_matrix	get_tr_matrix_world2obj_yup(t_vector w_dir);
 t_matrix	get_tr_matrix_world2tangent(t_vector w_dir);
 
 

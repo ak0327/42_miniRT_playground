@@ -26,7 +26,7 @@ static t_colorf	get_checker_color_on_plane(t_intersection_point intp, t_shape *s
 	pos_local = sub(&intp.position, &shape->data.plane.position);
 	u_mag = 1.0f / 50.0f;
 	v_mag = 1.0f / 50.0f;
-	Tr_matrix = get_tr_matrix_world2obj_vup(shape->data.plane.normal);
+	Tr_matrix = get_tr_matrix_world2obj_yup(shape->data.plane.normal);
 	pattern_map = get_planar_map(pos_local, Tr_matrix);
 
 	ra = 0.3f; ga = 0.3f; ba = 0.3f;
@@ -77,7 +77,7 @@ static t_colorf	get_checker_color_on_cylinder(t_intersection_point intp, t_shape
 	pos_local = sub(&intp.position, &shape->data.cylinder.position);
 	u_mag = 10.0f;
 	v_mag = 7.0f;
-	Tr_matrix = get_tr_matrix_world2obj(shape->data.cylinder.normal);
+	Tr_matrix = get_tr_matrix_world2obj_zup(shape->data.cylinder.normal);
 	pattern_map = get_cylindrical_map(pos_local, Tr_matrix, shape->data.cylinder.height);
 	ra = 0.2f; ga = 0.7f; ba = 0.2f;
 	rb = 0.8f; gb = 0.8f; bb = 0.8f;
@@ -103,7 +103,7 @@ static t_colorf	get_checker_color_on_corn(t_intersection_point intp, t_shape *sh
 	pos_local = sub(&intp.position, &shape->data.corn.position);
 	u_mag = 10.0f;
 	v_mag = 10.0f;
-	Tr_matrix = get_tr_matrix_world2obj(shape->data.corn.normal);
+	Tr_matrix = get_tr_matrix_world2obj_zup(shape->data.corn.normal);
 	pattern_map = get_conical_map(pos_local, Tr_matrix, shape->data.corn.height);
 	ra = 0.7f; ga = 0.4f; ba = 0.2f;
 	rb = 0.8f; gb = 0.8f; bb = 0.8f;

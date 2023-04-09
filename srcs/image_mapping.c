@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 22:45:27 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 09:29:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 14:01:32 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static t_colorf	get_image_color_on_plane(t_intersection_point intp, t_shape *sha
 	t_texture_map	pattern_map;
 
 	pos_local = sub(&intp.position, &shape->data.plane.position);
-	Tr_matrix = get_tr_matrix_world2obj_vup(shape->data.plane.normal);
+	Tr_matrix = get_tr_matrix_world2obj_yup(shape->data.plane.normal);
 	pattern_map = get_planar_map(pos_local, Tr_matrix);
 
 	row = (((int)pattern_map.u % img.width) + img.width) % img.width;		// 0 <= row <= img.width
@@ -91,7 +91,7 @@ static t_colorf	get_image_color_on_cylinder(t_intersection_point intp, t_shape *
 	pos_local = sub(&intp.position, &shape->data.cylinder.position);
 	radius = shape->data.cylinder.radius;
 
-	Tr_matrix = get_tr_matrix_world2obj(shape->data.cylinder.normal);
+	Tr_matrix = get_tr_matrix_world2obj_zup(shape->data.cylinder.normal);
 
 	pos_uv = mul_matrix_vec(Tr_matrix, pos_local);	// pos(x,y,z)->pos(u,v,w)
 
@@ -133,7 +133,7 @@ static t_colorf	get_image_color_on_corn(t_intersection_point intp, t_shape *shap
 	hi = mult(dot(&pos_local, &shape->data.corn.normal), &shape->data.corn.normal);
 	radius = shape->data.corn.radius * norm(&hi) / shape->data.corn.height;
 
-	Tr_matrix = get_tr_matrix_world2obj(shape->data.corn.normal);
+	Tr_matrix = get_tr_matrix_world2obj_zup(shape->data.corn.normal);
 	pos_uv = mul_matrix_vec(Tr_matrix, pos_local);	// pos(x,y,z)->pos(u,v,w)
 
 	theta = acosf(pos_uv.x / radius);				// 0 <= theta <= pi
