@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 15:01:58 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 15:16:03 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ int	main(void)
 //	const char	*img_path = "./img/bump_1.ppm";
 //	const char	*img_path = "./img/normal1.ppm";
 //	const char	*bump_img_path = "./img/normalmap_example.ppm";
-	const char	*bump_img_path = "./img/small_earth_daymap_normal.ppm";
-	const char	*texture_img_path = "./img/small_earth_daymap.ppm";
+	const char	*bump_img_path = "./img/1k_earth_normal.ppm";
+	const char	*texture_img_path = "./img/1k_earth.ppm";
 
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);
