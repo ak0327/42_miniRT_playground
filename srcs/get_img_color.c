@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 22:45:27 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 19:07:36 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 19:13:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_colorf	get_image_color_on_plane(t_intersection_point intp, t_shape *sha
 	t_texture_map	map;
 
 	pos_local = sub(&intp.position, &shape->data.plane.position);
-	Tr_matrix = get_tr_matrix_world2obj_yup(shape->data.plane.normal);
+	Tr_matrix = get_tr_matrix_world2obj_zup(shape->data.plane.normal);
 	map = get_planar_map(pos_local, Tr_matrix);
 
 	row = ((((int)map.u * img_size) % img.width) + img.width) % img.width;		// 0 <= row <= img.width
