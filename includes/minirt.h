@@ -145,11 +145,19 @@ typedef struct	s_colorf
 	float	b;
 } t_colorf;
 
+typedef struct	s_img
+{
+	int	height;
+	int width;
+	int	*data;	// data=[R11,G11,B11, R12,G12,B12, ..., R21,G21,B21,..., Rhw,Ghw,Bhw]
+} t_img;
+
 typedef struct	s_ray
 {
 	t_vector	start;		// 始点
 	t_vector	direction;	// 方向ベクトル（単位？）
 } t_ray;
+
 
 typedef struct	s_plane
 {
@@ -179,6 +187,7 @@ typedef struct	s_corn
 	float		height;
 	float		radius;
 } t_corn;
+
 
 typedef struct	s_hyperboloid
 {
@@ -223,12 +232,12 @@ typedef struct	s_material
 
 } t_material;
 
-
 typedef struct	s_shape
 {
 	t_shape_type	type;		// sphere or plane
 	t_shape_data	data;		// sphere or plane の情報
 	t_material		material;	// 物体表面の質感
+
 } t_shape;
 
 typedef struct	s_light
@@ -263,21 +272,12 @@ typedef struct	s_camera
 {
 	t_vector	pos;
 	t_vector	dir;
-	t_vector	u;
-	t_vector	v;
 	t_vector	vec_camera_to_sc_center;
 	t_matrix	transpose_matrix_w2c;
 	t_matrix	transpose_matrix_c2w;
 	float		distance_camera_to_sc;
 	float		fov_deg;
 } t_camera;
-
-typedef struct	s_img
-{
-	int	height;
-	int width;
-	int	*data;	// data=[R11,G11,B11, R12,G12,B12, ..., R21,G21,B21,..., Rhw,Ghw,Bhw]
-} t_img;
 
 typedef struct	s_texture_map
 {
@@ -358,7 +358,7 @@ t_texture_map	get_planar_map(t_vector pos_local, t_matrix Tr);
 /********** matrix **********/
 t_matrix	rot_matrix(t_vector E);
 t_matrix	transpose_matrix(t_matrix R);
-t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3);
+t_matrix	set_vec_to_matrix(t_vector m1, t_vector m2, t_vector m3);
 t_vector	mul_matrix_vec(t_matrix T, t_vector v);
 t_matrix	get_tr_matrix_world2obj_zup(t_vector w_dir);
 t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir);

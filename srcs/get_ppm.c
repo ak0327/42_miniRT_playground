@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 23:26:06 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 15:43:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,6 @@ int	get_img(t_img *img, const char *img_path)
 	fd = open(img_path, O_RDONLY);
 	if (fd < 0)
 		return (FAILURE);
-//	img = (t_img *)malloc(sizeof(t_img));
-//	if (!img)
-//		return (NULL);
 
 	img->data = NULL;
 	col = 0;

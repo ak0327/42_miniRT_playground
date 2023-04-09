@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 15:16:03 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 15:42:05 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,16 @@ void	free_img(t_img *img)
 	free(img->data);
 }
 
-/*
+/* **********************
 
- Left hand coordinates
+ Coordinates : Left hand
 
    +y
    |  +z
    | /
    |/_____ +x
 
- */
+ ********************** */
 
 int	main(void)
 {

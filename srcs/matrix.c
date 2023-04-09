@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:50:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 14:02:48 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 15:44:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_matrix	get_tr_matrix_world2tangent(t_vector w_dir)
 		eu = normalize_vec_inv(&ex);
 		ew = normalize_vec_inv(&ez);
 	}
-	Tr = set_matrix(eu, ev, ew);
+	Tr = set_vec_to_matrix(eu, ev, ew);
 	return(Tr);
 }
 
@@ -65,7 +65,7 @@ t_matrix	get_tr_matrix_world2obj_yup(t_vector w_dir)
 		ew = normalize_vec_inv(&ez);
 	}
 
-	Tr = set_matrix(eu, ev, ew);	// (x,y,z)->(u,w,v)への変換matrix
+	Tr = set_vec_to_matrix(eu, ev, ew);	// (x,y,z)->(u,w,v)への変換matrix
 	return (Tr);
 }
 
@@ -105,36 +105,36 @@ t_matrix	get_tr_matrix_world2obj_zup(t_vector w_dir)
 //		eu = ey;
 //		ew = ez;
 //	}
-	Tr = set_matrix(eu, ev, ew);	// (x,y,z)->(u,v,w)への変換matrix
+	Tr = set_vec_to_matrix(eu, ev, ew);	// (x,y,z)->(u,v,w)への変換matrix
 	return (Tr);
 }
 
-t_matrix	set_matrix(t_vector m1, t_vector m2, t_vector m3)
-{
-	t_matrix	M;
-
-	M.m11 = m1.x; M.m12 = m1.y; M.m13 = m1.z;
-	M.m21 = m2.x; M.m22 = m2.y; M.m23 = m2.z;
-	M.m31 = m3.x; M.m32 = m3.y; M.m33 = m3.z;
-	return (M);
-}
-
-t_vector	mul_matrix_vec(t_matrix T, t_vector v)
-{
-	t_vector	Mv;
-
-	Mv.x = T.m11 * v.x + T.m12 * v.y + T.m13 * v.z;
-	Mv.y = T.m21 * v.x + T.m22 * v.y + T.m23 * v.z;
-	Mv.z = T.m31 * v.x + T.m32 * v.y + T.m33 * v.z;
-	return (Mv);
-}
-
-t_matrix	transpose_matrix(t_matrix M)
+t_matrix	set_vec_to_matrix(t_vector m1, t_vector m2, t_vector m3)
 {
 	t_matrix	Mt;
 
-	Mt.m11 = M.m11; Mt.m12 = M.m21; Mt.m13 = M.m31;
-	Mt.m21 = M.m12; Mt.m22 = M.m22; Mt.m23 = M.m32;
-	Mt.m31 = M.m13; Mt.m32 = M.m23; Mt.m33 = M.m33;
+	Mt.m11 = m1.x; Mt.m12 = m1.y; Mt.m13 = m1.z;
+	Mt.m21 = m2.x; Mt.m22 = m2.y; Mt.m23 = m2.z;
+	Mt.m31 = m3.x; Mt.m32 = m3.y; Mt.m33 = m3.z;
+	return (Mt);
+}
+
+t_vector	mul_matrix_vec(t_matrix Matrix, t_vector vec)
+{
+	t_vector	v;
+
+	v.x = Matrix.m11 * vec.x + Matrix.m12 * vec.y + Matrix.m13 * vec.z;
+	v.y = Matrix.m21 * vec.x + Matrix.m22 * vec.y + Matrix.m23 * vec.z;
+	v.z = Matrix.m31 * vec.x + Matrix.m32 * vec.y + Matrix.m33 * vec.z;
+	return (v);
+}
+
+t_matrix	transpose_matrix(t_matrix Matrix)
+{
+	t_matrix	Mt;
+
+	Mt.m11 = Matrix.m11; Mt.m12 = Matrix.m21; Mt.m13 = Matrix.m31;
+	Mt.m21 = Matrix.m12; Mt.m22 = Matrix.m22; Mt.m23 = Matrix.m32;
+	Mt.m31 = Matrix.m13; Mt.m32 = Matrix.m23; Mt.m33 = Matrix.m33;
 	return (Mt);
 }
