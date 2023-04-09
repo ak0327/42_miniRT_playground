@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:50:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 09:18:09 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 09:25:15 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,34 +66,6 @@ t_matrix	get_tr_matrix_world2obj_vup(t_vector w_dir)
 	}
 
 	Tr = set_matrix(eu, ev, ew);	// (x,y,z)->(u,w,v)への変換matrix
-	return (Tr);
-}
-
-t_matrix	get_tr_matrix_world2obj_plane(t_vector w_dir)
-{
-	t_vector	eu, ew, ev;
-	t_vector	ex, ey, ez;
-	t_matrix	Tr;
-
-	SET_VECTOR(ex, 1.0f, 0.0f, 0.0f);
-	SET_VECTOR(ey, 0.0f, 1.0f, 0.0f);
-	SET_VECTOR(ez, 0.0f, 0.0f, 1.0f);
-
-	ev = normalize_vec(&w_dir);
-	eu = cross(&ev, &ez);
-	ew = cross(&eu, &ev);
-
-	if (ev.x == ez.x && ev.y == ez.y && ev.z == ez.z)
-	{
-		eu = ex;
-		ew = normalize_vec_inv(&ey);
-	}
-	if (ev.x == ez.x && ev.y == ez.y && ev.z == -ez.z)
-	{
-		eu = ex;
-		ew = ey;
-	}
-	Tr = set_matrix(eu, ev, ew);	// (x,y,z)->(u,v,w)への変換matrix
 	return (Tr);
 }
 
