@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 16:33:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 19:34:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,8 @@ typedef struct	s_cylinder
 typedef struct	s_corn
 {
 	t_vector	normal;		// 単位法線ベクトル todo:direction
-	t_vector	position;	// 中心位置ベクトル
+	t_vector	position;	// 底面中心位置ベクトル
+	t_vector	origin;		// 中心位置（先端）ベクトル
 	float		height;
 	float		radius;
 } t_corn;

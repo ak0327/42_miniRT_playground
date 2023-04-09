@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 15:03:55 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 19:26:18 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,11 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 		normalize(&dir_pos_to_light);
 		nl_dot = CLAMP(dot(&normal, &dir_pos_to_light), 0, 1);
+//		if (nl_dot <= 0 && shape->type == ST_PLANE)
+//		{
+//			normal = normalize_vec_inv(&normal);
+//			nl_dot = CLAMP(dot(&normal, &dir_pos_to_light), 0, 1);
+//		}
 
 		/* shadow_rayを計算 */
 		shadow_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &dir_pos_to_light);
@@ -322,8 +327,7 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	{
 		/* 完全鏡面反射 */
 		perfect_reflect_color = calc_perfect_reflection_color(scene, eye_ray,
-															  out_col,
-															  recursion_level,
+															  out_col, recursion_level,
 															  intp, shape, bump_img, texture_img);
 		color = colorf_add(&color, &perfect_reflect_color);
 	}

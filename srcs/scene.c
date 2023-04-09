@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 15:22:40 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 19:33:51 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -714,7 +714,7 @@ void scene_setting(t_scene *scene)
 
 	init_shape(&scene->shapes[1], ST_CORN,
 			   -0.2f, 1.0f, 0.0f,	/* 法線ベクトル */
-			   -150.0f, 150.0f, 0.0f,	/* 中心位置 */
+			   -150.0f, 20.0f, 0.0f,	/* 中心位置 */
 			   130.0f,				/* 高さ */
 			   65.0f);				/* 半径 */
 
@@ -761,6 +761,7 @@ void scene_setting(t_scene *scene)
 	init_shape(&scene->shapes[4], ST_PLANE,
 			   -200.0f, 0.0f, 200.0f,		/* 平面が通る点の位置 */
 			   1.0f, 1.0f, -1.0f);		/* 平面の法線ベクトル */
+//			   -1.0f, -1.0f, 1.0f);		/* 平面の法線ベクトル */
 
 	init_material(&scene->shapes[4].material,
 //				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
@@ -779,6 +780,7 @@ void scene_setting(t_scene *scene)
 	init_shape(&scene->shapes[5], ST_PLANE,
 			   400.0f, 0.0f, 200.0f,		/* 平面が通る点の位置 */
 			   -1.0f, 0.0f, -0.2);		/* 平面の法線ベクトル */
+//			   1.0f, 0.0f, 0.2);		/* 平面の法線ベクトル */
 
 	init_material(&scene->shapes[5].material,
 //				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */

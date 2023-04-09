@@ -88,7 +88,7 @@ static int	intersection_with_corn(const t_shape *shape, const t_ray *ray,
 	float			A, B, C, D;
 	float			r = corn->radius;
 	float			h = corn->height;
-	t_vector		pc = corn->position;
+	t_vector		pc = corn->origin;
 	t_vector		n = corn->normal;
 	t_vector		d = normalize_vec_inv(&n);
 

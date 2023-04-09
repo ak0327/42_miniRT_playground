@@ -85,6 +85,8 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 
 		corn->height = va_arg(args, double);
 		corn->radius = va_arg(args, double);
+
+		corn->origin = vec_calc(1, &corn->position, corn->height, &corn->normal);
 	}
 	else
 	{
