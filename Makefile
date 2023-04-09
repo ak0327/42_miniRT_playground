@@ -33,7 +33,7 @@ SRC				= main.c \
 				  matrix.c \
 				  get_ppm.c \
 				  get_checker_texture.c \
-				  get_texture_map.c \
+				  get_texture_uv_map.c \
 				  get_bump_normal.c \
 				  get_img_color.c \
 
