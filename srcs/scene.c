@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 16:59:37 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 18:35:03 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -896,7 +896,7 @@ void scene_setting(t_scene *scene)
 	init_light(&scene->lights[0], LT_POINT,
 			   -200.0f, 500.0f, -300.0f,	/* position */
 			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
-			   0.7f, 0.7f, 0.7f,	/* color */
+			   1.0f, 1.0f, 1.0f,	/* color */
 			   70.0f);					/* angle */
 
 

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 17:03:56 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 18:45:45 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_vector	get_dir_pos2light(t_light light, t_vector pos)
 		dir_pos2light = sub(&light.position, &pos);
 	else
 		dir_pos2light = normalize_vec_inv(&light.direction);	// 平行光源
-	dir_pos2light = normalize_vec(&dir_pos2light);
+	normalize(&dir_pos2light);
 	return (dir_pos2light);
 }
 
@@ -108,7 +108,7 @@ t_colorf	get_diffuse_reflection_color(t_shape *shape, float nl_dot, t_light *lig
 	normalize(&ref_dir);
 
 	inv_eye_dir = normalize_vec_inv(&eye_dir);
-	vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
+	vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0.0f, 1.0f);
 
 	if (vr_dot <= 0.0f)
 		return (color);
@@ -126,7 +126,7 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp
 {
 	t_colorf	color;
 	size_t		idx;
-	t_light		*light;
+	t_light		light;
 	t_vector	dir_pos2light, normal;
 	float		nl_dot;
 	t_colorf	color_checker_texture, color_image_texture, color_diffuse_ref, color_specular_ref;
@@ -140,25 +140,63 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp
 	idx = 0;
 	while (idx < scene->num_lights)
 	{
-		light = &scene->lights[idx];
+		light = scene->lights[idx];
 		idx++;
 
-		dir_pos2light = get_dir_pos2light(*light, intp.position);
-		nl_dot = CLAMP(dot(&normal, &dir_pos2light), 0, 1); // n*l <= 0 -> color = 0になる
+		dir_pos2light = get_dir_pos2light(light, intp.position);
+		nl_dot = CLAMP(dot(&normal, &dir_pos2light), 0.0f, 1.0f);
 
-		if (is_obj_exists_between_light_and_eye(scene, dir_pos2light, light, intp))
+		if (is_obj_exists_between_light_and_eye(scene, dir_pos2light, &light, intp))
 			continue ;
 
-		if (!shape->material.texture.data)
-		{
-			color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, light, dir_pos2light, eye_ray.direction);
-			color = colorf_add(color, color_diffuse_ref);
-		}
-		color_image_texture = get_image_reflection_color(shape, intp, nl_dot, light);
+//		if (!shape->material.texture.data)
+//		{
+//			color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, &light, dir_pos2light, eye_ray.direction);
+//			color = colorf_add(color, color_diffuse_ref);
+//		}
+		color_image_texture = get_image_reflection_color(shape, intp, nl_dot, &light);
 		color = colorf_add(color, color_image_texture);
 
-		color_checker_texture = get_checker_reflection_color(shape, intp, nl_dot, light);
+		color_checker_texture = get_checker_reflection_color(shape, intp, nl_dot, &light);
 		color = colorf_add(color, color_checker_texture);
+
+		t_vector	ref_dir, inv_eye_dir;
+		float		vr_dot, vr_dot_pow;
+		t_vector	light_to_pos;
+		float		alpha;
+
+		if (light.type == LT_SPOT)
+		{
+			light_to_pos = normalize_vec_inv(&dir_pos2light);
+			alpha = acosf(dot(&light_to_pos, &light.direction));
+
+			if (alpha > light.angle / 2.0f * (float)M_PI / 180.0f)
+				continue ;
+		}
+
+		color_diffuse_ref = get_color_k1c1k2c2(1.0f,&shape->material.diffuse_ref,
+											   nl_dot, &light.illuminance);
+		color = colorf_add(color, color_diffuse_ref);
+
+		if (nl_dot <= 0.0f)
+			continue ;
+
+		ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &dir_pos2light);
+		normalize(&ref_dir);
+
+		inv_eye_dir = normalize_vec_inv(&eye_ray.direction);
+		vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0.0f, 1.0f);
+
+		if (vr_dot <= 0.0f)
+			continue ;
+
+		vr_dot_pow = powf(vr_dot, shape->material.shininess);
+		color_specular_ref = get_color_k1c1k2c2( 1.0f, &shape->material.specular_ref,
+												 vr_dot_pow, &light.illuminance);
+
+
+		color = colorf_add(color, color_specular_ref);
+
 	}
 	return (color);
 }
