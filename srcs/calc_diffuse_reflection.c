@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 14:36:35 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 15:04:02 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
 		idx++;
 
 		dir_pos2light = get_dir_pos2light(*light, intp.position);
-		nl_dot = CLAMP(dot(&normal, &dir_pos2light), 0, 1);
+		nl_dot = CLAMP(dot(&normal, &dir_pos2light), 0, 1); // n*l <= 0 -> color = 0になる
 
 		if (is_obj_exists_between_light_and_eye(scene, dir_pos2light, light, intp))
 			continue ;
@@ -130,6 +130,7 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
 		color_image_texture = get_image_reflection_color(shape, intp, nl_dot);
 		color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, light, dir_pos2light);
 		color_specular_ref = calc_specular_reflection(shape, nl_dot, light, dir_pos2light, eye_ray->direction);
+
 		color = colorf_add(color, color_checker_texture);
 		color = colorf_add(color, color_image_texture);
 		color = colorf_add(color, color_diffuse_ref);

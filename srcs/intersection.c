@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 10:25:41 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 15:03:54 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray,
 	float 			dn_dot = dot(&ray->direction, &pln->normal);
 	t_vector		s_p;
 	float			t;
-	t_vector		td;
+	t_vector		td, inv_eye_dir;
 
 	if (dn_dot == 0.0f)
 		return (0);
@@ -223,6 +223,11 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray,
 	td = mult(t, &ray->direction);
 	out_intp->position = add(&ray->start, &td);
 	out_intp->normal = pln->normal;
+
+	inv_eye_dir = normalize_vec_inv(&ray->direction);
+	if (dot(&out_intp->normal, &inv_eye_dir) < 0)
+		out_intp->normal = normalize_vec_inv(&pln->normal);
+
 	return (1);
 }
 
