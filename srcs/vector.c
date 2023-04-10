@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:48:43 by takira            #+#    #+#             */
-/*   Updated: 2023/03/17 16:36:56 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 20:00:29 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,6 @@ t_vector sub(const t_vector *a, const t_vector *b)
 	vec.x = a->x - b->x;
 	vec.y = a->y - b->y;
 	vec.z = a->z - b->z;
-//	printf("sub: a:%s\n", vector_str(a));
-//	printf("     b:%s\n", vector_str(b));
-//	printf("     vec:%s\n\n", vector_str(&vec));
 	return (vec);
 }
 
