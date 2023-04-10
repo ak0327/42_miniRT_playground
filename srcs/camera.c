@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 10:01:31 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 10:28:50 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ t_camera	init_camera(void)
 //	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 
 //	cylinder
-	SET_VECTOR(camera.pos, -5.0f, 200.0f, -600.0f)
-	SET_VECTOR(camera.dir, 0.0f, -0.2f, 1.0f)
+//	SET_VECTOR(camera.pos, -5.0f, 200.0f, -600.0f)
+//	SET_VECTOR(camera.dir, 0.0f, -0.2f, 1.0f)
 
 
 
 //	SET_VECTOR(camera.pos, 0.0f, 0.0f, -1000.0f)
 //	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 
-//	SET_VECTOR(camera.pos, 0.0f, 0.0f, 1000.0f)
-//	SET_VECTOR(camera.dir, 0.0f, 0.0f, -1.0f)
+	SET_VECTOR(camera.pos, 0.0f, 0.0f, 1000.0f)
+	SET_VECTOR(camera.dir, 0.0f, 0.0f, -1.0f)
 
 
 	normalize(&camera.dir);

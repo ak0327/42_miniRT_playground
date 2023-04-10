@@ -81,12 +81,12 @@ int	main(void)
 	t_img		bump_img;
 	t_img		texture_img;
 
-//	const char	*texture_img_path = "./img/cat.ppm";
+	const char	*texture_img_path = "./img/cat.ppm";
 //	const char	*img_path = "./img/bump_1.ppm";
 //	const char	*img_path = "./img/normal1.ppm";
 //	const char	*bump_img_path = "./img/normalmap_example.ppm";
 	const char	*bump_img_path = "./img/1k_earth_normal.ppm";
-	const char	*texture_img_path = "./img/1k_earth.ppm";
+//	const char	*texture_img_path = "./img/1k_earth.ppm";
 
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);

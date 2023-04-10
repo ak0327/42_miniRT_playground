@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 10:05:16 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 10:24:04 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,10 +187,10 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 //	if (shape->type == ST_PLANE)
 //		normal = get_bump_normal(intp, shape, bump_img);
-	if (shape->type == ST_SPHERE)
-		normal = get_bump_normal(intp, shape, bump_img);
-	if (shape->type == ST_CYLINDER)
-		normal = get_bump_normal(intp, shape, bump_img);
+//	if (shape->type == ST_SPHERE)
+//		normal = get_bump_normal(intp, shape, bump_img);
+//	if (shape->type == ST_CYLINDER)
+//		normal = get_bump_normal(intp, shape, bump_img);
 //	if (shape->type == ST_CORN)
 //		normal = get_bump_normal(intp, shape, bump_img);
 
@@ -247,7 +247,7 @@ static t_colorf calc_light_color(const t_scene *scene, const t_ray *eye_ray,
 
 
 		/* image texture */
-		if (shape->type == ST_SPHERE || shape->type == ST_CYLINDER)
+		if (shape->type == ST_SPHERE || shape->type == ST_CYLINDER || shape->type == ST_PLANE)
 		{
 			img_col = get_img_color(intp, shape, texture_img);
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
