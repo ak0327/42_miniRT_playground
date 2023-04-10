@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 19:34:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:13:36 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,9 @@ typedef struct	s_shape
 	t_shape_type	type;		// sphere or plane
 	t_shape_data	data;		// sphere or plane の情報
 	t_material		material;	// 物体表面の質感
+	t_img			*texture;
+	t_img			*bump;
+
 
 } t_shape;
 
@@ -341,10 +344,6 @@ int			intersection_test(t_shape *shape, const t_ray * ray, t_intersection_point 
 int			get_nearest_shape(const t_scene *scene, const t_ray *ray, float max_dist, int exit_once_found,
 					  t_shape **out_shape, t_intersection_point *out_intp);
 
-/********** ray **********/
-int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, t_img bump_img, t_img texture_img);
-
-
 /********** checker **********/
 t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape);
 
@@ -371,23 +370,24 @@ t_matrix	get_tr_matrix_world2tangent(t_vector w_dir);
 int			get_img(t_img *img, const char *img_path);
 void		draw_img_test(t_data data, t_img img);
 t_colorf	get_img_color(t_intersection_point intp, t_shape *shape, t_img img);
-t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape, t_img img);
+t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape);
 
 
 /********** calc_reflection **********/
 t_colorf	calc_ambient_reflection(t_colorf ka, t_colorf Ia);
 t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
-								 t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img);
+								 t_intersection_point intp, t_shape *shape);
 t_colorf	calc_perfect_reflection(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
-		t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img);
+		t_intersection_point intp, t_shape *shape);
 
 t_colorf	calc_inflection_refraction(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
-		t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img);
+		t_intersection_point intp, t_shape *shape);
 
 /********** raytrace **********/
-int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level, t_img bump_img, t_img texture_img);
+int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level);
+int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col);
 
 
 
@@ -401,7 +401,8 @@ void		init_material(t_material *mat,
 				   float shns,
 				   t_material_type type,
 				   float refR, float refG, float refB,
-				   float refraction_index);
+				   float refraction_index,
+				   char *texture_path, char *bump_path);
 
 void init_light(t_light *light, t_light_type lt,
 				float px, float py, float pz,

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 10:28:37 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:16:55 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -809,7 +809,9 @@ void scene_setting(t_scene *scene)
 				  1.0f,								/* 光沢度 */
 				  MT_DEFAULT,
 				  0.0f, 0.0f, 0.0f,
-				  0.0f);
+				  0.0f,
+				  "./img/cat.ppm",
+				  (char*)NULL);
 
 
 
@@ -824,7 +826,9 @@ void scene_setting(t_scene *scene)
 				   8.0f,							/* 光沢度 */
 				  MT_DEFAULT, 					/* マテリアルタイプ */
 				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-				  0.0f);					/* 絶対屈折率 */
+				  0.0f,
+				  (char *)NULL,
+				  "./img/normalmap_example.ppm");					/* 絶対屈折率 */
 
 
 	init_shape(&scene->shapes[2], ST_SPHERE,
@@ -838,7 +842,9 @@ void scene_setting(t_scene *scene)
 				  8.0f,							/* 光沢度 */
 				  MT_DEFAULT, 					/* マテリアルタイプ */
 				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-				  0.0f);					/* 絶対屈折率 */
+				  0.0f,
+				  (char *)NULL,
+				  (char *)NULL);					/* 絶対屈折率 */
 
 
 

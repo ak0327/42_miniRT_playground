@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:34:26 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 11:34:26 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:14:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_colorf	calc_inflection_refraction(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
-		t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img)
+		t_intersection_point intp, t_shape *shape)
 {
 	float		eta_1;			// 物質1（屈折前）の絶対屈折率
 	float		eta_2;			// 物質2（屈折後）の絶対屈折率
@@ -105,9 +105,9 @@ t_colorf	calc_inflection_refraction(
 	fe_color = *out_col;
 
 	/* 再帰呼び出し（反射） */
-	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1, bump_img, texture_img);
+	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1);
 	/* 再帰呼び出し（屈折） */
-	recursive_raytrace(scene, &fe_ray, &fe_color, recursion_level + 1, bump_img, texture_img);
+	recursive_raytrace(scene, &fe_ray, &fe_color, recursion_level + 1);
 
 	/* 完全鏡面反射、屈折光を計算 */
 	color = colorf_mul(&color, 1.0f, &shape->material.reflect_ref, cr, &re_color);

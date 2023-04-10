@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 19:46:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/04 21:58:09 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 12:54:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ void init_light(t_light *light, t_light_type lt,
 
 void init_shape(t_shape *shape, t_shape_type st, ...)
 {
+	char	*texture_path;
+	char	*bump_path;
+
 	va_list args;
 	va_start(args, st);
 
@@ -94,6 +97,17 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 		abort();
 	}
 
+	texture_path  = va_arg(args, char *);
+	bump_path  = va_arg(args, char *);
+
+	shape->texture = NULL;
+	if (texture_path)
+		get_img(shape->texture, texture_path); //TODO:error
+
+	shape->bump = NULL;
+	if (bump_path)
+		get_img(shape->bump, bump_path); //TODO:error
+
 	va_end(args);
 }
 
@@ -104,7 +118,8 @@ void init_material(t_material *mat,
 				   float shns,
 				   t_material_type type,
 				   float refR, float refG, float refB,
-				   float refraction_index)
+				   float refraction_index,
+				   char *texture_path, char *bump_path)
 {
 	SET_COLOR(mat->ambient_ref,  ambR, ambG, ambB);
 	SET_COLOR(mat->diffuse_ref,  difR, difG, difB);

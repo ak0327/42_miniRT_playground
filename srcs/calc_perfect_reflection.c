@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:34:10 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 11:34:10 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:14:27 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_colorf	calc_perfect_reflection(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
-		t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img)
+		t_intersection_point intp, t_shape *shape)
 {
 	t_colorf	color;
 	t_vector	eye_dir;
@@ -54,7 +54,7 @@ t_colorf	calc_perfect_reflection(
 	re_ray.direction = ref_dir;
 
 	re_color = *out_col;
-	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1, bump_img, texture_img);
+	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1);
 
 	/* 完全鏡面反射を計算 */
 	color = colorf_mul(&color, 1.0f, &shape->material.reflect_ref, 1.0f, &re_color);

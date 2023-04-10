@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 
-t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape, t_img img)
+t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape)
 {
 	t_colorf	img_color;
 	t_vector	bump_normal_obj;
@@ -21,7 +21,7 @@ t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape, t_img img)
 	t_matrix	Tr_matrix;
 
 	bump_normal_obj = intp.normal;
-	img_color = get_img_color(intp, shape, img);
+	img_color = get_img_color(intp, shape, *shape->bump);
 	bump_normal_obj.x = (img_color.r - 0.5f) / 0.5f;
 	bump_normal_obj.z = (img_color.g - 0.5f) / 0.5f;
 	bump_normal_obj.y = (img_color.b - 0.5f) / 0.5f;

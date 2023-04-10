@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 19:58:39 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:14:53 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ int	main(void)
 	t_img		bump_img;
 	t_img		texture_img;
 
-	const char	*texture_img_path = "./img/cat.ppm";
+//	const char	*texture_img_path = "./img/cat.ppm";
 //	const char	*img_path = "./img/bump_1.ppm";
 //	const char	*img_path = "./img/normal1.ppm";
 //	const char	*bump_img_path = "./img/normalmap_example.ppm";
-	const char	*bump_img_path = "./img/1k_earth_normal.ppm";
+//	const char	*bump_img_path = "./img/1k_earth_normal.ppm";
 //	const char	*texture_img_path = "./img/1k_earth.ppm";
 
 	if (init_data(&data) == FAILURE)
@@ -93,17 +93,17 @@ int	main(void)
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
 	/* ppm test */
-	if (get_img(&bump_img, bump_img_path) == FAILURE)
-	{
-		free_data(&data);
-		return (EXIT_FAILURE);
-	}
-	if (get_img(&texture_img, texture_img_path) == FAILURE)
-	{
-		free_data(&data);
-		free_img(&bump_img);
-		return (EXIT_FAILURE);
-	}
+//	if (get_img(&bump_img, bump_img_path) == FAILURE)
+//	{
+//		free_data(&data);
+//		return (EXIT_FAILURE);
+//	}
+//	if (get_img(&texture_img, texture_img_path) == FAILURE)
+//	{
+//		free_data(&data);
+//		free_img(&bump_img);
+//		return (EXIT_FAILURE);
+//	}
 
 //	draw_img_test(data, *img);
 
@@ -122,7 +122,7 @@ int	main(void)
 
 			eye_ray.start = camera.pos;
 			eye_ray.direction = ray_dir(i, j, camera);
-			raytrace(&scene, &eye_ray, &color, bump_img, texture_img);
+			raytrace(&scene, &eye_ray, &color);
 			r = (int)(255 * CLAMP(color.r, 0, 1));
 			g = (int)(255 * CLAMP(color.g, 0, 1));
 			b = (int)(255 * CLAMP(color.b, 0, 1));

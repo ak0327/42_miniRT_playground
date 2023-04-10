@@ -6,45 +6,27 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 11:12:18 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:12:19 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
-						  t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img)
+						  t_intersection_point intp, t_shape *shape)
 {
-	t_colorf	color;
-	t_colorf	checker_col;
-	t_colorf	img_col;
-
+	t_colorf	color, checker_col, img_col;
 	size_t		i;
 	t_light		*light;
-	t_vector	dir_pos_to_light; 	// 入射ベクトル
-	float		nl_dot;		// 法線ベクトルと入射ベクトルの内積
-	t_vector	ref_dir;
-	float		vr_dot;
-	float		vr_dot_pow;
-
-	t_vector	inv_eye_dir;
-
+	t_vector	ref_dir, dir_pos_to_light, inv_eye_dir, vec_pi_to_light, normal;
+	float		nl_dot, vr_dot, vr_dot_pow, dist;
 	int 		shadow_int_res;
 	t_ray		shadow_ray;
-	float		dist;
-	t_vector	vec_pi_to_light;
 
-	t_vector	normal = intp.normal;
+	normal = intp.normal;
 
-
-//	if (shape->type == ST_PLANE)
-//		normal = get_bump_normal(intp, shape, bump_img);
-//	if (shape->type == ST_SPHERE)
-//		normal = get_bump_normal(intp, shape, bump_img);
-//	if (shape->type == ST_CYLINDER)
-//		normal = get_bump_normal(intp, shape, bump_img);
-//	if (shape->type == ST_CORN)
-//		normal = get_bump_normal(intp, shape, bump_img);
+	if (shape->bump)
+		normal = get_bump_normal(intp, shape);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 	inv_eye_dir = normalize_vec_inv(&eye_ray->direction);
@@ -99,13 +81,11 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
 
 
 		/* image texture */
-		if (shape->type == ST_SPHERE || shape->type == ST_CYLINDER || shape->type == ST_PLANE)
+		if (shape->texture)
 		{
-			img_col = get_img_color(intp, shape, texture_img);
+			img_col = get_img_color(intp, shape, *shape->texture);
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 		}
-//		img_col = get_img_color(intp, shape, texture_img);
-//		color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 
 		if (light->type == LT_SPOT)
 		{
