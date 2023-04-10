@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 16:12:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 16:20:29 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,6 @@ t_colorf	get_specular_reflection_color(t_shape *shape, float nl_dot, t_light *li
 		if (alpha > light->angle / 2.0f * (float)M_PI / 180.0f)
 			return (color);
 	}
-
-	if (nl_dot <= 0.0f)
-		return (color);
 
 	ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &dir_pos2light);
 	normalize(&ref_dir);
@@ -75,6 +72,9 @@ t_colorf calc_specular_reflection(const t_scene *scene, const t_ray *eye_ray,
 		nl_dot = CLAMP(dot(&normal, &dir_pos2light), 0, 1); // n*l <= 0 -> color = 0になる
 
 		if (is_obj_exists_between_light_and_eye(scene, dir_pos2light, light, intp))
+			continue ;
+
+		if (nl_dot <= 0.0f)
 			continue ;
 
 		color_specular_ref = get_specular_reflection_color(shape, nl_dot, light, dir_pos2light, eye_ray->direction);

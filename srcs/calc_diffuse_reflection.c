@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 15:41:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 16:27:47 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,10 @@ t_colorf	get_checker_reflection_color(t_shape *shape, t_intersection_point intp,
 	return (color);
 }
 
-t_colorf	get_image_reflection_color(t_shape *shape, t_intersection_point intp, float nl_dot)
+t_colorf	get_image_reflection_color(t_shape *shape, t_intersection_point intp, float nl_dot, t_light *light)
 {
 	t_colorf	color;
 	t_colorf	img_col;
-	t_colorf	diffuse_ref;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
@@ -74,8 +73,7 @@ t_colorf	get_image_reflection_color(t_shape *shape, t_intersection_point intp, f
 		return (color);
 
 	img_col = get_img_color(intp, shape, shape->material.texture);
-	SET_COLOR(diffuse_ref, 1.0f, 1.0f, 1.0f)
-	color = colorf_mul(&color, 1.0f, &diffuse_ref, nl_dot,&img_col);
+	color = colorf_mul(&color, 1.0f, &img_col, nl_dot,&light->illuminance);
 
 	return (color);
 }
@@ -136,7 +134,7 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp
 			color = colorf_add(color, color_diffuse_ref);
 		}
 
-		color_image_texture = get_image_reflection_color(shape, intp, nl_dot);
+		color_image_texture = get_image_reflection_color(shape, intp, nl_dot, light);
 		color = colorf_add(color, color_image_texture);
 
 	}

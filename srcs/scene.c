@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 16:13:42 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 16:27:35 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -733,9 +733,10 @@ void scene_setting(t_scene *scene)
 				  MT_DEFAULT,
 				  1.0f, 1.0f, 1.0f,
 				  8.0f,
+				  "./img/cat.ppm",
+//				  (char *)NULL,
 				  (char *)NULL,
-				  (char *)NULL,
-				  true);
+				  false);
 
 
 	init_shape(&scene->shapes[2],  ST_CYLINDER,
