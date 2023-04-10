@@ -21,6 +21,7 @@
 
 !scenes
 !*.rt
+!*.md
 
 .idea/
 objs/
