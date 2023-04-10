@@ -329,8 +329,8 @@ t_colorf	init_color(float r, float g, float b);
 //t_colorf	colorf_mul(t_colorf c, float k1, t_colorf c1, float k2, t_colorf c2);
 //t_colorf	colorf_mul(t_colorf *c, float k1, t_colorf *c1, float k2, t_colorf *c2);
 t_colorf	colorf_mul(const t_colorf *c, float k1, const t_colorf *c1, float k2, const t_colorf *c2);
-t_colorf	colorf_add(const t_colorf *c1, const t_colorf *c2);
-t_colorf	colorf_muladd(const t_colorf *c, float k1, const t_colorf *c1);
+t_colorf	colorf_add(const t_colorf c1, const t_colorf c2);
+t_colorf	colorf_muladd(const t_colorf c, float k1, const t_colorf c1);
 
 /********** mlx_keyhooks **********/
 void		mlx_hooks(t_data data);
@@ -374,7 +374,20 @@ t_colorf	get_img_color(t_intersection_point intp, t_shape *shape, t_img img);
 t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape, t_img img);
 
 
+/********** calc_reflection **********/
+t_colorf	calc_ambient_reflection(t_colorf ka, t_colorf Ia);
+t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
+								 t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img);
+t_colorf	calc_perfect_reflection(
+		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
+		t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img);
 
+t_colorf	calc_inflection_refraction(
+		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
+		t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img);
+
+/********** ray **********/
+int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level, t_img bump_img, t_img texture_img);
 
 
 

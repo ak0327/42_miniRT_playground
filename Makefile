@@ -36,9 +36,12 @@ SRC				= main.c \
 				  get_texture_uv_map.c \
 				  get_bump_normal.c \
 				  get_img_color.c \
-				  calc_ambient_illuminance.c \
-				  calc_diffuse_refrection.c \
-				  calc_specular_refrection.c \
+				  calc_ambient_reflection.c \
+				  calc_diffuse_reflection.c \
+				  calc_specular_reflection.c \
+				  calc_perfect_reflection.c \
+				  calc_refraction.c \
+
 
 
 SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))
