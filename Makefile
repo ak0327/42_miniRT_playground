@@ -41,6 +41,9 @@ SRC				= main.c \
 				  calc_specular_reflection.c \
 				  calc_perfect_reflection.c \
 				  calc_refraction.c \
+				  get_input.c \
+				  set_input.c \
+
 
 
 
