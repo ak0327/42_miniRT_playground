@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 19:26:18 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 10:05:16 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,13 +329,15 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		perfect_reflect_color = calc_perfect_reflection_color(scene, eye_ray,
 															  out_col, recursion_level,
 															  intp, shape, bump_img, texture_img);
-		color = colorf_add(&color, &perfect_reflect_color);
+		color = colorf_mul(&color, 1.0f, &perfect_reflect_color, 1.0f, &shape->material.specular_ref);
+//		color = colorf_add(&color, &perfect_reflect_color);
 	}
 	else if (shape->material.type == MT_REFRACTION)
 	{
 		/* 屈折 */
 		inflection_refraction_color = calc_inflection_refraction_color(scene, eye_ray, out_col, recursion_level, intp, shape, bump_img, texture_img);
-		color = colorf_add(&color, &inflection_refraction_color);
+//		color = colorf_add(&color, &inflection_refraction_color);
+		color = colorf_mul(&color, 1.0f, &inflection_refraction_color, 1.0f, &shape->material.reflect_ref);
 	}
 
 	light_color = calc_light_color(scene, eye_ray,  intp, shape, bump_img, texture_img);

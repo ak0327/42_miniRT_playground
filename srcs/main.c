@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 15:42:05 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/09 19:58:39 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	main(void)
 	t_img		bump_img;
 	t_img		texture_img;
 
-//	const char	*img_path = "./img/cat.ppm";
+//	const char	*texture_img_path = "./img/cat.ppm";
 //	const char	*img_path = "./img/bump_1.ppm";
 //	const char	*img_path = "./img/normal1.ppm";
 //	const char	*bump_img_path = "./img/normalmap_example.ppm";

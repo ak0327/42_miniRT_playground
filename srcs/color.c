@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 
+// c + k1c1 * k2c2
 t_colorf	colorf_mul(const t_colorf *c, float k1, const t_colorf *c1, float k2, const t_colorf *c2)
 {
 	t_colorf	color;
@@ -19,6 +20,17 @@ t_colorf	colorf_mul(const t_colorf *c, float k1, const t_colorf *c1, float k2, c
 	color.r = c->r + k1 * c1->r * k2 * c2->r;
 	color.g = c->g + k1 * c1->g * k2 * c2->g;
 	color.b = c->b + k1 * c1->b * k2 * c2->b;
+	return (color);
+}
+
+// c + k1c1
+t_colorf	colorf_muladd(const t_colorf *c, float k1, const t_colorf *c1)
+{
+	t_colorf	color;
+
+	color.r = c->r + k1 * c1->r;
+	color.g = c->g + k1 * c1->g;
+	color.b = c->b + k1 * c1->b;
 	return (color);
 }
 
