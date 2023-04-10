@@ -26,7 +26,7 @@ SRC				= main.c \
 				  reflection.c \
 				  intersection.c \
 				  mlx_keyhooks.c \
-				  ray.c \
+				  raytrace.c \
 				  scene.c \
 				  camera.c \
 				  init.c \

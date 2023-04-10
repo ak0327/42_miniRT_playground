@@ -386,7 +386,7 @@ t_colorf	calc_inflection_refraction(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
 		t_intersection_point intp, t_shape *shape, t_img bump_img, t_img texture_img);
 
-/********** ray **********/
+/********** raytrace **********/
 int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level, t_img bump_img, t_img texture_img);
 
 

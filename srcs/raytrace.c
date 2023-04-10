@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray.c                                              :+:      :+:    :+:   */
+/*   raytrace.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 11:41:05 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 12:29:31 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 		return (0);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
+
 	ambient_reflect_color = calc_ambient_reflection(shape->material.ambient_ref, scene->ambient_illuminance);
 	color = colorf_add(color, ambient_reflect_color);
 
