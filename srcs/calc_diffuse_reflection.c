@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 16:48:46 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 17:03:56 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_colorf	get_checker_reflection_color(t_shape *shape, t_intersection_point intp,
 		return (color);
 
 	checker_col = get_checker_color(intp, shape);
-	color = colorf_mul(&color, 1.0f, &checker_col, nl_dot,&light->illuminance);
+	color = get_color_k1c1k2c2(1.0f, &checker_col, nl_dot, &light->illuminance);
 	return (color);
 }
 
@@ -73,7 +73,7 @@ t_colorf	get_image_reflection_color(t_shape *shape, t_intersection_point intp, f
 		return (color);
 
 	img_col = get_img_color(intp, shape, shape->material.texture);
-	color = colorf_mul(&color, 1.0f, &img_col, nl_dot,&light->illuminance);
+	color = get_color_k1c1k2c2(1.0f, &img_col, nl_dot, &light->illuminance);
 
 	return (color);
 }
@@ -97,25 +97,25 @@ t_colorf	get_diffuse_reflection_color(t_shape *shape, float nl_dot, t_light *lig
 			return (color);
 	}
 
-	SET_COLOR(color_diffuse_ref, 0.0f, 0.0f, 0.0f);
-	color_diffuse_ref = colorf_mul(&color_diffuse_ref, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
+	color_diffuse_ref = get_color_k1c1k2c2(1.0f,&shape->material.diffuse_ref,
+											nl_dot, &light->illuminance);
 	color = colorf_add(color, color_diffuse_ref);
 
 	if (nl_dot <= 0.0f)
 		return (color);
 
-	SET_COLOR(color_specular_ref, 0.0f, 0.0f, 0.0f);
-
 	ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &dir_pos2light);
 	normalize(&ref_dir);
 
+	inv_eye_dir = normalize_vec_inv(&eye_dir);
 	vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
 
 	if (vr_dot <= 0.0f)
 		return (color);
 
 	vr_dot_pow = powf(vr_dot, shape->material.shininess);
-	color_specular_ref = colorf_mul(&color_specular_ref, 1.0f, &shape->material.specular_ref, vr_dot_pow, &light->illuminance);
+	color_specular_ref = get_color_k1c1k2c2( 1.0f, &shape->material.specular_ref,
+											 vr_dot_pow, &light->illuminance);
 
 //	color_specular_ref = get_specular_reflection_color(shape, nl_dot, light, dir_pos2light, eye_dir);
 	color = colorf_add(color, color_specular_ref);

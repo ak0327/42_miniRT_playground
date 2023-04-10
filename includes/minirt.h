@@ -329,11 +329,12 @@ int			shading(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sph
 
 /********** color **********/
 t_colorf	init_color(float r, float g, float b);
-//t_colorf	colorf_mul(t_colorf c, float k1, t_colorf c1, float k2, t_colorf c2);
-//t_colorf	colorf_mul(t_colorf *c, float k1, t_colorf *c1, float k2, t_colorf *c2);
-t_colorf	colorf_mul(const t_colorf *c, float k1, const t_colorf *c1, float k2, const t_colorf *c2);
+//t_colorf	colorf_mul_k1c1k2c2(t_colorf c, float k1, t_colorf c1, float k2, t_colorf c2);
+//t_colorf	colorf_mul_k1c1k2c2(t_colorf *c, float k1, t_colorf *c1, float k2, t_colorf *c2);
+t_colorf	colorf_mul_k1c1k2c2(const t_colorf *c, float k1, const t_colorf *c1, float k2, const t_colorf *c2);
 t_colorf	colorf_add(const t_colorf c1, const t_colorf c2);
-t_colorf	colorf_muladd(const t_colorf c, float k1, const t_colorf c1);
+t_colorf	colorf_muladd_k1c2_k2c2(const t_colorf c, float k1, const t_colorf c1, float k2, const t_colorf c2);
+t_colorf	get_color_k1c1k2c2(float k1, const t_colorf *c1, float k2, const t_colorf *c2);
 
 /********** mlx_keyhooks **********/
 void		mlx_hooks(t_data data);

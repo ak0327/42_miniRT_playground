@@ -42,7 +42,8 @@ t_colorf	get_specular_reflection_color(t_shape *shape, float nl_dot, t_light *li
 
 	vr_dot_pow = powf(vr_dot, shape->material.shininess);
 
-	color = colorf_mul(&color, 1.0f, &shape->material.specular_ref, vr_dot_pow, &light->illuminance);
+	color = colorf_mul_k1c1k2c2(&color, 1.0f, &shape->material.specular_ref,
+								vr_dot_pow, &light->illuminance);
 	return (color);
 }
 

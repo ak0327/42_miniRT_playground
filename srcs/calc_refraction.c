@@ -110,7 +110,9 @@ t_colorf	calc_inflection_refraction(
 	recursive_raytrace(scene, &fe_ray, &fe_color, recursion_level + 1);
 
 	/* 完全鏡面反射、屈折光を計算 */
-	color = colorf_mul(&color, 1.0f, &shape->material.reflect_ref, cr, &re_color);
-	color = colorf_mul(&color, 1.0f, &shape->material.reflect_ref, ct, &fe_color);
+	color = colorf_mul_k1c1k2c2(&color, 1.0f, &shape->material.reflect_ref, cr,
+								&re_color);
+	color = colorf_mul_k1c1k2c2(&color, 1.0f, &shape->material.reflect_ref, ct,
+								&fe_color);
 	return (color);
 }
