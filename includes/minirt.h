@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 16:10:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 16:30:53 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,7 +375,7 @@ t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape);
 
 /********** calc_reflection **********/
 t_colorf	calc_ambient_reflection(t_colorf ka, t_colorf Ia);
-t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp, t_shape *shape);
+t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp, t_ray eye_ray, t_shape *shape);
 t_colorf	calc_perfect_reflection(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
 		t_intersection_point intp, t_shape *shape);

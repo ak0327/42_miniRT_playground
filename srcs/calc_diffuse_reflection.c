@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 16:27:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 16:48:46 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int is_obj_exists_between_light_and_eye(const t_scene *scene, t_vector dir_pos2l
 	return (shadow_intersect_result);
 }
 
-t_colorf	get_checker_reflection_color(t_shape *shape, t_intersection_point intp, float nl_dot)
+t_colorf	get_checker_reflection_color(t_shape *shape, t_intersection_point intp, float nl_dot, t_light *light)
 {
 	t_colorf	color;
 	t_colorf	checker_col;
@@ -57,7 +57,7 @@ t_colorf	get_checker_reflection_color(t_shape *shape, t_intersection_point intp,
 		return (color);
 
 	checker_col = get_checker_color(intp, shape);
-	color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&checker_col);
+	color = colorf_mul(&color, 1.0f, &checker_col, nl_dot,&light->illuminance);
 	return (color);
 }
 
@@ -78,14 +78,16 @@ t_colorf	get_image_reflection_color(t_shape *shape, t_intersection_point intp, f
 	return (color);
 }
 
-t_colorf	get_diffuse_reflection_color(t_shape *shape, float nl_dot, t_light *light, t_vector dir_pos2light)
+t_colorf	get_diffuse_reflection_color(t_shape *shape, float nl_dot, t_light *light, t_vector dir_pos2light, t_vector eye_dir)
 {
 	t_colorf	color;
 	t_vector	light_to_pos;
 	float		alpha;
+	t_colorf	color_diffuse_ref, color_specular_ref;
+	t_vector	ref_dir, inv_eye_dir, normal;
+	float		vr_dot, vr_dot_pow;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
-
 	if (light->type == LT_SPOT)
 	{
 		light_to_pos = normalize_vec_inv(&dir_pos2light);
@@ -94,11 +96,33 @@ t_colorf	get_diffuse_reflection_color(t_shape *shape, float nl_dot, t_light *lig
 		if (alpha > light->angle / 2.0f * (float)M_PI / 180.0f)
 			return (color);
 	}
-	color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
+
+	SET_COLOR(color_diffuse_ref, 0.0f, 0.0f, 0.0f);
+	color_diffuse_ref = colorf_mul(&color_diffuse_ref, 1.0f, &shape->material.diffuse_ref, nl_dot,&light->illuminance);
+	color = colorf_add(color, color_diffuse_ref);
+
+	if (nl_dot <= 0.0f)
+		return (color);
+
+	SET_COLOR(color_specular_ref, 0.0f, 0.0f, 0.0f);
+
+	ref_dir = vec_calc(2.0f * nl_dot, &normal, -1.0f, &dir_pos2light);
+	normalize(&ref_dir);
+
+	vr_dot = CLAMP(dot(&inv_eye_dir, &ref_dir), 0, 1);
+
+	if (vr_dot <= 0.0f)
+		return (color);
+
+	vr_dot_pow = powf(vr_dot, shape->material.shininess);
+	color_specular_ref = colorf_mul(&color_specular_ref, 1.0f, &shape->material.specular_ref, vr_dot_pow, &light->illuminance);
+
+//	color_specular_ref = get_specular_reflection_color(shape, nl_dot, light, dir_pos2light, eye_dir);
+	color = colorf_add(color, color_specular_ref);
 	return (color);
 }
 
-t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp, t_shape *shape)
+t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp, t_ray eye_ray, t_shape *shape)
 {
 	t_colorf	color;
 	size_t		idx;
@@ -125,18 +149,16 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp
 		if (is_obj_exists_between_light_and_eye(scene, dir_pos2light, light, intp))
 			continue ;
 
-		color_checker_texture = get_checker_reflection_color(shape, intp, nl_dot);
-		color = colorf_add(color, color_checker_texture);
-
 		if (!shape->material.texture.data)
 		{
-			color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, light, dir_pos2light);
+			color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, light, dir_pos2light, eye_ray.direction);
 			color = colorf_add(color, color_diffuse_ref);
 		}
-
 		color_image_texture = get_image_reflection_color(shape, intp, nl_dot, light);
 		color = colorf_add(color, color_image_texture);
 
+		color_checker_texture = get_checker_reflection_color(shape, intp, nl_dot, light);
+		color = colorf_add(color, color_checker_texture);
 	}
 	return (color);
 }

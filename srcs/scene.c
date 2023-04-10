@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 16:27:35 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 16:38:17 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -770,13 +770,13 @@ void scene_setting(t_scene *scene)
 				   8.0f,							/* 光沢度 */
 				  MT_DEFAULT, 					/* マテリアルタイプ */
 				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-				  8.0f,
+				  20.0f,
 //				  "./img/cat.ppm",
-//				  (char *)NULL,
+				  (char *)NULL,
 //				  "./img/1k_earth.ppm",
 //				  "./img/1k_earth_normal.ppm",
 				  (char *)NULL,
-				  "./img/normalmap_example.ppm",
+//				  "./img/normalmap_example.ppm",
 				  false);					/* 絶対屈折率 */
 
 
