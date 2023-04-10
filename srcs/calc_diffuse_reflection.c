@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 13:12:19 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:34:42 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
 
 	normal = intp.normal;
 
-	if (shape->bump)
+	if (shape->material.bump.data)
 		normal = get_bump_normal(intp, shape);
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
@@ -81,9 +81,9 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
 
 
 		/* image texture */
-		if (shape->texture)
+		if (shape->material.texture.data)
 		{
-			img_col = get_img_color(intp, shape, *shape->texture);
+			img_col = get_img_color(intp, shape, shape->material.texture);
 			color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
 		}
 

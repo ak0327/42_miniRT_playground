@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 13:14:53 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:26:07 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,8 @@ int	main(void)
 	mlx_hooks(data);
 	mlx_loop(data.mlx);
 	free_data(&data);
-	free_img(&bump_img);
-	free_img(&texture_img);
+//	free_img(&bump_img);
+//	free_img(&texture_img);
 	free(scene.lights);
 	free(scene.shapes);
 	return (0);

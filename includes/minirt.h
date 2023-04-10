@@ -231,6 +231,9 @@ typedef struct	s_material
 	t_colorf		reflect_ref;	// kf 完全鏡面反射光/屈折光係数RGB
 	float			refraction_index;	// 絶対屈折率
 
+	t_img			texture;
+	t_img			bump;
+
 } t_material;
 
 typedef struct	s_shape
@@ -238,10 +241,6 @@ typedef struct	s_shape
 	t_shape_type	type;		// sphere or plane
 	t_shape_data	data;		// sphere or plane の情報
 	t_material		material;	// 物体表面の質感
-	t_img			*texture;
-	t_img			*bump;
-
-
 } t_shape;
 
 typedef struct	s_light

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 19:46:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 12:54:23 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:33:34 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ void init_light(t_light *light, t_light_type lt,
 
 void init_shape(t_shape *shape, t_shape_type st, ...)
 {
-	char	*texture_path;
-	char	*bump_path;
-
 	va_list args;
 	va_start(args, st);
 
@@ -97,17 +94,6 @@ void init_shape(t_shape *shape, t_shape_type st, ...)
 		abort();
 	}
 
-	texture_path  = va_arg(args, char *);
-	bump_path  = va_arg(args, char *);
-
-	shape->texture = NULL;
-	if (texture_path)
-		get_img(shape->texture, texture_path); //TODO:error
-
-	shape->bump = NULL;
-	if (bump_path)
-		get_img(shape->bump, bump_path); //TODO:error
-
 	va_end(args);
 }
 
@@ -129,4 +115,12 @@ void init_material(t_material *mat,
 	mat->type = type;
 	SET_COLOR(mat->reflect_ref, refR, refG, refB);
 	mat->refraction_index = refraction_index;
+
+	mat->texture.data = NULL;
+	if (texture_path)
+		get_img(&mat->texture, texture_path); //TODO:error
+
+	mat->bump.data= NULL;
+	if (bump_path)
+		get_img(&mat->bump, bump_path); //TODO:error
 }

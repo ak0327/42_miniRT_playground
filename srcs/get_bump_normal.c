@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:13:41 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 14:46:02 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:34:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape)
 	t_matrix	Tr_matrix;
 
 	bump_normal_obj = intp.normal;
-	img_color = get_img_color(intp, shape, *shape->bump);
+	img_color = get_img_color(intp, shape, shape->material.bump);
 	bump_normal_obj.x = (img_color.r - 0.5f) / 0.5f;
 	bump_normal_obj.z = (img_color.g - 0.5f) / 0.5f;
 	bump_normal_obj.y = (img_color.b - 0.5f) / 0.5f;
