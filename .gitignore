@@ -19,6 +19,9 @@
 !*.ppm
 !*.xpm
 
+!scenes
+!*.rt
+
 .idea/
 objs/
 libs/.idea
