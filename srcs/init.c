@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 19:46:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 13:33:34 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 13:56:05 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void init_material(t_material *mat,
 				   t_material_type type,
 				   float refR, float refG, float refB,
 				   float refraction_index,
-				   char *texture_path, char *bump_path)
+				   char *texture_path, char *bump_path, bool is_checker)
 {
 	SET_COLOR(mat->ambient_ref,  ambR, ambG, ambB);
 	SET_COLOR(mat->diffuse_ref,  difR, difG, difB);
@@ -123,4 +123,6 @@ void init_material(t_material *mat,
 	mat->bump.data= NULL;
 	if (bump_path)
 		get_img(&mat->bump, bump_path); //TODO:error
+
+	mat->is_checker = is_checker;
 }
