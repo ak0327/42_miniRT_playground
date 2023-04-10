@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 14:28:04 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 14:28:55 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,6 @@ void	free_data(t_data *data)
 	mlx_destroy_window(data->mlx, data->win);
 	mlx_destroy_display(data->mlx);
 	free(data->mlx);
-}
-
-void	free_img(t_img *img)
-{
-	if (!img || !img->data)
-		return ;
-	free(img->data);
 }
 
 void	free_scene(t_scene scene)

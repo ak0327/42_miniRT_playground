@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 13:56:18 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 14:35:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,6 +384,9 @@ t_colorf	calc_perfect_reflection(
 t_colorf	calc_inflection_refraction(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
 		t_intersection_point intp, t_shape *shape);
+
+t_colorf	calc_specular_reflection(t_shape *shape, float nl_dot, t_light *light, t_vector dir_pos2light, t_vector eye_dir);
+
 
 /********** raytrace **********/
 int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level);
