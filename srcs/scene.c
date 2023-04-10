@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:28:16 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 13:57:07 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 16:13:42 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -640,26 +640,31 @@ void scene_setting(t_scene *scene)
 /*                          bump mapping   ここから                                        */
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
-	scene->num_shapes_capacity = 3; /* 物体リストの最大格納数(自由に変更して良い) */
+	scene->num_shapes_capacity = 6; /* 物体リストの最大格納数(自由に変更して良い) */
 	scene->num_shapes = scene->num_shapes_capacity;	/* 物体リストに，実際に格納した物体の数 */
 
 	scene->shapes = (t_shape *)malloc(sizeof(t_shape) * scene->num_shapes_capacity);
 
-//	init_shape(&scene->shapes[0], ST_PLANE,
-//			   0.0, 0.0, 0.0,		/* 平面が通る点の位置 */
-//			   0.0, 1.0, 0.0);		/* 平面の法線ベクトル */
-//
-//	init_material(&scene->shapes[0].material,
-////				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
-////				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
-////				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
-//				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
-//				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
-//				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
-//				  1.0f,								/* 光沢度 */
-//				  MT_DEFAULT,
-//				  0.0f, 0.0f, 0.0f,
-//				  0.0f);
+	init_shape(&scene->shapes[0], ST_PLANE,
+			   0.0, 0.0, 0.0,		/* 平面が通る点の位置 */
+			   0.0, 1.0, 0.0);		/* 平面の法線ベクトル */
+
+	init_material(&scene->shapes[0].material,
+//				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
+//				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+//				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
+				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
+				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
+				  1.0f,								/* 光沢度 */
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f,
+				  0.0f,
+//				  "./img/cat.ppm",
+//				  (char *)NULL,
+				  (char *)NULL,
+				  (char *)NULL,
+				  true);
 
 //	init_shape(&scene->shapes[1], ST_SPHERE,
 //			   0.0f, 10.0f, 0.0f,	/* 球の中心位置 */
@@ -714,140 +719,163 @@ void scene_setting(t_scene *scene)
 
 
 // ******************************
-//	init_shape(&scene->shapes[1], ST_CORN,
-//			   -0.2f, 1.0f, 0.0f,	/* 法線ベクトル */
-//			   -150.0f, 20.0f, 0.0f,	/* 中心位置 */
-//			   130.0f,				/* 高さ */
-//			   65.0f);				/* 半径 */
-//
-//	init_material(&scene->shapes[1].material,
-//				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
-//				  0.5f, 0.5f, 0.5f,			/* 拡散反射係数(RGB) */
-//				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
-//				  8.0f,
-//				  MT_DEFAULT,
-//				  1.0f, 1.0f, 1.0f,
-//				  0.0f);
-//
-//
-//	init_shape(&scene->shapes[2],  ST_CYLINDER,
-//			   0.0f, 1.0f, 0.3f,	/* 法線ベクトル */
-//			   100.0f, 50.0f, 0.0f,	/* 中心位置 */
-//			   130.0f,				/* 高さ */
-//			   50.0f);				/* 半径 */
-//
-//	init_material(&scene->shapes[2].material,
-//				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
-//				  0.5f, 0.5f, 0.5f,		/* 拡散反射係数(RGB) */
-//				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
-//				  8.0f,
-//				  MT_DEFAULT,
-//				  1.0f, 1.0f, 1.0f,
-//				  0.0f);
-//
-//
-//	init_shape(&scene->shapes[3], ST_SPHERE,
-//			   0.0f, 50.0f, -150.0f,	/* 球の中心位置 */
-//			   50.0f);    			/* 球の半径 */
-//
-//	init_material(&scene->shapes[3].material,
-//				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
-//				  0.5f, 0.5f, 0.5f,		/* 拡散反射係数(RGB) */
-//				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
-//				   8.0f,							/* 光沢度 */
-//				  MT_DEFAULT, 					/* マテリアルタイプ */
-//				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-//				  0.0f);					/* 絶対屈折率 */
-//
-//
-//	init_shape(&scene->shapes[4], ST_PLANE,
-//			   -200.0f, 0.0f, 200.0f,		/* 平面が通る点の位置 */
-//			   1.0f, 1.0f, -1.0f);		/* 平面の法線ベクトル */
-////			   -1.0f, -1.0f, 1.0f);		/* 平面の法線ベクトル */
-//
-//	init_material(&scene->shapes[4].material,
-////				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
-////				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
-////				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
-//				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
-//				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
-//				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
-//				  1.0f,								/* 光沢度 */
-//				  MT_DEFAULT,
-//				  0.0f, 0.0f, 0.0f,
-//				  0.0f);
-//
-//
-//
-//	init_shape(&scene->shapes[5], ST_PLANE,
-//			   400.0f, 0.0f, 200.0f,		/* 平面が通る点の位置 */
-//			   -1.0f, 0.0f, -0.2);		/* 平面の法線ベクトル */
-////			   1.0f, 0.0f, 0.2);		/* 平面の法線ベクトル */
-//
-//	init_material(&scene->shapes[5].material,
-////				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
-////				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
-////				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
-//				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
-//				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
-//				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
-//				  1.0f,								/* 光沢度 */
-//				  MT_DEFAULT,
-//				  0.0f, 0.0f, 0.0f,
-//				  0.0f);
+	init_shape(&scene->shapes[1], ST_CORN,
+			   -0.2f, 1.0f, 0.0f,	/* 法線ベクトル */
+			   -150.0f, 20.0f, 0.0f,	/* 中心位置 */
+			   130.0f,				/* 高さ */
+			   65.0f);				/* 半径 */
 
-// ******************************
+	init_material(&scene->shapes[1].material,
+				  0.01f, 0.01f, 0.01f, 	/* 環境光係数(RGB)   */
+				  0.8f, 0.8f, 0.8f,			/* 拡散反射係数(RGB) */
+				  0.30f, 0.30f, 0.30f,		/* 鏡面反射率(RGB)   */
+				  8.0f,
+				  MT_DEFAULT,
+				  1.0f, 1.0f, 1.0f,
+				  8.0f,
+				  (char *)NULL,
+				  (char *)NULL,
+				  true);
 
-	init_shape(&scene->shapes[0], ST_PLANE,
-			   0.0f, 0.0f, 0.0f,		/* 平面が通る点の位置 */
-			   0.0f, 0.0f, -1.0f);		/* 平面の法線ベクトル */
 
-	init_material(&scene->shapes[0].material,
+	init_shape(&scene->shapes[2],  ST_CYLINDER,
+			   0.0f, 1.0f, 0.3f,	/* 法線ベクトル */
+			   100.0f, 50.0f, 0.0f,	/* 中心位置 */
+			   130.0f,				/* 高さ */
+			   50.0f);				/* 半径 */
+
+	init_material(&scene->shapes[2].material,
+				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+				  0.0f, 0.5f, 0.0f,		/* 拡散反射係数(RGB) */
+				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+				  8.0f,
+				  MT_DEFAULT,
+				  1.0f, 1.0f, 1.0f,
+				  8.0f,
+//				  "./img/cat.ppm",
+				  (char *)NULL,
+				  "./img/normalmap_example.ppm",
+				  false);
+
+
+	init_shape(&scene->shapes[3], ST_SPHERE,
+			   0.0f, 50.0f, -150.0f,	/* 球の中心位置 */
+			   50.0f);    			/* 球の半径 */
+
+	init_material(&scene->shapes[3].material,
+				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+				  0.5f, 0.5f, 0.0f,		/* 拡散反射係数(RGB) */
+				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+				   8.0f,							/* 光沢度 */
+				  MT_DEFAULT, 					/* マテリアルタイプ */
+				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
+				  8.0f,
+//				  "./img/cat.ppm",
+//				  (char *)NULL,
+//				  "./img/1k_earth.ppm",
+//				  "./img/1k_earth_normal.ppm",
+				  (char *)NULL,
+				  "./img/normalmap_example.ppm",
+				  false);					/* 絶対屈折率 */
+
+
+	init_shape(&scene->shapes[4], ST_PLANE,
+			   -200.0f, 0.0f, 200.0f,		/* 平面が通る点の位置 */
+			   1.0f, 1.0f, -1.0f);		/* 平面の法線ベクトル */
+//			   -1.0f, -1.0f, 1.0f);		/* 平面の法線ベクトル */
+
+	init_material(&scene->shapes[4].material,
+//				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
+//				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+//				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
 				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
 				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
 				  1.0f,								/* 光沢度 */
 				  MT_DEFAULT,
 				  0.0f, 0.0f, 0.0f,
-				  0.0f,
-				  "./img/cat.ppm",
-				  (char*)NULL,
+				  8.0f,
+//				  "./img/cat.ppm",
+				  (char *)NULL,
+				  (char *)NULL,
 				  true);
 
 
 
-	init_shape(&scene->shapes[1], ST_SPHERE,
-			   0.0f, -50.0f, -150.0f,	/* 球の中心位置 */
-			   50.0f);    			/* 球の半径 */
+	init_shape(&scene->shapes[5], ST_PLANE,
+			   400.0f, 0.0f, 200.0f,		/* 平面が通る点の位置 */
+//			   -1.0f, 0.0f, -0.2f);		/* 平面の法線ベクトル */
+			   1.0f, 0.0f, 0.2);		/* 平面の法線ベクトル */
 
-	init_material(&scene->shapes[1].material,
+	init_material(&scene->shapes[5].material,
+//				  0.0f, 0.0f, 0.0f,	/* 環境光係数(RGB)   */
+//				  0.0f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+//				  0.0f, 0.0f, 0.0f,		/* 鏡面反射率(RGB)   */
 				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
-				  0.5f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
-				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
-				   8.0f,							/* 光沢度 */
-				  MT_DEFAULT, 					/* マテリアルタイプ */
-				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-				  0.0f,
-				  (char *)NULL,
-				  "./img/normalmap_example.ppm",
-				  false);					/* 絶対屈折率 */
-
-
-	init_shape(&scene->shapes[2], ST_SPHERE,
-			   0.0f, 50.0f, 150.0f,	/* 球の中心位置 */
-			   50.0f);    			/* 球の半径 */
-
-	init_material(&scene->shapes[2].material,
-				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
-				  0.0f, 0.0f, 0.5f,		/* 拡散反射係数(RGB) */
-				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
-				  8.0f,							/* 光沢度 */
-				  MT_DEFAULT, 					/* マテリアルタイプ */
-				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
-				  0.0f,
+				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
+				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
+				  1.0f,								/* 光沢度 */
+				  MT_DEFAULT,
+				  0.0f, 0.0f, 0.0f,
+				  8.0f,
+//				  "./img/cat.ppm",
+//				  "./img/normalmap_example.ppm",
 				  (char *)NULL,
 				  (char *)NULL,
-				  false);					/* 絶対屈折率 */
+				  true);
+
+// ******************************
+
+//	init_shape(&scene->shapes[0], ST_PLANE,
+//			   0.0f, 0.0f, 0.0f,		/* 平面が通る点の位置 */
+//			   0.0f, 0.0f, -1.0f);		/* 平面の法線ベクトル */
+//
+//	init_material(&scene->shapes[0].material,
+//				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+//				  0.7f, 0.7f, 0.7f,		/* 拡散反射係数(RGB) */
+//				  0.10f, 0.10f, 0.10f,		/* 鏡面反射率(RGB)   */
+//				  1.0f,								/* 光沢度 */
+//				  MT_DEFAULT,
+//				  0.0f, 0.0f, 0.0f,
+//				  0.0f,
+//				  "./img/cat.ppm",
+//				  (char*)NULL,
+//				  true);
+//
+//
+//
+//	init_shape(&scene->shapes[1], ST_SPHERE,
+//			   0.0f, -50.0f, -150.0f,	/* 球の中心位置 */
+//			   50.0f);    			/* 球の半径 */
+//
+//	init_material(&scene->shapes[1].material,
+//				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+//				  0.5f, 0.0f, 0.0f,		/* 拡散反射係数(RGB) */
+//				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+//				   8.0f,							/* 光沢度 */
+//				  MT_DEFAULT, 					/* マテリアルタイプ */
+//				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
+//				  0.0f,
+//				  (char *)NULL,
+//				  "./img/normalmap_example.ppm",
+//				  false);					/* 絶対屈折率 */
+//
+//
+//	init_shape(&scene->shapes[2], ST_SPHERE,
+//			   0.0f, 50.0f, 150.0f,	/* 球の中心位置 */
+//			   50.0f);    			/* 球の半径 */
+//
+//	init_material(&scene->shapes[2].material,
+//				  0.1f, 0.1f, 0.1f,	/* 環境光係数(RGB)   */
+//				  0.0f, 0.0f, 0.5f,		/* 拡散反射係数(RGB) */
+//				  0.3f, 0.3f, 0.3f,		/* 鏡面反射率(RGB)   */
+//				  8.0f,							/* 光沢度 */
+//				  MT_DEFAULT, 					/* マテリアルタイプ */
+//				  1.0f, 1.0f, 1.0f,		/* 完全鏡面反射係数(RGB) */
+//				  0.0f,
+//				  (char *)NULL,
+//				  (char *)NULL,
+//				  false);					/* 絶対屈折率 */
 
 
 
@@ -864,14 +892,8 @@ void scene_setting(t_scene *scene)
 //			   70.0f);					/* angle */
 
 	// cylinder
-//	init_light(&scene->lights[0], LT_POINT,
-//			   -200.0f, 500.0f, -300.0f,	/* position */
-//			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
-//			   0.7f, 0.7f, 0.7f,	/* color */
-//			   70.0f);					/* angle */
-
 	init_light(&scene->lights[0], LT_POINT,
-			   0.0f, 0.0f, -500.0f,	/* position */
+			   -200.0f, 500.0f, -300.0f,	/* position */
 			   0.0f, 1.0f, 0.0f,	/* direction(do not use LT_POINT) */
 			   0.7f, 0.7f, 0.7f,	/* color */
 			   70.0f);					/* angle */

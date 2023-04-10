@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 15:04:02 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 15:41:32 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ t_colorf	get_image_reflection_color(t_shape *shape, t_intersection_point intp, f
 {
 	t_colorf	color;
 	t_colorf	img_col;
+	t_colorf	diffuse_ref;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
@@ -73,7 +74,8 @@ t_colorf	get_image_reflection_color(t_shape *shape, t_intersection_point intp, f
 		return (color);
 
 	img_col = get_img_color(intp, shape, shape->material.texture);
-	color = colorf_mul(&color, 1.0f, &shape->material.diffuse_ref, nl_dot,&img_col);
+	SET_COLOR(diffuse_ref, 1.0f, 1.0f, 1.0f)
+	color = colorf_mul(&color, 1.0f, &diffuse_ref, nl_dot,&img_col);
 
 	return (color);
 }
@@ -98,8 +100,7 @@ t_colorf	get_diffuse_reflection_color(t_shape *shape, float nl_dot, t_light *lig
 	return (color);
 }
 
-t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
-						  t_intersection_point intp, t_shape *shape)
+t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp, t_shape *shape)
 {
 	t_colorf	color;
 	size_t		idx;
@@ -127,14 +128,17 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
 			continue ;
 
 		color_checker_texture = get_checker_reflection_color(shape, intp, nl_dot);
-		color_image_texture = get_image_reflection_color(shape, intp, nl_dot);
-		color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, light, dir_pos2light);
-		color_specular_ref = calc_specular_reflection(shape, nl_dot, light, dir_pos2light, eye_ray->direction);
-
 		color = colorf_add(color, color_checker_texture);
+
+		if (!shape->material.texture.data)
+		{
+			color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, light, dir_pos2light);
+			color = colorf_add(color, color_diffuse_ref);
+		}
+
+		color_image_texture = get_image_reflection_color(shape, intp, nl_dot);
 		color = colorf_add(color, color_image_texture);
-		color = colorf_add(color, color_diffuse_ref);
-		color = colorf_add(color, color_specular_ref);
+
 	}
 	return (color);
 }

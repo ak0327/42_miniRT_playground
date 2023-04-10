@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/09 15:43:09 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 15:57:14 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ int	get_img(t_img *img, const char *img_path)
 		split = free_split_array_ret_nullptr(split);
 		col++;
 	}
+	if (close(fd) < 0)
+		printf("error\n");
 	return (SUCCESS);
 }
 

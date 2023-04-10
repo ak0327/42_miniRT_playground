@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 13:12:43 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 15:44:46 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	t_colorf				perfect_reflect_color;
 	t_colorf				inflection_refraction_color;
 	t_colorf				diffuse_reflect_color;
+	t_colorf				specular_reflect_color;
 	t_colorf				ambient_reflect_color;
 
 	if (recursion_level > MAX_RECURSION)
@@ -36,15 +37,15 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
 	ambient_reflect_color = calc_ambient_reflection(shape->material.ambient_ref, scene->ambient_illuminance);
-	color = colorf_add(color, ambient_reflect_color);
-
-	diffuse_reflect_color = calc_diffuse_reflection(scene, eye_ray,  intp, shape);
-	color = colorf_add(color, diffuse_reflect_color);
-
+	diffuse_reflect_color = calc_diffuse_reflection(scene, intp, shape);
+	specular_reflect_color = calc_specular_reflection(scene, eye_ray, intp, shape);
 	perfect_reflect_color = calc_perfect_reflection(scene, eye_ray, out_col, recursion_level, intp, shape);
-	color = colorf_add(color, perfect_reflect_color);
-
 	inflection_refraction_color = calc_inflection_refraction(scene, eye_ray, out_col, recursion_level, intp, shape);
+
+	color = colorf_add(color, ambient_reflect_color);
+	color = colorf_add(color, diffuse_reflect_color);
+	color = colorf_add(color, specular_reflect_color);
+	color = colorf_add(color, perfect_reflect_color);
 	color = colorf_add(color, inflection_refraction_color);
 
 	*out_col = color;

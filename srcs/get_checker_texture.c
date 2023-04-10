@@ -26,7 +26,7 @@ static t_colorf	get_checker_color_on_plane(t_intersection_point intp, t_shape *s
 	pos_local = sub(&intp.position, &shape->data.plane.position);
 	u_mag = 1.0f / 50.0f;
 	v_mag = 1.0f / 50.0f;
-	Tr_matrix = get_tr_matrix_world2obj_zup(shape->data.plane.normal);
+	Tr_matrix = get_tr_matrix_world2obj_yup(shape->data.plane.normal);
 	pattern_map = get_planar_map(pos_local, Tr_matrix);
 
 	ra = 0.3f; ga = 0.3f; ba = 0.3f;

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 14:35:37 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 16:10:32 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,8 +375,7 @@ t_vector	get_bump_normal(t_intersection_point intp, t_shape *shape);
 
 /********** calc_reflection **********/
 t_colorf	calc_ambient_reflection(t_colorf ka, t_colorf Ia);
-t_colorf calc_diffuse_reflection(const t_scene *scene, const t_ray *eye_ray,
-								 t_intersection_point intp, t_shape *shape);
+t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp, t_shape *shape);
 t_colorf	calc_perfect_reflection(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
 		t_intersection_point intp, t_shape *shape);
@@ -385,8 +384,14 @@ t_colorf	calc_inflection_refraction(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,
 		t_intersection_point intp, t_shape *shape);
 
-t_colorf	calc_specular_reflection(t_shape *shape, float nl_dot, t_light *light, t_vector dir_pos2light, t_vector eye_dir);
+t_colorf	get_specular_reflection_color(t_shape *shape, float nl_dot, t_light *light, t_vector dir_pos2light, t_vector eye_dir);
 
+t_colorf calc_specular_reflection(const t_scene *scene, const t_ray *eye_ray,
+								  t_intersection_point intp, t_shape *shape);
+
+
+t_vector	get_dir_pos2light(t_light light, t_vector pos);
+int is_obj_exists_between_light_and_eye(const t_scene *scene, t_vector dir_pos2light, t_light *light, t_intersection_point intp);
 
 /********** raytrace **********/
 int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level);
