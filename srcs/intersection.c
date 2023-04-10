@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 16:04:38 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 19:49:10 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray,
 {
 	const t_plane	*pln = &shape->data.plane;
 	float 			dn_dot = dot(&ray->direction, &pln->normal);
-	t_vector		s_p;
+	t_vector		s_p, normal;
 	float			t;
 	t_vector		td, inv_eye_dir;
 
@@ -214,6 +214,7 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray,
 		return (0);
 
 	s_p = sub(&ray->start, &pln->position);
+
 	t = -1.0f * dot(&s_p, &pln->normal) / dn_dot;
 
 	if (t <= 0.0f || !out_intp)
@@ -225,8 +226,8 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray,
 	out_intp->normal = pln->normal;
 
 	inv_eye_dir = normalize_vec_inv(&ray->direction);
-	if (dot(&out_intp->normal, &inv_eye_dir) < 0)
-		out_intp->normal = normalize_vec_inv(&out_intp->normal);
+	if (dot(&pln->normal, &inv_eye_dir) < 0)
+		out_intp->normal = normalize_vec_inv(&pln->normal);
 
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:50:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 16:05:17 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 19:24:18 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_matrix	get_tr_matrix_world2obj_zup(t_vector w_dir)
 		eu = ex;
 		ew = ey;
 	}
-	// こっちでもOK
+//	 こっちでもOK
 //	ew = cross(&ex, &ev);
 //	eu = cross(&ev, &ew);
 //	if (ev.x == ex.x && ev.y == ex.y && ev.z == ex.z)
