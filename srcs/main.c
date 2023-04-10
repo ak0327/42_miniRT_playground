@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 14:30:16 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 21:24:27 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	free_scene(t_scene scene)
 
  ********************** */
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_data		data;
 	t_ray		eye_ray;
@@ -84,40 +84,31 @@ int	main(void)
 
 	int			i, j;
 	int			r, g, b;
+	int 		ret_val;
 
 	t_camera	camera;
-	t_img		bump_img;
-	t_img		texture_img;
 
-//	const char	*texture_img_path = "./img/cat.ppm";
-//	const char	*img_path = "./img/bump_1.ppm";
-//	const char	*img_path = "./img/normal1.ppm";
-//	const char	*bump_img_path = "./img/normalmap_example.ppm";
-//	const char	*bump_img_path = "./img/1k_earth_normal.ppm";
-//	const char	*texture_img_path = "./img/1k_earth.ppm";
+	if (argc != 2)
+	{
+		ft_dprintf(STDERR_FILENO, "[Error]Invalid argument.\n       $> ./miniRT <scene filepath>\n");
+		return (1);
+	}
+
+	ret_val = get_scene_config(&scene, &camera, argv[1]);
+	if (ret_val != SUCCESS)
+	{
+		//todo:error mgs
+		ft_dprintf(STDERR_FILENO, "Error\n");
+		return (1);
+	}
+
+	scene_setting(&scene);
+	camera = init_camera();
 
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
 
-	/* ppm test */
-//	if (get_img(&bump_img, bump_img_path) == FAILURE)
-//	{
-//		free_data(&data);
-//		return (EXIT_FAILURE);
-//	}
-//	if (get_img(&texture_img, texture_img_path) == FAILURE)
-//	{
-//		free_data(&data);
-//		free_img(&bump_img);
-//		return (EXIT_FAILURE);
-//	}
-
-//	draw_img_test(data, *img);
-
-//	/* init scene & camera */
-	scene_setting(&scene);
-	camera = init_camera();
 
 	/* draw */
 	j = 0;

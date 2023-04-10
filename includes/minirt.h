@@ -263,6 +263,11 @@ typedef struct	s_scene
 	size_t		num_lights;				// 光源リストに格納されている数
 	t_colorf	ambient_illuminance;	// 環境光の強さIa RGB
 	float		global_refraction_index;// 大気の絶対屈折率
+
+
+	t_list		*light_list;
+	t_list		*shape_list;
+
 } t_scene;
 
 typedef struct	s_intersection_point
@@ -416,6 +421,11 @@ void init_light(t_light *light, t_light_type lt,
 				float dirx, float diry, float dirz,
 				float illR, float illG, float illB,
 				float angle);
+
+
+
+/********** get_input **********/
+int get_scene_config(t_scene *scene, t_camera *camera, const char *path);
 
 
 /********** main **********/
