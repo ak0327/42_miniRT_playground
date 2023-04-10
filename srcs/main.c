@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 13:26:07 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/10 14:28:04 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,21 @@ void	free_img(t_img *img)
 	if (!img || !img->data)
 		return ;
 	free(img->data);
+}
+
+void	free_scene(t_scene scene)
+{
+	size_t idx;
+
+	idx = 0;
+	while (idx < scene.num_shapes)
+	{
+		free(scene.shapes[idx].material.bump.data);
+		free(scene.shapes[idx].material.texture.data);
+		idx++;
+	}
+	free(scene.lights);
+	free(scene.shapes);
 }
 
 /* **********************
@@ -138,10 +153,7 @@ int	main(void)
 	mlx_hooks(data);
 	mlx_loop(data.mlx);
 	free_data(&data);
-//	free_img(&bump_img);
-//	free_img(&texture_img);
-	free(scene.lights);
-	free(scene.shapes);
+	free_scene(scene);
 	return (0);
 }
 
