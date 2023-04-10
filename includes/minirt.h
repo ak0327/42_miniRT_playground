@@ -26,8 +26,7 @@
 # include "vector.h"
 
 /********** return value **********/
-# define COLOR_A	0
-# define COLOR_B	1
+# define PROCESS_ERROR 3
 
 /********** color **********/
 # define RED			0xFF0000
@@ -72,6 +71,7 @@
 #define EPSILON			(1.0f / 32.0f)
 
 #define MAX_RECURSION	8
+
 
 
 /********** enum **********/
