@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 19:49:35 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 09:30:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ t_camera	init_camera(void)
 //	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 
 //	cylinder
-//	SET_VECTOR(camera.pos, -5.0f, 200.0f, -600.0f)
-//	SET_VECTOR(camera.dir, 0.0f, -0.2f, 1.0f)
+	SET_VECTOR(camera.pos, -5.0f, 200.0f, -600.0f)
+	SET_VECTOR(camera.dir, 0.0f, -0.2f, 1.0f)
 
 
-	SET_VECTOR(camera.pos, 0.0f, 0.0f, -300.0f)
-	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
+//	SET_VECTOR(camera.pos, 0.0f, 0.0f, -300.0f)
+//	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
 
 
 //	SET_VECTOR(camera.pos, 1000.0f, 0.0f, -1000.0f)
@@ -58,8 +58,8 @@ t_camera	init_camera(void)
 	camera.distance_camera_to_sc = (WINDOW_HEIGHT * ASPECT / 2.0f) / tanf(fov_radians / 2.0f);
 	camera.vec_camera_to_sc_center = mult(camera.distance_camera_to_sc, &camera.dir);
 
-	camera.transpose_matrix_w2c = get_tr_matrix_world2obj_yup(
+	camera.translate_matrix_w2c = get_tr_matrix_world2obj_yup(
 			normalize_vec_inv(&camera.dir));
-	camera.transpose_matrix_c2w = transpose_matrix(camera.transpose_matrix_w2c);
+	camera.translate_matrix_c2w = transpose_matrix(camera.translate_matrix_w2c);
 	return (camera);
 }
