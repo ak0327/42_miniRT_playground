@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 22:45:27 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 10:14:55 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 10:27:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static t_colorf	get_image_color_on_cylinder(t_intersection_point intp, t_shape *
 
 	map = get_cylindrical_map( intp.position, shape->data.cylinder.position, shape->data.cylinder.normal, shape->data.cylinder.height);
 
-	map.u *= -(float)img.width * (float)frequency;
+	map.u *= (float)img.width * (float)frequency;
 	map.v *= -(float)img.height * (float)frequency;
 
 	row = (((int)map.u % img.width) + img.width) % img.width;		// 0 <= row <= img.width
@@ -91,7 +91,7 @@ static t_colorf	get_image_color_on_corn(t_intersection_point intp, t_shape *shap
 
 	map = get_conical_map( intp.position, shape->data.corn.position, shape->data.corn.normal, shape->data.corn.height);
 
-	map.u *= -(float)img.width * (float)frequency;
+	map.u *= (float)img.width * (float)frequency;
 	map.v *= -(float)img.height * (float)frequency;
 
 	row = (((int)map.u % img.width) + img.width) % img.width;		// 0 <= row <= img.width
