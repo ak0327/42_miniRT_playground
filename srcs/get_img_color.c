@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 22:45:27 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 19:40:04 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 09:31:28 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,13 @@ static t_colorf	get_image_color_on_plane(t_intersection_point intp, t_shape *sha
 static t_colorf	get_image_color_on_sphere(t_intersection_point intp, t_shape *shape, t_img img)
 {
 	t_colorf		color;
-	t_vector		pos_local;
 	int				r, g, b;
 	size_t			row, col, idx;
 	int				frequency = 1;
 	t_texture_map	map;
 
-	pos_local = sub(&intp.position, &shape->data.sphere.center);
+	map = get_spherical_map(intp.position, shape->data.sphere.center);
 
-	map = get_spherical_map(pos_local);
 	map.u *= (float)img.width * (float)frequency;
 	map.v *= (float)img.height * (float)frequency;
 
@@ -74,7 +72,7 @@ static t_colorf	get_image_color_on_cylinder(t_intersection_point intp, t_shape *
 	t_texture_map	map;
 
 	pos_local = sub(&intp.position, &shape->data.cylinder.position);
-	Tr_matrix = get_tr_matrix_world2obj_zup(shape->data.cylinder.normal);
+	Tr_matrix = get_tr_matrix_world2obj_yup(shape->data.cylinder.normal);
 
 	map = get_cylindrical_map(pos_local, Tr_matrix, shape->data.cylinder.height);
 	map.u *= (float)img.width * (float)frequency;
@@ -103,7 +101,7 @@ static t_colorf	get_image_color_on_corn(t_intersection_point intp, t_shape *shap
 
 	pos_local = sub(&intp.position, &shape->data.corn.position);
 
-	Tr_matrix = get_tr_matrix_world2obj_zup(shape->data.corn.normal);
+	Tr_matrix = get_tr_matrix_world2obj_yup(shape->data.corn.normal);
 
 	map = get_conical_map(pos_local, Tr_matrix, shape->data.corn.height);
 	map.u *= (float)img.width * (float)frequency;

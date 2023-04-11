@@ -352,8 +352,10 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape);
 /********** texture_map **********/
 t_texture_map	get_cylindrical_map(t_vector pos_local, t_matrix Tr, float h);
 t_texture_map	get_conical_map(t_vector pos_local, t_matrix Tr, float h);
-t_texture_map	get_spherical_map(t_vector pos_local);
+//t_texture_map	get_spherical_map(t_vector pos_local);
 t_texture_map	get_planar_map(t_vector pos_local, t_matrix Tr);
+
+t_texture_map	get_spherical_map(t_vector int_pos, t_vector center_pos);
 
 
 /********** matrix **********/

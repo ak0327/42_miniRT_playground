@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 14:02:49 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 19:59:59 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 09:40:30 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,38 @@ t_texture_map	get_planar_map(t_vector pos_local, t_matrix Tr)
 	return (map);
 }
 
-t_texture_map	get_spherical_map(t_vector pos_local)
+
+//t_texture_map	get_spherical_map(t_vector pos_local)
+//{
+//	t_texture_map	map;
+//	float			radius;
+//	float			theta;
+//	float			phi;
+//	float			shift = (float)M_PI;
+//
+//	radius = norm(&pos_local);
+//	theta = acosf(pos_local.y / radius);
+//	phi = atan2f(pos_local.z, pos_local.x);
+//
+//	map.u = (phi + (float)M_PI + shift) / (2.0f * (float)M_PI);		// 0 <= fu <= 1
+//	map.v = theta / (float)M_PI;	// 0 <= fv <= 1
+//	return (map);
+//}
+
+
+
+
+
+t_texture_map	get_spherical_map(t_vector int_pos, t_vector center_pos)
 {
 	t_texture_map	map;
 	float			radius;
 	float			theta;
 	float			phi;
 	float			shift = (float)M_PI;
+	t_vector		pos_local;
 
+	pos_local = sub(&int_pos, &center_pos);
 	radius = norm(&pos_local);
 	theta = acosf(pos_local.y / radius);
 	phi = atan2f(pos_local.z, pos_local.x);
@@ -67,3 +91,37 @@ t_texture_map	get_spherical_map(t_vector pos_local)
 	map.v = theta / (float)M_PI;	// 0 <= fv <= 1
 	return (map);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
