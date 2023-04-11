@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 14:54:44 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:23:51 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,10 @@ typedef struct	s_light
 	t_vector		direction;
 	t_colorf		illuminance;	// 光源の照度 Ii RGB
 	float			angle;			// spot_light, angle
+
+	double 			d_angle;
+	double 			brightness_ratio;
+
 } t_light;
 
 typedef struct	s_scene
@@ -459,8 +463,8 @@ int get_scene_config(t_scene *scene, t_camera *camera, const char *path);
 /********** setting **********/
 int get_setting_for_camera(const char *line, t_camera *camera);
 int	get_setting_for_ambient(const char *line, t_scene *scene);
-int get_setting_for_lights(const char *line, t_scene *scene);
-int get_setting_for_objects(const char *line, t_scene *scene);
+int get_setting_for_lights(const char *line, t_scene *scene, t_identifier id);
+int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id);
 
 /********** parsing_config **********/
 char	*get_identifier(const char *line, size_t *idx);

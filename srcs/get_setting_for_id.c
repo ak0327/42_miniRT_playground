@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:36:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 15:16:39 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:26:59 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,49 @@ int	get_setting_for_ambient(const char *line, t_scene *scene)
 	return (SUCCESS);
 }
 
+t_light_type	get_light_type(t_identifier id)
+{
+	if (id == id_point_light)
+		return (LT_POINT);
+	return (LT_SPOT);
+}
+
+
 // L   XYZ   brightness_ratio[0,1]   RGB[0,255]
 // sl  XYZ   brightness_ratio[0,1]   RGB[0,255]   angle[0,180]
-int get_setting_for_lights(const char *line, t_scene *scene)
+int get_setting_for_lights(const char *line, t_scene *scene, t_identifier id)
 {
+	t_light	light;
+	size_t	idx;
+
+	light.type = get_light_type(id);
+	idx = 0;
+
+	if (parsing_vec(line, &light.position, &idx) == FAILURE)
+		return (FAILURE);
+
+	if (parsing_double_num(line, &light.brightness_ratio, &idx) == FAILURE)
+		return (FAILURE);
+
+	if (parsing_color(line, &light.illuminance, &idx) == FAILURE)
+		return (FAILURE);
+
+	if (light.brightness_ratio < 0.0 || 1.0 < light.brightness_ratio)
+		return (FAILURE);
+
+	if (!is_color_in_range(light.illuminance))
+		return (FAILURE);
+
+	if (light.type == LT_SPOT)
+	{
+		if (parsing_double_num(line, &light.d_angle, &idx) == FAILURE)
+			return (FAILURE);
+		if (light.d_angle < 0.0 || 180.0 < light.d_angle)
+			return (FAILURE);
+	}
+
+	if (line[idx])
+		return (FAILURE);
 
 	return (SUCCESS);
 }
@@ -81,8 +120,35 @@ int get_setting_for_lights(const char *line, t_scene *scene)
 // pl   XYZ   norm_vec[-1,1]                       RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
 // cy   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
 // co   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
-int get_setting_for_objects(const char *line, t_scene *scene)
+int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id)
 {
 
 	return (SUCCESS);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
