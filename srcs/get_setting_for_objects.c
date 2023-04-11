@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:32 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 18:43:11 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 18:57:04 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,8 @@ static int get_setting_for_corn(const char *line, t_shape *shape)
 	if (is_color_in_range(shape->material.diffuse_ref) == FAILURE)
 		return (FAILURE);
 
+	shape->data.corn.origin = vec_calc(1.0f, &shape->data.corn.position, shape->data.corn.height, &shape->data.corn.normal);
+
 	shape->material.is_checker = false;
 	shape->material.texture.data = NULL;
 	shape->material.bump.data = NULL;
@@ -215,7 +217,6 @@ static int get_setting_for_corn(const char *line, t_shape *shape)
 		return (FAILURE);
 	return (SUCCESS);
 }
-
 
 // sp   XYZ                    diameter            RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
 // pl   XYZ   norm_vec[-1,1]                       RGB[0,255]   <OPTION:RGB[0,255]   image_paths>

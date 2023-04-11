@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 20:10:07 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 17:47:09 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 18:44:38 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*get_identifier(const char *line, size_t *idx)
 	return (id_str);
 }
 
-int get_params_for_identifier(int id_no, const char *line, t_scene *scene, t_camera *camera)
+static int get_params_for_identifier(int id_no, const char *line, t_scene *scene, t_camera *camera)
 {
 	int ret_value;
 
@@ -56,7 +56,7 @@ int get_params_for_identifier(int id_no, const char *line, t_scene *scene, t_cam
 	return (ret_value);
 }
 
-int increment_idx_to_next_char(const char *line, const char *id_str, size_t *idx)
+static int increment_idx_to_next_char(const char *line, const char *id_str, size_t *idx)
 {
 	*idx += ft_strlen_ns(id_str);
 	while (ft_isspace(line[*idx]))
@@ -96,7 +96,7 @@ static int parse_config_line(t_scene *scene, t_camera *camera, const char *line)
 	return (SUCCESS);
 }
 
-int	parsing_config_line_by_line(t_scene *scene, t_camera *camera, int fd)
+static int	parsing_config_line_by_line(t_scene *scene, t_camera *camera, int fd)
 {
 	char	*line;
 	int		ret_value;

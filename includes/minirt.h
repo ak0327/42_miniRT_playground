@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 17:19:43 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 18:58:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 
 # include "./../minilibx-linux/mlx.h"
 # include "./../libs/include/libft.h"
-# include "raycasting.h"
-# include "vector.h"
 
 /********** return value **********/
 # define PROCESS_ERROR	3
@@ -81,9 +79,6 @@ typedef enum	e_shape_type
 	ST_SPHERE,
 	ST_CYLINDER,
 	ST_CORN,
-	ST_HYPERBOLOID,
-	ST_PARABOLOID,
-	ST_TRIANGLE,
 } t_shape_type;
 
 typedef enum	e_light_type
@@ -142,14 +137,6 @@ typedef struct s_matrix
 	float	m31, m32, m33;
 } t_matrix;
 
-typedef struct	s_screen
-{
-	float		screen_width;
-	float		screen_height;
-	t_vector	vec_center;
-	t_vector	normal_vec;
-} t_screen;
-
 typedef struct	s_colorf
 {
 	float	r;
@@ -170,12 +157,10 @@ typedef struct	s_ray
 	t_vector	direction;	// 方向ベクトル（単位？）
 } t_ray;
 
-
 typedef struct	s_plane
 {
 	t_vector	normal;		// 単位法線ベクトル
 	t_vector	position;	// planeが通る点の位置ベクトル
-	float		checker_width;
 } t_plane;
 
 typedef struct	s_sphere
@@ -202,31 +187,12 @@ typedef struct	s_corn
 } t_corn;
 
 
-typedef struct	s_hyperboloid
-{
-	t_vector	normal;		// 単位法線ベクトル todo:direction
-	t_vector	position;	// 中心位置ベクトル
-	float		height;
-	float		radius;
-} t_hyperboloid;
-
-typedef struct	s_paraboloid
-{
-	t_vector	normal;		// 単位法線ベクトル todo:direction
-	t_vector	position;	// 中心位置ベクトル
-	float		height;
-	float		radius;
-} t_paraboloid;
-
-
 typedef union	u_shape_data // sphere or plane
 {
 	t_plane			plane;
 	t_sphere		sphere;
 	t_cylinder		cylinder;
 	t_corn			corn;
-	t_hyperboloid	hyperboloid;
-	t_paraboloid	paraboloid;
 
 } t_shape_data;
 
@@ -234,7 +200,6 @@ typedef struct	s_material
 {
 	t_colorf		ambient_ref;	// ka 環境光反射率RGB
 	t_colorf		diffuse_ref;	// kd 拡散反射率RGB
-	t_colorf		diffuse_ref_checker;	// kd 拡散反射率RGB
 
 	t_colorf		specular_ref;	// ks 鏡面反射率RGB
 	float			shininess;		// alpha 光沢度
@@ -258,7 +223,6 @@ typedef struct	s_shape
 	t_material		material;	// 物体表面の質感
 } t_shape;
 
-
 typedef struct	s_light
 {
 	t_light_type	type;			// point, directional or spot
@@ -266,9 +230,6 @@ typedef struct	s_light
 	t_vector		direction;
 	t_colorf		illuminance;	// 光源の照度 Ii RGB
 	float			angle;			// spot_light, angle
-
-	float 			brightness_ratio;
-
 } t_light;
 
 typedef struct	s_scene
@@ -286,9 +247,6 @@ typedef struct	s_scene
 
 	t_list		*light_list;
 	t_list		*shape_list;
-
-	float		ambient_lightning_ratio;
-
 } t_scene;
 
 typedef struct	s_intersection_point
