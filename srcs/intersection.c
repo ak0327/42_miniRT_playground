@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 12:28:12 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 19:49:10 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 19:16:32 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,6 @@ static int	intersection_with_cylinder(t_shape *shape, const t_ray *ray,
 		return (1);
 	}
 	return (0);
-}
-
-static float	sign(t_vector p1, t_vector p2, t_vector p3)
-{
-	return ((p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y));
 }
 
 static int	intersection_with_corn(const t_shape *shape, const t_ray *ray,
@@ -206,7 +201,7 @@ static int	intersection_with_plane(const t_shape *shape, const t_ray *ray,
 {
 	const t_plane	*pln = &shape->data.plane;
 	float 			dn_dot = dot(&ray->direction, &pln->normal);
-	t_vector		s_p, normal;
+	t_vector		s_p;
 	float			t;
 	t_vector		td, inv_eye_dir;
 
@@ -250,27 +245,27 @@ int get_nearest_shape(const t_scene *scene, const t_ray *ray,
 					  float max_dist, int exit_once_found,
 					  t_shape **out_shape, t_intersection_point *out_intp)
 {
-	size_t					i;
 	t_shape					*nearest_shape = NULL;
 	t_intersection_point	nearest_intp;
 	t_intersection_point	intp;
 	int						res;
+	t_list 					*obj_node;
 
 	nearest_intp.distance = max_dist;
 
-	i = 0;
-	while (i < scene->num_shapes)
+	obj_node = scene->shape_list;
+	while (obj_node)
 	{
-		res = intersection_test(&scene->shapes[i], ray, &intp);
+		res = intersection_test(obj_node->content, ray, &intp);
 
 		if (res && intp.distance < nearest_intp.distance)
 		{
-			nearest_shape = &scene->shapes[i];
+			nearest_shape = obj_node->content;
 			nearest_intp = intp;
 			if (exit_once_found)
 				break;
 		}
-		i++;
+		obj_node = obj_node->next;
 	}
 
 	if (!nearest_shape)

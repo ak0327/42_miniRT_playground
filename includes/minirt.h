@@ -298,7 +298,7 @@ t_vector	ray_dir(int x, int y, t_camera camera);
 
 
 /********** camera **********/
-t_camera	init_camera(void);
+void	init_camera(t_camera *camera);
 
 
 /********** sphere **********/

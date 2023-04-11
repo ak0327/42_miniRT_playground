@@ -102,8 +102,10 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 
-	scene_setting(&scene);
-	camera = init_camera();
+	init_camera(&camera);
+
+//	scene_setting(&scene);
+//	camera = init_camera();
 
 	if (init_data(&data) == FAILURE)
 		return (EXIT_FAILURE);

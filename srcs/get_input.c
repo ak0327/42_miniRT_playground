@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 20:10:07 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 18:44:38 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 19:12:34 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,9 @@ int get_scene_config(t_scene *scene, t_camera *camera, const char *path)
 {
 	int 	fd;
 	int		ret_value;
+
+	scene->light_list = NULL;
+	scene->shape_list = NULL;
 
 	// todo:dir or file
 	fd = open(path, O_RDONLY);

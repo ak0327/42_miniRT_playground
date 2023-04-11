@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 19:09:11 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 19:21:02 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,11 @@ t_colorf	get_diffuse_reflection_color(t_shape *shape, float nl_dot, t_light *lig
 t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp, t_ray eye_ray, t_shape *shape)
 {
 	t_colorf	color;
-	size_t		idx;
-	t_light		light;
+	t_light		*light;
 	t_vector	dir_pos2light, normal;
 	float		nl_dot;
 	t_colorf	color_checker_texture, color_image_texture, color_diffuse_ref;
+	t_list 		*light_node;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
@@ -122,25 +122,25 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp
 	if (shape->material.bump.data)
 		normal = get_bump_normal(intp, shape);
 
-	idx = 0;
-	while (idx < scene->num_lights)
+	light_node = scene->light_list;
+	while (light_node)
 	{
-		light = scene->lights[idx];
-		idx++;
+		light = light_node->content;
+		light_node = light_node->next;
 
-		dir_pos2light = get_dir_pos2light(light, intp.position);
+		dir_pos2light = get_dir_pos2light(*light, intp.position);
 		nl_dot = CLAMP(dot(&normal, &dir_pos2light), 0.0f, 1.0f);
 
-		if (is_obj_exists_between_light_and_eye(scene, dir_pos2light, &light, intp))
+		if (is_obj_exists_between_light_and_eye(scene, dir_pos2light, light, intp))
 			continue ;
 
-		color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, &light, dir_pos2light, eye_ray.direction);
+		color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, light, dir_pos2light, eye_ray.direction);
 		color = colorf_add(color, color_diffuse_ref);
 
-		color_image_texture = get_image_reflection_color(shape, intp, nl_dot, &light);
+		color_image_texture = get_image_reflection_color(shape, intp, nl_dot, light);
 		color = colorf_add(color, color_image_texture);
 
-		color_checker_texture = get_checker_reflection_color(shape, intp, nl_dot, &light);
+		color_checker_texture = get_checker_reflection_color(shape, intp, nl_dot, light);
 		color = colorf_add(color, color_checker_texture);
 
 	}
