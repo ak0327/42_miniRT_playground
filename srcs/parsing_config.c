@@ -6,19 +6,20 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 13:10:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 15:14:33 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 17:21:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	parsing_int_num(const char *line, int *int_num, size_t *idx)
+// todo:float -> int, 今回は変更面倒なのでfloatで進める
+int	parsing_int_num(const char *line, float *int_num, size_t *idx)
 {
-	size_t	head_idx;	size_t	len;
+	size_t	len;
 	char	*num_str;
 	bool	is_success;
 
-	head_idx = 0;	while (ft_isspace(line[*idx]))
+	while (ft_isspace(line[*idx]))
 		*idx += 1;
 	len = 0;
 	while (line[*idx + len] && !ft_isspace(line[*idx + len]))
@@ -32,7 +33,7 @@ int	parsing_int_num(const char *line, int *int_num, size_t *idx)
 		perror("malloc");
 		return (FAILURE);
 	}
-	*int_num = ft_atoi(num_str, &is_success);
+	*int_num = (float)ft_atoi(num_str, &is_success);
 	free(num_str);
 
 	if (!is_success)
@@ -41,9 +42,9 @@ int	parsing_int_num(const char *line, int *int_num, size_t *idx)
 }
 
 
-int	parsing_double_num(const char *line, double *double_num, size_t *idx)
+int	parsing_double_num(const char *line, float *double_num, size_t *idx)
 {
-	size_t	head_idx;	size_t	len;
+	size_t	len;
 	char	*num_str;
 	bool	is_success;
 
@@ -61,7 +62,7 @@ int	parsing_double_num(const char *line, double *double_num, size_t *idx)
 		perror("malloc");
 		return (FAILURE);
 	}
-	*double_num = ft_strtod(num_str, &is_success);
+	*double_num = (float)ft_strtod(num_str, &is_success);
 	free(num_str);
 
 	if (!is_success)
@@ -81,20 +82,20 @@ void	skip_delimiter(const char *line, size_t *idx)
 
 int is_vec_in_normal_range(t_vector vec)
 {
-	const double x = vec.dx;
-	const double y = vec.dy;
-	const double z = vec.dz;
+	const float x = vec.x;
+	const float y = vec.y;
+	const float z = vec.z;
 
-	return ((-1.0 <= x && x <= 1.0) && (-1.0 <= y && y <= 1.0) && (-1.0 <= z && z <= 1.0));
+	return ((-1.0f <= x && x <= 1.0f) && (-1.0f <= y && y <= 1.0f) && (-1.0f <= z && z <= 1.0f));
 }
 
 int is_color_in_range(t_colorf color)
 {
-	const int	r = color.ir;
-	const int	g = color.ig;
-	const int	b = color.ib;
+	const float	r = color.r;
+	const float	g = color.g;
+	const float	b = color.b;
 
-	return ((0 <= r && r <= 255) && (0 <= g && g <= 255) && (0 <= b && b <= 255));
+	return ((0.0f <= r && r <= 255.0f) && (0.0f <= g && g <= 255.0f) && (0.0f <= b && b <= 255.0f));
 }
 
 // double_num1, double_num2, double_num3
@@ -103,17 +104,17 @@ int parsing_vec(const char *line, t_vector *vec, size_t *idx)
 	while (ft_isspace(line[*idx]))
 		*idx += 1;
 
-	if (parsing_double_num(line, &vec->dx, idx) == FAILURE)
+	if (parsing_double_num(line, &vec->x, idx) == FAILURE)
 		return (FAILURE);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_double_num(line, &vec->dy, idx) == FAILURE)
+	if (parsing_double_num(line, &vec->y, idx) == FAILURE)
 		return (FAILURE);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_double_num(line, &vec->dz, idx) == FAILURE)
+	if (parsing_double_num(line, &vec->z, idx) == FAILURE)
 		return (FAILURE);
 
 	while (ft_isspace(line[*idx]))
@@ -128,17 +129,17 @@ int parsing_color(const char *line, t_colorf *color, size_t *idx)
 	while (ft_isspace(line[*idx]))
 		*idx += 1;
 
-	if (parsing_int_num(line, &color->ir, idx) == FAILURE)
+	if (parsing_int_num(line, &color->r, idx) == FAILURE)
 		return (FAILURE);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_int_num(line, &color->ig, idx) == FAILURE)
+	if (parsing_int_num(line, &color->g, idx) == FAILURE)
 		return (FAILURE);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_int_num(line, &color->ib, idx) == FAILURE)
+	if (parsing_int_num(line, &color->b, idx) == FAILURE)
 		return (FAILURE);
 
 	while (ft_isspace(line[*idx]))

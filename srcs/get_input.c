@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 20:10:07 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 12:43:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 17:47:09 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int get_params_for_identifier(int id_no, const char *line, t_scene *scene, t_cam
 	else if (id_no == id_ambient)
 		ret_value = get_setting_for_ambient(line, scene);
 	else if (id_no == id_point_light || id_no == id_spot_light)
-		ret_value = get_setting_for_lights(line, scene);
+		ret_value = get_setting_for_lights(line, scene, id_no);
 	else
-		ret_value = get_setting_for_objects(line, scene);
+		ret_value = get_setting_for_objects(line, scene, id_no);
 	return (ret_value);
 }
 

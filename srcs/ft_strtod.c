@@ -18,5 +18,5 @@ double	ft_strtod(const char *str, bool *is_success)
 
 	num = strtod(str, NULL);
 	*is_success = true;
-	return (num);
+return (num);
 }

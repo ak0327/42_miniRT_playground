@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 15:23:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 17:19:43 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,6 @@ typedef struct	s_vector
 	float	x;
 	float	y;
 	float	z;
-
-	double	dx;
-	double	dy;
-	double	dz;
 } t_vector;
 
 typedef struct s_matrix
@@ -159,10 +155,6 @@ typedef struct	s_colorf
 	float	r;
 	float	g;
 	float	b;
-
-	int 	ir;
-	int 	ig;
-	int 	ib;
 } t_colorf;
 
 typedef struct	s_img
@@ -251,6 +243,8 @@ typedef struct	s_material
 	t_colorf		reflect_ref;	// kf 完全鏡面反射光/屈折光係数RGB
 	float			refraction_index;	// 絶対屈折率
 
+	t_colorf		checker_color;
+
 	t_img			texture;
 	t_img			bump;
 	bool			is_checker;
@@ -264,6 +258,7 @@ typedef struct	s_shape
 	t_material		material;	// 物体表面の質感
 } t_shape;
 
+
 typedef struct	s_light
 {
 	t_light_type	type;			// point, directional or spot
@@ -272,8 +267,7 @@ typedef struct	s_light
 	t_colorf		illuminance;	// 光源の照度 Ii RGB
 	float			angle;			// spot_light, angle
 
-	double 			d_angle;
-	double 			brightness_ratio;
+	float 			brightness_ratio;
 
 } t_light;
 
@@ -292,7 +286,7 @@ typedef struct	s_scene
 	t_list		*light_list;
 	t_list		*shape_list;
 
-	double		ambient_lightning_ratio;
+	float		ambient_lightning_ratio;
 
 } t_scene;
 
@@ -312,7 +306,6 @@ typedef struct	s_camera
 	t_matrix	translate_matrix_c2w;
 	float		distance_camera_to_sc;
 	float		fov_deg;
-	double 		d_fov_deg
 } t_camera;
 
 typedef struct	s_texture_map
@@ -470,8 +463,8 @@ int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id);
 char	*get_identifier(const char *line, size_t *idx);
 double	ft_strtod(const char *str, bool *is_success);
 
-int		parsing_int_num(const char *line, int *int_num, size_t *idx);
-int		parsing_double_num(const char *line, double *double_num, size_t *idx);
+int		parsing_int_num(const char *line, float *int_num, size_t *idx);
+int		parsing_double_num(const char *line, float *double_num, size_t *idx);
 
 int 	parsing_vec(const char *line, t_vector *vec, size_t *idx);
 int 	parsing_color(const char *line, t_colorf *color, size_t *idx);
@@ -479,6 +472,7 @@ char	*parsing_img_path(const char *line, size_t *idx);
 
 int 	is_color_in_range(t_colorf color);
 int 	is_vec_in_normal_range(t_vector vec);
+void	skip_delimiter(const char *line, size_t *idx);
 
 /********** main **********/
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
