@@ -44,6 +44,16 @@ t_colorf	get_color_k1c1k2c2(float k1, const t_colorf *c1, float k2, const t_colo
 	return (color);
 }
 
+t_colorf	get_color_k1c1(float k1, const t_colorf c1)
+{
+	t_colorf	color;
+
+	color.r = k1 * c1.r;
+	color.g = k1 * c1.g;
+	color.b = k1 * c1.b;
+	return (color);
+}
+
 t_colorf	colorf_add(const t_colorf c1, const t_colorf c2)
 {
 	t_colorf	color;

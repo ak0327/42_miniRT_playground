@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:36:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 18:09:50 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 18:39:13 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,27 @@ int get_setting_for_camera(const char *line, t_camera *camera)
 // A   lightning_ratio[0,1]   RGB[0,255]
 int	get_setting_for_ambient(const char *line, t_scene *scene)
 {
-	size_t	idx;
+	size_t		idx;
+	float		lightning_ratio;
+	t_colorf	color;
 
 	idx = 0;
-
-	if (parsing_double_num(line, &scene->ambient_lightning_ratio, &idx) == FAILURE)
+	if (parsing_double_num(line, &lightning_ratio, &idx) == FAILURE)
 		return (FAILURE);
 
-	if (parsing_color(line, &scene->ambient_illuminance, &idx) == FAILURE)
+	if (parsing_color(line, &color, &idx) == FAILURE)
 		return (FAILURE);
 
-	if (scene->ambient_lightning_ratio < 0.0f || 1.0f < scene->ambient_lightning_ratio)
+	if (lightning_ratio < 0.0f || 1.0f < lightning_ratio)
 		return (FAILURE);
 
-	if (!is_color_in_range(scene->ambient_illuminance))
+	if (!is_color_in_range(color))
 		return (FAILURE);
 
 	if (line[idx])
 		return (FAILURE);
+
+	scene->ambient_illuminance = get_color_k1c1(lightning_ratio, color);
 
 	return (SUCCESS);
 }
@@ -81,26 +84,27 @@ t_light_type	get_light_type(t_identifier id)
 // sl  XYZ   brightness_ratio[0,1]   RGB[0,255]   angle[0,180]
 int get_setting_for_lights(const char *line, t_scene *scene, t_identifier id)
 {
-	t_light	light;
-	size_t	idx;
-	t_list	*new_list;
+	t_light		light;
+	size_t		idx;
+	t_list		*new_list;
+	float		brightness_ratio;
+	t_colorf	color;
 
 	light.type = get_light_type(id);
 	idx = 0;
-
 	if (parsing_vec(line, &light.position, &idx) == FAILURE)
 		return (FAILURE);
 
-	if (parsing_double_num(line, &light.brightness_ratio, &idx) == FAILURE)
+	if (parsing_double_num(line, &brightness_ratio, &idx) == FAILURE)
 		return (FAILURE);
 
-	if (parsing_color(line, &light.illuminance, &idx) == FAILURE)
+	if (parsing_color(line, &color, &idx) == FAILURE)
 		return (FAILURE);
 
-	if (light.brightness_ratio < 0.0f || 1.0f < light.brightness_ratio)
+	if (brightness_ratio < 0.0f || 1.0f < brightness_ratio)
 		return (FAILURE);
 
-	if (!is_color_in_range(light.illuminance))
+	if (!is_color_in_range(color))
 		return (FAILURE);
 
 	if (light.type == LT_SPOT)
@@ -114,17 +118,15 @@ int get_setting_for_lights(const char *line, t_scene *scene, t_identifier id)
 	if (line[idx])
 		return (FAILURE);
 
+	light.illuminance = get_color_k1c1(brightness_ratio, color);
+
 	new_list = ft_lstnew(&light);
 	if (!new_list)
 		return (FAILURE);
-
 	ft_lstadd_back(&scene->light_list, new_list);
 
 	return (SUCCESS);
 }
-
-
-
 
 int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
 {
@@ -169,7 +171,6 @@ int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
 	free(path);
 	return (SUCCESS);
 }
-
 
 // sp   XYZ                    diameter            RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
 int get_setting_for_sphere(const char *line, t_shape *shape)
@@ -362,30 +363,3 @@ int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id)
 
 	return (ret_value);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

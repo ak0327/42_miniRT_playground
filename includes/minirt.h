@@ -279,9 +279,10 @@ typedef struct	s_scene
 	t_light		*lights;				// 光源リストへのポインタ
 	size_t		num_lights_capacity;	// 光源リストの最大格納数
 	size_t		num_lights;				// 光源リストに格納されている数
+
+
 	t_colorf	ambient_illuminance;	// 環境光の強さIa RGB
 	float		global_refraction_index;// 大気の絶対屈折率
-
 
 	t_list		*light_list;
 	t_list		*shape_list;
@@ -358,6 +359,7 @@ t_colorf	colorf_mul_k1c1k2c2(const t_colorf *c, float k1, const t_colorf *c1, fl
 t_colorf	colorf_add(t_colorf c1, t_colorf c2);
 t_colorf	colorf_muladd_k1c2_k2c2(t_colorf c, float k1, t_colorf c1, float k2, t_colorf c2);
 t_colorf	get_color_k1c1k2c2(float k1, const t_colorf *c1, float k2, const t_colorf *c2);
+t_colorf	get_color_k1c1(float k1, const t_colorf c1);
 
 /********** mlx_keyhooks **********/
 void		mlx_hooks(t_data data);
