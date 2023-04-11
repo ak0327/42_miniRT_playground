@@ -363,7 +363,7 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape);
 
 
 t_texture_map	get_planar_map(t_vector int_pos, t_vector center_pos, t_vector obj_normal);
-t_texture_map	get_spherical_map(t_vector int_pos, t_vector center_pos);
+t_texture_map	get_spherical_map(t_vector int_pos, t_vector center_pos, float obj_radius);
 t_texture_map	get_conical_map(t_vector int_pos, t_vector center_pos, t_vector obj_dir, float obj_height);
 t_texture_map	get_cylindrical_map(t_vector int_pos, t_vector center_pos, t_vector obj_dir, float obj_height);
 

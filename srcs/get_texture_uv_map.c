@@ -87,17 +87,15 @@ t_texture_map	get_planar_map(t_vector int_pos, t_vector center_pos, t_vector obj
 }
 
 
-t_texture_map	get_spherical_map(t_vector int_pos, t_vector center_pos)
+t_texture_map	get_spherical_map(t_vector int_pos, t_vector center_pos, float obj_radius)
 {
 	t_texture_map	map;
-	float			radius;
 	float			theta;
 	float			phi;
 	t_vector		pos_local;
 
 	pos_local = sub(&int_pos, &center_pos);
-	radius = norm(&pos_local);
-	theta = acosf(pos_local.y / radius);
+	theta = acosf(pos_local.y / obj_radius);
 	phi = atan2f(pos_local.z, pos_local.x);
 
 	map.u = (phi + (float)M_PI) / (2.0f * (float)M_PI);		// 0 <= u <= 1

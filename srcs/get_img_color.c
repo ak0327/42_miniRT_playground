@@ -41,7 +41,7 @@ static t_colorf	get_image_color_on_sphere(t_intersection_point intp, t_shape *sh
 	int				frequency = 1;
 	t_texture_map	map;
 
-	map = get_spherical_map(intp.position, shape->data.sphere.center);
+	map = get_spherical_map(intp.position, shape->data.sphere.center, shape->data.sphere.radius);
 
 	map.u *= (float)img.width * (float)frequency;
 	map.v *= (float)img.height * (float)frequency;

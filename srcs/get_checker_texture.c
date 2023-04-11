@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 10:15:58 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 10:35:10 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_colorf	get_checker_color_on_sphere(t_intersection_point intp, t_shape *
 	float			rb, gb, bb;
 	float			u_mag, v_mag;
 
-	pattern_map = get_spherical_map(intp.position, shape->data.sphere.center);
+	pattern_map = get_spherical_map(intp.position, shape->data.sphere.center, shape->data.sphere.radius);
 
 	u_mag = 10.0f;
 	v_mag = 10.0f;
