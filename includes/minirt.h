@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 19:14:40 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 10:13:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,8 +277,8 @@ typedef struct	s_camera
 	t_vector	pos;
 	t_vector	dir;
 	t_vector	vec_camera_to_sc_center;
-	t_matrix	transpose_matrix_w2c;
-	t_matrix	transpose_matrix_c2w;
+	t_matrix	translate_matrix_w2c;
+	t_matrix	translate_matrix_c2w;
 	float		distance_camera_to_sc;
 	float		fov_deg;
 } t_camera;
@@ -350,12 +350,17 @@ t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape);
 
 
 /********** texture_map **********/
-t_texture_map	get_cylindrical_map(t_vector pos_local, t_matrix Tr, float h);
-t_texture_map	get_conical_map(t_vector pos_local, t_matrix Tr, float h);
-//t_texture_map	get_spherical_map(t_vector pos_local);
-t_texture_map	get_planar_map(t_vector pos_local, t_matrix Tr);
+//t_texture_map	get_cylindrical_map(t_vector pos_local, t_matrix Tr, float h);
+//t_texture_map	get_conical_map(t_vector pos_local, t_matrix Tr, float h);
 
+//t_texture_map	get_spherical_map(t_vector pos_local);
+//t_texture_map	get_planar_map(t_vector pos_local, t_matrix Tr);
+
+
+t_texture_map	get_planar_map(t_vector int_pos, t_vector center_pos, t_vector obj_normal);
 t_texture_map	get_spherical_map(t_vector int_pos, t_vector center_pos);
+t_texture_map	get_conical_map(t_vector int_pos, t_vector center_pos, t_vector obj_dir, float obj_height);
+t_texture_map	get_cylindrical_map(t_vector int_pos, t_vector center_pos, t_vector obj_dir, float obj_height);
 
 
 /********** matrix **********/

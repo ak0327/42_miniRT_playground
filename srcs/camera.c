@@ -58,8 +58,8 @@ t_camera	init_camera(void)
 	camera.distance_camera_to_sc = (WINDOW_HEIGHT * ASPECT / 2.0f) / tanf(fov_radians / 2.0f);
 	camera.vec_camera_to_sc_center = mult(camera.distance_camera_to_sc, &camera.dir);
 
-	camera.transpose_matrix_w2c = get_tr_matrix_world2obj_yup(
+	camera.translate_matrix_w2c = get_tr_matrix_world2obj_yup(
 			normalize_vec_inv(&camera.dir));
-	camera.transpose_matrix_c2w = transpose_matrix(camera.transpose_matrix_w2c);
+	camera.translate_matrix_c2w = transpose_matrix(camera.translate_matrix_w2c);
 	return (camera);
 }
