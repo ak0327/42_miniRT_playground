@@ -28,9 +28,9 @@ sl   -40,50,00       0.6                         10, 0, 255
  color options
   normal color    : RGB
   checker texture : RGB  RGB
-  image texture   : RGB  image_filepath,bumpmap_filepath
-       only image : RGB  image_filepath,
-       only bump  : RGB                ,bumpmap_filepath
+  image texture   : RGB  image_filepath, bumpmap_filepath
+       only image : RGB  image_filepath, null
+       only bump  : RGB  null          , bumpmap_filepath
 
 ##################################################################
 # Rule

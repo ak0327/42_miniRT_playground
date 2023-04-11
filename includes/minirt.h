@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 12:40:52 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 14:33:12 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,10 @@ typedef struct	s_vector
 	float	x;
 	float	y;
 	float	z;
+
+	double	dx;
+	double	dy;
+	double	dz;
 } t_vector;
 
 typedef struct s_matrix
@@ -155,6 +159,10 @@ typedef struct	s_colorf
 	float	r;
 	float	g;
 	float	b;
+
+	int 	ir;
+	int 	ig;
+	int 	ib;
 } t_colorf;
 
 typedef struct	s_img
