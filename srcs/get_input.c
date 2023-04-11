@@ -121,6 +121,7 @@ int get_scene_config(t_scene *scene, t_camera *camera, const char *path)
 	int 	fd;
 	int		ret_value;
 
+	// todo:dir or file
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 	{

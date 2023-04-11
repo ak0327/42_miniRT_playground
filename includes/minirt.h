@@ -454,6 +454,9 @@ int get_setting_for_objects(const char *line, t_scene *scene);
 /********** parsing_config **********/
 
 
+double	ft_strtod(const char *str, bool *is_success);
+
+
 /********** main **********/
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 

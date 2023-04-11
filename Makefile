@@ -45,6 +45,8 @@ SRC				= main.c \
 				  set_input.c \
 				  get_setting_for_id.c \
 				  parsing_config.c \
+				  ft_strtod.c \
+
 
 
 
