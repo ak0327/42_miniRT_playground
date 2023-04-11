@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 14:33:12 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 14:54:44 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,6 +306,7 @@ typedef struct	s_camera
 	t_matrix	translate_matrix_c2w;
 	float		distance_camera_to_sc;
 	float		fov_deg;
+	double 		d_fov_deg
 } t_camera;
 
 typedef struct	s_texture_map
@@ -460,10 +461,18 @@ int get_setting_for_lights(const char *line, t_scene *scene);
 int get_setting_for_objects(const char *line, t_scene *scene);
 
 /********** parsing_config **********/
-
-
+char	*get_identifier(const char *line, size_t *idx);
 double	ft_strtod(const char *str, bool *is_success);
 
+int		parsing_int_num(const char *line, int *int_num);
+int		parsing_double_num(const char *line, double *double_num);
+
+int 	parsing_vec(const char *line, t_vector *vec, size_t *idx);
+int 	parsing_color(const char *line, t_colorf *color, size_t *idx);
+char	*parsing_img_path(const char *line, size_t *idx);
+
+int 	is_color_in_range(t_colorf color);
+int 	is_vec_in_normal_range(t_vector vec);
 
 /********** main **********/
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);

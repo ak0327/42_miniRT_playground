@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:36:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 12:40:10 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 14:57:54 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,26 @@
 // C   XYZ   orientation_vec[-1,1]   FOV[0,180]
 int get_setting_for_camera(const char *line, t_camera *camera)
 {
+	size_t		idx;
+
+	idx = 0;
+	if (parsing_vec(line, &camera->pos, &idx) == FAILURE)
+		return (FAILURE);
+
+	if (parsing_vec(line, &camera->dir, &idx) == FAILURE)
+		return (FAILURE);
+
+	if (parsing_double_num(line, &camera->d_fov_deg) == FAILURE)
+		return (FAILURE);
+
+	if (line[idx])
+		return (FAILURE);
+
+	if (!is_vec_in_normal_range(camera->dir))
+		return (FAILURE);
+
+	if (camera->d_fov_deg < 0.0 || 180.0 < camera->d_fov_deg)
+		return (FAILURE);
 
 	return (SUCCESS);
 }

@@ -27,17 +27,15 @@ static int		get_identifier_no(const char *id_str)
 	return (INVALID_ID);
 }
 
-static char	*get_identifier(const char *line)
+char	*get_identifier(const char *line, size_t *idx)
 {
 	char	*id_str;
-	size_t	tail_idx;
 
-	tail_idx = 0;
-	while (line[tail_idx] && !ft_isspace(line[tail_idx]))
-		tail_idx++;
-	if (!line[tail_idx])
+	while (line[*idx] && !ft_isspace(line[*idx]))
+		*idx += 1;
+	if (!line[*idx])
 		return (NULL);
-	id_str = ft_substr(line, 0, tail_idx);
+	id_str = ft_substr(line, 0, *idx);
 	if (!id_str)
 		return (NULL);
 	return (id_str);
@@ -79,7 +77,7 @@ static int parse_config_line(t_scene *scene, t_camera *camera, const char *line)
 		idx++;
 
 	// get_identifier
-	id_str = get_identifier(&line[idx]);
+	id_str = get_identifier(line, &idx);
 	if (!id_str)
 		return (FAILURE);
 

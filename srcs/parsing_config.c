@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 13:10:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 14:33:53 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 14:57:21 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,23 @@ void	skip_delimiter(const char *line, size_t *idx)
 		*idx += 1;
 }
 
-int is_vec_in_normal_range(double x, double y, double z)
+int is_vec_in_normal_range(t_vector vec)
 {
+	const double x = vec.dx;
+	const double y = vec.dy;
+	const double z = vec.dz;
+
 	return ((-1.0 <= x && x <= 1.0) && (-1.0 <= y && y <= 1.0) && (-1.0 <= z && z <= 1.0));
 }
 
-int is_rgb_in_range(int r, int g, int b)
+int is_color_in_range(t_colorf color)
 {
+	const int	r = color.ir;
+	const int	g = color.ig;
+	const int	b = color.ib;
+
 	return ((0 <= r && r <= 255) && (0 <= g && g <= 255) && (0 <= b && b <= 255));
 }
-
 
 // double_num1, double_num2, double_num3
 int parsing_vec(const char *line, t_vector *vec, size_t *idx)
@@ -112,6 +119,9 @@ int parsing_vec(const char *line, t_vector *vec, size_t *idx)
 
 	if (parsing_double_num(&line[*idx], &vec->dz) == FAILURE)
 		return (FAILURE);
+
+	while (ft_isspace(line[*idx]))
+		*idx += 1;
 
 	return (SUCCESS);
 }
@@ -135,16 +145,17 @@ int parsing_color(const char *line, t_colorf *color, size_t *idx)
 	if (parsing_int_num(&line[*idx], &color->ib) == FAILURE)
 		return (FAILURE);
 
+	while (ft_isspace(line[*idx]))
+		*idx += 1;
+
 	return (SUCCESS);
 }
 
 // str1, str2
-char	*parsing_img_path(const char *line, bool *is_success)
+char	*parsing_img_path(const char *line, size_t *idx)
 {
-	size_t	idx;
 	char	*path;
 
-	idx = 0;
-
+	path = get_identifier(line, idx);
 	return (path);
 }
