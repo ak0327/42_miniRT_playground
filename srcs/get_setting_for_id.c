@@ -40,9 +40,9 @@ int get_setting_for_lights(const char *line, t_scene *scene)
 }
 
 // sp   XYZ   diameter                             RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
-// pl   XYZ   norm_vec[-1,1]
-// cy   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]
-// co   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]
+// pl   XYZ   norm_vec[-1,1]                       RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
+// cy   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
+// co   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
 int get_setting_for_objects(const char *line, t_scene *scene)
 {
 

@@ -44,6 +44,8 @@ SRC				= main.c \
 				  get_input.c \
 				  set_input.c \
 				  get_setting_for_id.c \
+				  parsing_config.c \
+
 
 
 

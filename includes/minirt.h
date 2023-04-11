@@ -451,6 +451,8 @@ int	get_setting_for_ambient(const char *line, t_scene *scene);
 int get_setting_for_lights(const char *line, t_scene *scene);
 int get_setting_for_objects(const char *line, t_scene *scene);
 
+/********** parsing_config **********/
+
 
 /********** main **********/
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
