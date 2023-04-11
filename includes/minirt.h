@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 10:13:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 12:40:52 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 # include "vector.h"
 
 /********** return value **********/
-# define PROCESS_ERROR 3
+# define PROCESS_ERROR	3
+# define INVALID_ID		(-1)
 
 /********** color **********/
 # define RED			0xFF0000
@@ -73,7 +74,6 @@
 #define MAX_RECURSION	8
 
 
-
 /********** enum **********/
 typedef enum	e_shape_type
 {
@@ -99,6 +99,18 @@ typedef enum	e_material_type
 	MT_PERFECT_REFLECTION,	// 完全鏡面反射
 	MT_REFRACTION,	// 完全鏡面反射・屈折
 } t_material_type;
+
+typedef enum	e_identifier
+{
+	id_camera = 0,
+	id_ambient = 1,
+	id_point_light = 2,
+	id_spot_light = 3,
+	id_sphere = 4,
+	id_plane = 5,
+	id_cylinder = 6,
+	id_corn = 7,
+} t_identifier;
 
 /********** struct **********/
 typedef struct	s_data
@@ -334,11 +346,9 @@ int			shading(t_vector vec_eye, t_vector vec_screen, t_light light, t_sphere sph
 
 /********** color **********/
 t_colorf	init_color(float r, float g, float b);
-//t_colorf	colorf_mul_k1c1k2c2(t_colorf c, float k1, t_colorf c1, float k2, t_colorf c2);
-//t_colorf	colorf_mul_k1c1k2c2(t_colorf *c, float k1, t_colorf *c1, float k2, t_colorf *c2);
 t_colorf	colorf_mul_k1c1k2c2(const t_colorf *c, float k1, const t_colorf *c1, float k2, const t_colorf *c2);
-t_colorf	colorf_add(const t_colorf c1, const t_colorf c2);
-t_colorf	colorf_muladd_k1c2_k2c2(const t_colorf c, float k1, const t_colorf c1, float k2, const t_colorf c2);
+t_colorf	colorf_add(t_colorf c1, t_colorf c2);
+t_colorf	colorf_muladd_k1c2_k2c2(t_colorf c, float k1, t_colorf c1, float k2, t_colorf c2);
 t_colorf	get_color_k1c1k2c2(float k1, const t_colorf *c1, float k2, const t_colorf *c2);
 
 /********** mlx_keyhooks **********/
@@ -433,6 +443,13 @@ void init_light(t_light *light, t_light_type lt,
 
 /********** get_input **********/
 int get_scene_config(t_scene *scene, t_camera *camera, const char *path);
+
+
+/********** setting **********/
+int get_setting_for_camera(const char *line, t_camera *camera);
+int	get_setting_for_ambient(const char *line, t_scene *scene);
+int get_setting_for_lights(const char *line, t_scene *scene);
+int get_setting_for_objects(const char *line, t_scene *scene);
 
 
 /********** main **********/

@@ -97,7 +97,7 @@ int	main(int argc, char **argv)
 	ret_val = get_scene_config(&scene, &camera, argv[1]);
 	if (ret_val != SUCCESS)
 	{
-		//todo:error mgs
+		//todo:error mgs, free_params
 		ft_dprintf(STDERR_FILENO, "Error\n");
 		return (1);
 	}
