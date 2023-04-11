@@ -43,7 +43,10 @@ SRC				= main.c \
 				  calc_refraction.c \
 				  get_input.c \
 				  set_input.c \
-				  get_setting_for_id.c \
+				  get_setting_for_camera.c \
+				  get_setting_for_ambient.c \
+				  get_setting_for_lights.c \
+				  get_setting_for_objects.c \
 				  parsing_config.c \
 				  ft_strtod.c \
 

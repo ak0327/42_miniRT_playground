@@ -1,134 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_setting_for_id.c                               :+:      :+:    :+:   */
+/*   get_setting_for_objects.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/11 12:36:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 18:39:13 by takira           ###   ########.fr       */
+/*   Created: 2023/04/11 18:40:32 by takira            #+#    #+#             */
+/*   Updated: 2023/04/11 18:43:11 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-// XYZ : 0.0, 0.0, 0.0
-// RGB : 255, 0, 255
-// image_path : image_path, bumpmap_path
-
-
-// C   XYZ   orientation_vec[-1,1]   FOV[0,180]
-int get_setting_for_camera(const char *line, t_camera *camera)
-{
-	size_t		idx;
-
-	idx = 0;
-	if (parsing_vec(line, &camera->pos, &idx) == FAILURE)
-		return (FAILURE);
-
-	if (parsing_vec(line, &camera->dir, &idx) == FAILURE)
-		return (FAILURE);
-
-	if (parsing_double_num(line, &camera->fov_deg, &idx) == FAILURE)
-		return (FAILURE);
-
-	if (!is_vec_in_normal_range(camera->dir))
-		return (FAILURE);
-
-	if (camera->fov_deg < 0.0f || 180.0f < camera->fov_deg)
-		return (FAILURE);
-
-	if (line[idx])
-		return (FAILURE);
-
-	return (SUCCESS);
-}
-
-// A   lightning_ratio[0,1]   RGB[0,255]
-int	get_setting_for_ambient(const char *line, t_scene *scene)
-{
-	size_t		idx;
-	float		lightning_ratio;
-	t_colorf	color;
-
-	idx = 0;
-	if (parsing_double_num(line, &lightning_ratio, &idx) == FAILURE)
-		return (FAILURE);
-
-	if (parsing_color(line, &color, &idx) == FAILURE)
-		return (FAILURE);
-
-	if (lightning_ratio < 0.0f || 1.0f < lightning_ratio)
-		return (FAILURE);
-
-	if (!is_color_in_range(color))
-		return (FAILURE);
-
-	if (line[idx])
-		return (FAILURE);
-
-	scene->ambient_illuminance = get_color_k1c1(lightning_ratio, color);
-
-	return (SUCCESS);
-}
-
-t_light_type	get_light_type(t_identifier id)
-{
-	if (id == id_point_light)
-		return (LT_POINT);
-	return (LT_SPOT);
-}
-
-
-// L   XYZ   brightness_ratio[0,1]   RGB[0,255]
-// sl  XYZ   brightness_ratio[0,1]   RGB[0,255]   angle[0,180]
-int get_setting_for_lights(const char *line, t_scene *scene, t_identifier id)
-{
-	t_light		light;
-	size_t		idx;
-	t_list		*new_list;
-	float		brightness_ratio;
-	t_colorf	color;
-
-	light.type = get_light_type(id);
-	idx = 0;
-	if (parsing_vec(line, &light.position, &idx) == FAILURE)
-		return (FAILURE);
-
-	if (parsing_double_num(line, &brightness_ratio, &idx) == FAILURE)
-		return (FAILURE);
-
-	if (parsing_color(line, &color, &idx) == FAILURE)
-		return (FAILURE);
-
-	if (brightness_ratio < 0.0f || 1.0f < brightness_ratio)
-		return (FAILURE);
-
-	if (!is_color_in_range(color))
-		return (FAILURE);
-
-	if (light.type == LT_SPOT)
-	{
-		if (parsing_double_num(line, &light.angle, &idx) == FAILURE)
-			return (FAILURE);
-		if (light.angle < 0.0f || 180.0f < light.angle)
-			return (FAILURE);
-	}
-
-	if (line[idx])
-		return (FAILURE);
-
-	light.illuminance = get_color_k1c1(brightness_ratio, color);
-
-	new_list = ft_lstnew(&light);
-	if (!new_list)
-		return (FAILURE);
-	ft_lstadd_back(&scene->light_list, new_list);
-
-	return (SUCCESS);
-}
-
-int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
+static int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
 {
 	char	*path;
 
@@ -173,7 +57,7 @@ int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
 }
 
 // sp   XYZ                    diameter            RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
-int get_setting_for_sphere(const char *line, t_shape *shape)
+static int get_setting_for_sphere(const char *line, t_shape *shape)
 {
 	size_t	idx;
 	float 	diameter;
@@ -208,7 +92,7 @@ int get_setting_for_sphere(const char *line, t_shape *shape)
 }
 
 // pl   XYZ   norm_vec[-1,1]                       RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
-int get_setting_for_plane(const char *line, t_shape *shape)
+static int get_setting_for_plane(const char *line, t_shape *shape)
 {
 	size_t	idx;
 	idx = 0;
@@ -243,7 +127,7 @@ int get_setting_for_plane(const char *line, t_shape *shape)
 }
 
 // cy   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
-int get_setting_for_cylinder(const char *line, t_shape *shape)
+static int get_setting_for_cylinder(const char *line, t_shape *shape)
 {
 	size_t	idx;
 	float	diameter;
@@ -288,7 +172,7 @@ int get_setting_for_cylinder(const char *line, t_shape *shape)
 }
 
 // co   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
-int get_setting_for_corn(const char *line, t_shape *shape)
+static int get_setting_for_corn(const char *line, t_shape *shape)
 {
 	size_t	idx;
 	float	diameter;
