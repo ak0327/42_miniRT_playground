@@ -6,29 +6,27 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 13:10:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 14:57:21 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:14:33 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	parsing_int_num(const char *line, int *int_num)
+int	parsing_int_num(const char *line, int *int_num, size_t *idx)
 {
-	size_t	head_idx;
-	size_t	len;
+	size_t	head_idx;	size_t	len;
 	char	*num_str;
 	bool	is_success;
 
-	head_idx = 0;
-	while (ft_isspace(line[head_idx]))
-		head_idx++;
+	head_idx = 0;	while (ft_isspace(line[*idx]))
+		*idx += 1;
 	len = 0;
-	while (line[head_idx + len] && !ft_isspace(line[head_idx + len]))
+	while (line[*idx + len] && !ft_isspace(line[*idx + len]))
 		len++;
-	if (!line[head_idx + len])
+	if (!line[*idx + len])
 		return (FAILURE);
 
-	num_str = ft_substr(line, head_idx, len);
+	num_str = ft_substr(line, *idx, len);
 	if (!num_str)
 	{
 		perror("malloc");
@@ -43,23 +41,21 @@ int	parsing_int_num(const char *line, int *int_num)
 }
 
 
-int	parsing_double_num(const char *line, double *double_num)
+int	parsing_double_num(const char *line, double *double_num, size_t *idx)
 {
-	size_t	head_idx;
-	size_t	len;
+	size_t	head_idx;	size_t	len;
 	char	*num_str;
 	bool	is_success;
 
-	head_idx = 0;
-	while (ft_isspace(line[head_idx]))
-		head_idx++;
+	while (ft_isspace(line[*idx]))
+		*idx += 1;
 	len = 0;
-	while (line[head_idx + len] && !ft_isspace(line[head_idx + len]) && line[head_idx + len] != ',')
+	while (line[*idx + len] && !ft_isspace(line[*idx + len]) && line[*idx + len] != ',')
 		len++;
-	if (!line[head_idx + len])
+	if (!line[*idx + len])
 		return (FAILURE);
 
-	num_str = ft_substr(line, head_idx, len);
+	num_str = ft_substr(line, *idx, len);
 	if (!num_str)
 	{
 		perror("malloc");
@@ -107,17 +103,17 @@ int parsing_vec(const char *line, t_vector *vec, size_t *idx)
 	while (ft_isspace(line[*idx]))
 		*idx += 1;
 
-	if (parsing_double_num(&line[*idx], &vec->dx) == FAILURE)
+	if (parsing_double_num(line, &vec->dx, idx) == FAILURE)
 		return (FAILURE);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_double_num(&line[*idx], &vec->dy) == FAILURE)
+	if (parsing_double_num(line, &vec->dy, idx) == FAILURE)
 		return (FAILURE);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_double_num(&line[*idx], &vec->dz) == FAILURE)
+	if (parsing_double_num(line, &vec->dz, idx) == FAILURE)
 		return (FAILURE);
 
 	while (ft_isspace(line[*idx]))
@@ -132,17 +128,17 @@ int parsing_color(const char *line, t_colorf *color, size_t *idx)
 	while (ft_isspace(line[*idx]))
 		*idx += 1;
 
-	if (parsing_int_num(&line[*idx], &color->ir) == FAILURE)
+	if (parsing_int_num(line, &color->ir, idx) == FAILURE)
 		return (FAILURE);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_int_num(&line[*idx], &color->ig) == FAILURE)
+	if (parsing_int_num(line, &color->ig, idx) == FAILURE)
 		return (FAILURE);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_int_num(&line[*idx], &color->ib) == FAILURE)
+	if (parsing_int_num(line, &color->ib, idx) == FAILURE)
 		return (FAILURE);
 
 	while (ft_isspace(line[*idx]))

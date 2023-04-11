@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:36:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 14:57:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:16:39 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@ int get_setting_for_camera(const char *line, t_camera *camera)
 	if (parsing_vec(line, &camera->dir, &idx) == FAILURE)
 		return (FAILURE);
 
-	if (parsing_double_num(line, &camera->d_fov_deg) == FAILURE)
-		return (FAILURE);
-
-	if (line[idx])
+	if (parsing_double_num(line, &camera->d_fov_deg, &idx) == FAILURE)
 		return (FAILURE);
 
 	if (!is_vec_in_normal_range(camera->dir))
@@ -41,12 +38,33 @@ int get_setting_for_camera(const char *line, t_camera *camera)
 	if (camera->d_fov_deg < 0.0 || 180.0 < camera->d_fov_deg)
 		return (FAILURE);
 
+	if (line[idx])
+		return (FAILURE);
+
 	return (SUCCESS);
 }
 
 // A   lightning_ratio[0,1]   RGB[0,255]
 int	get_setting_for_ambient(const char *line, t_scene *scene)
 {
+	size_t	idx;
+
+	idx = 0;
+
+	if (parsing_double_num(line, &scene->ambient_lightning_ratio, &idx) == FAILURE)
+		return (FAILURE);
+
+	if (parsing_color(line, &scene->ambient_illuminance, &idx) == FAILURE)
+		return (FAILURE);
+
+	if (scene->ambient_lightning_ratio < 0.0 || 1.0 < scene->ambient_lightning_ratio)
+		return (FAILURE);
+
+	if (!is_color_in_range(scene->ambient_illuminance))
+		return (FAILURE);
+
+	if (line[idx])
+		return (FAILURE);
 
 	return (SUCCESS);
 }

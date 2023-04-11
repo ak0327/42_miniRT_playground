@@ -288,6 +288,8 @@ typedef struct	s_scene
 	t_list		*light_list;
 	t_list		*shape_list;
 
+	double		ambient_lightning_ratio;
+
 } t_scene;
 
 typedef struct	s_intersection_point
@@ -464,8 +466,8 @@ int get_setting_for_objects(const char *line, t_scene *scene);
 char	*get_identifier(const char *line, size_t *idx);
 double	ft_strtod(const char *str, bool *is_success);
 
-int		parsing_int_num(const char *line, int *int_num);
-int		parsing_double_num(const char *line, double *double_num);
+int		parsing_int_num(const char *line, int *int_num, size_t *idx);
+int		parsing_double_num(const char *line, double *double_num, size_t *idx);
 
 int 	parsing_vec(const char *line, t_vector *vec, size_t *idx);
 int 	parsing_color(const char *line, t_colorf *color, size_t *idx);
