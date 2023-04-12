@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:32 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 15:05:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:22:29 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,8 +260,8 @@ int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id)
 		return (FAILURE);
 
 	shape->material.type = MT_DEFAULT;
-	shape->material.shininess = 8.0f;
-	SET_COLOR(shape->material.specular_ref, 0.3f, 0.3f, 0.3f);
+	shape->material.shininess = 20.0f;
+	SET_COLOR(shape->material.specular_ref, 0.6f, 0.6f, 0.6f);
 	shape->material.refraction_index = 1.51f;
 
 	ret_value = FAILURE;

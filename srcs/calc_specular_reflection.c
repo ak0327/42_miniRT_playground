@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 14:36:08 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:26:08 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_colorf calc_specular_reflection(const t_scene *scene, const t_ray *eye_ray,
 								  t_intersection_point intp, t_shape *shape)
 {
 	t_colorf	color;
-	t_light		light;
+	t_light		*light;
 	t_vector	dir_pos2light, normal;
 	float		nl_dot;
 	t_colorf	color_specular_ref;
@@ -37,20 +37,21 @@ t_colorf calc_specular_reflection(const t_scene *scene, const t_ray *eye_ray,
 	light_node = scene->light_list;
 	while (light_node)
 	{
+		light = light_node->content;
 		light_node = light_node->next;
 
-		dir_pos2light = get_dir_pos2light(light, intp.position);
+		dir_pos2light = get_dir_pos2light(*light, intp.position);
 		nl_dot = CLAMP(dot(&normal, &dir_pos2light), 0.0f, 1.0f);
 
-		if (is_obj_exists_between_light_and_eye(scene, dir_pos2light, &light, intp))
+		if (is_obj_exists_between_light_and_eye(scene, dir_pos2light, light, intp))
 			continue ;
 
-		if (light.type == LT_SPOT)
+		if (light->type == LT_SPOT)
 		{
 			light_to_pos = normalize_vec_inv(&dir_pos2light);
-			alpha = acosf(dot(&light_to_pos, &light.direction));
+			alpha = acosf(dot(&light_to_pos, &light->direction));
 
-			if (alpha > light.angle / 2.0f * (float)M_PI / 180.0f)
+			if (alpha > light->angle / 2.0f * (float)M_PI / 180.0f)
 				continue ;
 		}
 
@@ -68,7 +69,7 @@ t_colorf calc_specular_reflection(const t_scene *scene, const t_ray *eye_ray,
 
 		vr_dot_pow = powf(vr_dot, shape->material.shininess);
 		color_specular_ref = get_color_k1c1k2c2( 1.0f, &shape->material.specular_ref,
-												 vr_dot_pow, &light.illuminance);
+												 vr_dot_pow, &light->illuminance);
 
 		color = colorf_add(color, color_specular_ref);
 	}
