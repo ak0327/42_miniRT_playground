@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 21:24:27 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 19:50:38 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,12 @@ void	free_scene(t_scene scene)
 		free(scene.shapes[idx].material.texture.data);
 		idx++;
 	}
-	free(scene.lights);
-	free(scene.shapes);
+	if (scene.light_list)
+		ft_lstclear(&scene.light_list, free);
+	if (scene.shape_list)
+		ft_lstclear(&scene.shape_list, free);
+//?	free(scene.lights);
+//	free(scene.shapes);
 }
 
 /* **********************

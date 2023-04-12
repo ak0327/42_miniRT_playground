@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 13:10:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 17:21:06 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 12:38:46 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	parsing_int_num(const char *line, float *int_num, size_t *idx)
 		perror("malloc");
 		return (FAILURE);
 	}
+	*idx += len;
 	*int_num = (float)ft_atoi(num_str, &is_success);
 	free(num_str);
 
@@ -53,8 +54,6 @@ int	parsing_double_num(const char *line, float *double_num, size_t *idx)
 	len = 0;
 	while (line[*idx + len] && !ft_isspace(line[*idx + len]) && line[*idx + len] != ',')
 		len++;
-	if (!line[*idx + len])
-		return (FAILURE);
 
 	num_str = ft_substr(line, *idx, len);
 	if (!num_str)
@@ -62,6 +61,7 @@ int	parsing_double_num(const char *line, float *double_num, size_t *idx)
 		perror("malloc");
 		return (FAILURE);
 	}
+	*idx += len;
 	*double_num = (float)ft_strtod(num_str, &is_success);
 	free(num_str);
 
@@ -72,11 +72,11 @@ int	parsing_double_num(const char *line, float *double_num, size_t *idx)
 
 void	skip_delimiter(const char *line, size_t *idx)
 {
-	while (ft_isspace(line[*idx]))
+	while (line[*idx] && ft_isspace(line[*idx]))
 		*idx += 1;
 	if (line[*idx] == ',')
 		*idx += 1;
-	while (ft_isspace(line[*idx]))
+	while (line[*idx] && ft_isspace(line[*idx]))
 		*idx += 1;
 }
 
@@ -101,24 +101,35 @@ int is_color_in_range(t_colorf color)
 // double_num1, double_num2, double_num3
 int parsing_vec(const char *line, t_vector *vec, size_t *idx)
 {
-	while (ft_isspace(line[*idx]))
+	while (line[*idx] && ft_isspace(line[*idx]))
 		*idx += 1;
 
 	if (parsing_double_num(line, &vec->x, idx) == FAILURE)
+	{
+		printf("    parsing_vec NG :: parsing_double_num 1\n");
 		return (FAILURE);
+	}
 
 	skip_delimiter(line, idx);
 
 	if (parsing_double_num(line, &vec->y, idx) == FAILURE)
+	{
+		printf("    parsing_vec NG :: parsing_double_num 2\n");
 		return (FAILURE);
+	}
 
 	skip_delimiter(line, idx);
 
 	if (parsing_double_num(line, &vec->z, idx) == FAILURE)
+	{
+		printf("    parsing_vec NG :: parsing_double_num 3\n");
 		return (FAILURE);
+	}
 
-	while (ft_isspace(line[*idx]))
+	while (line[*idx] && ft_isspace(line[*idx]))
 		*idx += 1;
+
+	printf("    parsing_vec :: SUCCESS, (x,y,z)=(%f,%f,%f)\n", vec->x, vec->y, vec->z);
 
 	return (SUCCESS);
 }
@@ -126,25 +137,38 @@ int parsing_vec(const char *line, t_vector *vec, size_t *idx)
 // int_num1, int_num2, int_num3
 int parsing_color(const char *line, t_colorf *color, size_t *idx)
 {
-	while (ft_isspace(line[*idx]))
+	while (line[*idx] && ft_isspace(line[*idx]))
 		*idx += 1;
 
-	if (parsing_int_num(line, &color->r, idx) == FAILURE)
+	if (parsing_double_num(line, &color->r, idx) == FAILURE)
+	{
+		printf("    parsing_color NG :: parsing_int_num 1, r:%d\n", (int)color->r);
 		return (FAILURE);
+	}
+//	printf("    parsing_color :: r:%f\n", color->r);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_int_num(line, &color->g, idx) == FAILURE)
+	if (parsing_double_num(line, &color->g, idx) == FAILURE)
+	{
+		printf("    parsing_color NG :: parsing_int_num 2\n");
 		return (FAILURE);
+	}
+//	printf("    parsing_color :: g:%f\n", color->g);
 
 	skip_delimiter(line, idx);
 
-	if (parsing_int_num(line, &color->b, idx) == FAILURE)
+	if (parsing_double_num(line, &color->b, idx) == FAILURE)
+	{
+		printf("    parsing_color NG :: parsing_int_num 3\n");
 		return (FAILURE);
+	}
+//	printf("    parsing_color :: b:%f\n", color->b);
 
-	while (ft_isspace(line[*idx]))
+	while (line[*idx] && ft_isspace(line[*idx]))
 		*idx += 1;
 
+	printf("    parsing_color :: SUCCESS, (r,g,b)=(%f,%f,%f)\n", color->r, color->g, color->b);
 	return (SUCCESS);
 }
 

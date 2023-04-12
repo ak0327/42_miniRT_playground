@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 19:21:02 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 19:22:03 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,7 @@ t_colorf	get_diffuse_reflection_color(t_shape *shape, float nl_dot, t_light *lig
 	t_colorf	color;
 	t_vector	light_to_pos;
 	float		alpha;
-	t_colorf	color_diffuse_ref, color_specular_ref;
-	t_vector	ref_dir, inv_eye_dir, normal;
-	float		vr_dot, vr_dot_pow;
+	t_colorf	color_diffuse_ref;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 

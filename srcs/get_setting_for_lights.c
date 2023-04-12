@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:17 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 18:41:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/11 19:33:11 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ int get_setting_for_lights(const char *line, t_scene *scene, t_identifier id)
 	if (!new_list)
 		return (FAILURE);
 	ft_lstadd_back(&scene->light_list, new_list);
+
+	printf("lights OK :)\n");
 
 	return (SUCCESS);
 }
