@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:05 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 12:41:21 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 14:25:12 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,16 @@ int	get_setting_for_ambient(const char *line, t_scene *scene)
 		printf("   ambient NG :: parsing_double_num\n");
 		return (FAILURE);
 	}
+	if (lightning_ratio < 0.0f || 1.0f < lightning_ratio)
+	{
+		printf("   ambient NG :: lightning_ratio out of range\n");
+		return (FAILURE);
+	}
 	printf("   ambient :: ratio:%f\n", lightning_ratio);
 
 	if (parsing_color(line, &color, &idx) == FAILURE)
 	{
 		printf("   ambient NG :: parsing_color\n");
-		return (FAILURE);
-	}
-
-	if (lightning_ratio < 0.0f || 1.0f < lightning_ratio)
-	{
-		printf("   ambient NG :: lightning_ratio out of range\n");
 		return (FAILURE);
 	}
 
@@ -51,6 +50,7 @@ int	get_setting_for_ambient(const char *line, t_scene *scene)
 		return (FAILURE);
 	}
 
+	color = get_color_k1c1(1.0f / 255.0f, color);
 	scene->ambient_illuminance = get_color_k1c1(lightning_ratio, color);
 
 	printf("   ambient OK :)\n");

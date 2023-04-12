@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 19:22:03 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 14:31:16 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,11 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp
 			continue ;
 
 		color_diffuse_ref = get_diffuse_reflection_color(shape, nl_dot, light, dir_pos2light, eye_ray.direction);
-		color = colorf_add(color, color_diffuse_ref);
-
 		color_image_texture = get_image_reflection_color(shape, intp, nl_dot, light);
-		color = colorf_add(color, color_image_texture);
-
 		color_checker_texture = get_checker_reflection_color(shape, intp, nl_dot, light);
+
+		color = colorf_add(color, color_diffuse_ref);
+		color = colorf_add(color, color_image_texture);
 		color = colorf_add(color, color_checker_texture);
 
 	}

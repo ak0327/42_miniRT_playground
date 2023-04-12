@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 16:19:43 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 10:35:10 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 14:45:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static t_colorf	get_checker_color_on_plane(t_intersection_point intp, t_shape *shape)
 {
-	t_colorf		color;
+//	t_colorf		color;
 	int				condition_checker;
 	t_texture_map	pattern_map;
-	float			ra, ga, ba;
-	float			rb, gb, bb;
+//	float			ra, ga, ba;
+//	float			rb, gb, bb;
 	float			u_mag, v_mag;
 
 	pattern_map = get_planar_map(shape->data.plane.position, intp.position, intp.normal);
@@ -26,59 +26,68 @@ static t_colorf	get_checker_color_on_plane(t_intersection_point intp, t_shape *s
 	u_mag = 1.0f / 50.0f;
 	v_mag = 1.0f / 50.0f;
 
-	ra = 0.3f; ga = 0.3f; ba = 0.3f;
-	rb = 0.0f; gb = 0.0f; bb = 0.0f;
+//	ra = 0.3f; ga = 0.3f; ba = 0.3f;
+//	rb = 0.0f; gb = 0.0f; bb = 0.0f;
 
-	SET_COLOR(color, ra, ga, ba)
+//	SET_COLOR(color, ra, ga, ba)
 	condition_checker = (int)(floorf(pattern_map.u * u_mag) + floorf(pattern_map.v * v_mag)) % 2;
 	if (condition_checker)
-	SET_COLOR(color, rb, gb, bb)
-	return (color);
+		return (shape->material.checker_color);
+	return (shape->material.diffuse_ref);
+//	SET_COLOR(color, rb, gb, bb)
+//	return (color);
 }
 
 static t_colorf	get_checker_color_on_sphere(t_intersection_point intp, t_shape *shape)
 {
-	t_colorf		color;
+//	t_colorf		color;
 	int				condition_checker;
 	t_texture_map	pattern_map;
-	float			ra, ga, ba;
-	float			rb, gb, bb;
+//	float			ra, ga, ba;
+//	float			rb, gb, bb;
 	float			u_mag, v_mag;
 
 	pattern_map = get_spherical_map(intp.position, shape->data.sphere.center, shape->data.sphere.radius);
 
 	u_mag = 10.0f;
 	v_mag = 10.0f;
-	ra = 0.2f; ga = 0.3f; ba = 0.6f;
-	rb = 0.8f; gb = 0.8f; bb = 0.8f;
+//	ra = 0.2f; ga = 0.3f; ba = 0.6f;
+//	rb = 0.8f; gb = 0.8f; bb = 0.8f;
 
-	SET_COLOR(color, ra, ga, ba)
+//	SET_COLOR(color, ra, ga, ba)
 	condition_checker = (int)(floorf(pattern_map.u * u_mag) + floorf(pattern_map.v * v_mag)) % 2;
 	if (condition_checker)
-	SET_COLOR(color, rb, gb, bb)
-	return (color);
+		return (shape->material.checker_color);
+	return (shape->material.diffuse_ref);
+
+//	SET_COLOR(color, rb, gb, bb)
+//	return (color);
 }
 
 static t_colorf	get_checker_color_on_cylinder(t_intersection_point intp, t_shape *shape)
 {
-	t_colorf		color;
+//	t_colorf		color;
 	int				condition_checker;
 	t_texture_map	pattern_map;
-	float			ra, ga, ba;
-	float			rb, gb, bb;
+//	float			ra, ga, ba;
+//	float			rb, gb, bb;
 	float			u_mag, v_mag;
 
 	pattern_map = get_cylindrical_map( intp.position, shape->data.cylinder.position, shape->data.cylinder.normal, shape->data.cylinder.height);
 	u_mag = 10.0f;
 	v_mag = 7.0f;
-	ra = 0.2f; ga = 0.7f; ba = 0.2f;
-	rb = 0.8f; gb = 0.8f; bb = 0.8f;
+//	ra = 0.2f; ga = 0.7f; ba = 0.2f;
+//	rb = 0.8f; gb = 0.8f; bb = 0.8f;
 
-	SET_COLOR(color, ra, ga, ba)
+//	SET_COLOR(color, ra, ga, ba)
 	condition_checker = (int)(floorf(pattern_map.u * u_mag) + floorf(pattern_map.v * v_mag)) % 2;
 	if (condition_checker)
-	SET_COLOR(color, rb, gb, bb)
-	return (color);
+		return (shape->material.checker_color);
+	return (shape->material.diffuse_ref);
+
+//	if (condition_checker)
+//	SET_COLOR(color, rb, gb, bb)
+//	return (color);
 }
 
 static t_colorf	get_checker_color_on_corn(t_intersection_point intp, t_shape *shape)
@@ -86,8 +95,8 @@ static t_colorf	get_checker_color_on_corn(t_intersection_point intp, t_shape *sh
 	t_colorf		color;
 	int				condition_checker;
 	t_texture_map	pattern_map;
-	float			ra, ga, ba;
-	float			rb, gb, bb;
+//	float			ra, ga, ba;
+//	float			rb, gb, bb;
 	float			u_mag, v_mag;
 
 	u_mag = 10.0f;
@@ -95,14 +104,18 @@ static t_colorf	get_checker_color_on_corn(t_intersection_point intp, t_shape *sh
 
 	pattern_map = get_conical_map( intp.position, shape->data.corn.position, shape->data.corn.normal, shape->data.corn.height);
 
-	ra = 0.7f; ga = 0.4f; ba = 0.2f;
-	rb = 0.8f; gb = 0.8f; bb = 0.8f;
+//	ra = 0.7f; ga = 0.4f; ba = 0.2f;
+//	rb = 0.8f; gb = 0.8f; bb = 0.8f;
 
-	SET_COLOR(color, ra, ga, ba)
+//	SET_COLOR(color, ra, ga, ba)
 	condition_checker = (int)(floorf(pattern_map.u * u_mag) + floorf(pattern_map.v * v_mag)) % 2;
 	if (condition_checker)
-	SET_COLOR(color, rb, gb, bb)
-	return (color);
+		return (shape->material.checker_color);
+	return (shape->material.diffuse_ref);
+
+//	if (condition_checker)
+//	SET_COLOR(color, rb, gb, bb)
+//	return (color);
 }
 
 t_colorf	get_checker_color(t_intersection_point intp, t_shape *shape)

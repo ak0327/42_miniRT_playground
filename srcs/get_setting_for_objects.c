@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:32 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 13:42:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:05:54 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,18 @@ char	*get_path(const char *line, size_t *idx)
 
 static int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
 {
-	char	*path;
+	char		*path;
+	t_colorf	checker_color;
 
 	if (ft_isdigit(line[*idx]))
 	{
 		shape->material.is_checker = true;
-		if (parsing_color(line, &shape->material.checker_color, idx) == FAILURE)
+		if (parsing_color(line, &checker_color, idx) == FAILURE)
 			return (FAILURE);
-		if (!is_color_in_range(shape->material.checker_color))
+		if (!is_color_in_range(checker_color))
 			return (FAILURE);
-		shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, shape->material.diffuse_ref);
+		shape->material.checker_color = get_color_k1c1(1.0f / 255.0f, checker_color);
+//		shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, shape->material.diffuse_ref);
 
 		if (!line[*idx])
 			return (SUCCESS);
@@ -87,8 +89,9 @@ static int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
 // sp   XYZ                    diameter            RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
 static int get_setting_for_sphere(const char *line, t_shape *shape)
 {
-	size_t	idx;
-	float 	diameter;
+	size_t		idx;
+	float 		diameter;
+	t_colorf	color;
 
 	shape->type = ST_SPHERE;
 	idx = 0;
@@ -102,15 +105,13 @@ static int get_setting_for_sphere(const char *line, t_shape *shape)
 	shape->data.sphere.radius = diameter / 2.0f;
 	printf("   [sp] diameter:%f\n", diameter);
 
-	if (parsing_color(line, &shape->material.diffuse_ref, &idx) == FAILURE)
+	if (parsing_color(line, &color, &idx) == FAILURE)
 		return (FAILURE);
-	if (!is_color_in_range(shape->material.diffuse_ref))
+	if (!is_color_in_range(color))
 		return (FAILURE);
-	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, shape->material.diffuse_ref);
 
-	shape->material.is_checker = false;
-	shape->material.texture.data = NULL;
-	shape->material.bump.data = NULL;
+	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, color);
+//	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, shape->material.diffuse_ref);
 
 	if (!line[idx])
 		return (SUCCESS);
@@ -124,8 +125,8 @@ static int get_setting_for_sphere(const char *line, t_shape *shape)
 // pl   XYZ   norm_vec[-1,1]                       RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
 static int get_setting_for_plane(const char *line, t_shape *shape)
 {
-	size_t	idx;
-	idx = 0;
+	size_t		idx;
+	t_colorf	color;
 
 	shape->type = ST_PLANE;
 	idx = 0;
@@ -138,15 +139,12 @@ static int get_setting_for_plane(const char *line, t_shape *shape)
 	if (!is_vec_in_normal_range(shape->data.plane.normal))
 		return (FAILURE);
 
-	if (parsing_color(line, &shape->material.diffuse_ref, &idx) == FAILURE)
+	if (parsing_color(line, &color, &idx) == FAILURE)
 		return (FAILURE);
-	if (!is_color_in_range(shape->material.diffuse_ref))
+	if (!is_color_in_range(color))
 		return (FAILURE);
-	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, shape->material.diffuse_ref);
-
-	shape->material.is_checker = false;
-	shape->material.texture.data = NULL;
-	shape->material.bump.data = NULL;
+//	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, shape->material.diffuse_ref);
+	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, color);
 
 	if (!line[idx])
 		return (SUCCESS);
@@ -160,8 +158,9 @@ static int get_setting_for_plane(const char *line, t_shape *shape)
 // cy   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
 static int get_setting_for_cylinder(const char *line, t_shape *shape)
 {
-	size_t	idx;
-	float	diameter;
+	size_t		idx;
+	float		diameter;
+	t_colorf	color;
 
 	shape->type = ST_CYLINDER;
 	idx = 0;
@@ -186,15 +185,12 @@ static int get_setting_for_cylinder(const char *line, t_shape *shape)
 		return (FAILURE);
 	printf("   [cylinder] height:%f\n", shape->data.cylinder.height);
 
-	if (parsing_color(line, &shape->material.diffuse_ref, &idx) == FAILURE)
+	if (parsing_color(line, &color, &idx) == FAILURE)
 		return (FAILURE);
-	if (!is_color_in_range(shape->material.diffuse_ref))
+	if (!is_color_in_range(color))
 		return (FAILURE);
-	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, shape->material.diffuse_ref);
-
-	shape->material.is_checker = false;
-	shape->material.texture.data = NULL;
-	shape->material.bump.data = NULL;
+//	shape->material.diffuse_ref = get_color_k1c1(255.0f, shape->material.diffuse_ref);
+	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, color);
 
 	if (!line[idx])
 		return (SUCCESS);
@@ -208,66 +204,36 @@ static int get_setting_for_cylinder(const char *line, t_shape *shape)
 // co   XYZ   norm_vec[-1,1]   diameter   height   RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
 static int get_setting_for_corn(const char *line, t_shape *shape)
 {
-	size_t	idx;
-	float	diameter;
+	size_t		idx;
+	float		diameter;
+	t_colorf	color;
 
 	shape->type = ST_CORN;
 	idx = 0;
 	if (parsing_vec(line, &shape->data.corn.position, &idx) == FAILURE)
-	{
-		printf("   [corn] get_setting_for_corn, parsing_vec 1 NG\n");
 		return (FAILURE);
-	}
-
 	if (parsing_vec(line, &shape->data.corn.normal, &idx) == FAILURE)
-	{
-		printf("   [corn] get_setting_for_corn, parsing_vec 2 NG\n");
 		return (FAILURE);
-	}
 	if (!is_vec_in_normal_range(shape->data.corn.normal))
-	{
-		printf("   [corn] get_setting_for_corn, parsing_vec 2 out of range NG\n");
 		return (FAILURE);
-	}
-
 	if (parsing_double_num(line, &diameter, &idx) == FAILURE)
-	{
-		printf("   [corn] get_setting_for_corn, parsing_double_num 1 NG\n");
 		return (FAILURE);
-	}
 	if (diameter <= 0.0f)
-	{
-		printf("   [corn] get_setting_for_corn, diameter out of range\n");
 		return (FAILURE);
-	}
 	shape->data.corn.radius = diameter / 2.0f;
 	printf("   [corn] diameter:%f\n", diameter);
-
 	if (parsing_double_num(line, &shape->data.corn.height, &idx) == FAILURE)
-	{
-		printf("   [corn] get_setting_for_corn, parsing_double_num 2 NG\n");
 		return (FAILURE);
-	}
 	if (shape->data.corn.height <= 0.0f)
-	{
-		printf("   [corn] get_setting_for_corn, height out of range\n");
 		return (FAILURE);
-	}
 	printf("   [corn] height:%f\n", shape->data.corn.height);
-
-	if (parsing_color(line, &shape->material.diffuse_ref, &idx) == FAILURE)
-	{
-		printf("   [corn] get_setting_for_corn, parsing_color NG\n");
+	if (parsing_color(line, &color, &idx) == FAILURE)
 		return (FAILURE);
-	}
-	if (!is_color_in_range(shape->material.diffuse_ref))
-	{
-		printf("   [corn] get_setting_for_corn, color out of range NG\n");
+	if (!is_color_in_range(color))
 		return (FAILURE);
-	}
-	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, shape->material.diffuse_ref);
+//	shape->material.diffuse_ref = get_color_k1c1(255.0f, shape->material.diffuse_ref);
 
-
+	shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, color);
 	shape->data.corn.origin = vec_calc(1.0f, &shape->data.corn.position, shape->data.corn.height, &shape->data.corn.normal);
 
 	if (!line[idx])
@@ -292,6 +258,11 @@ int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id)
 	shape = (t_shape *) ft_calloc(sizeof(t_shape), 1);
 	if (!shape)
 		return (FAILURE);
+
+	shape->material.type = MT_DEFAULT;
+	shape->material.shininess = 8.0f;
+	SET_COLOR(shape->material.specular_ref, 0.3f, 0.3f, 0.3f);
+	shape->material.refraction_index = 1.51f;
 
 	ret_value = FAILURE;
 	if (id == id_sphere)

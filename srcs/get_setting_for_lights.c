@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:17 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 14:01:16 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:02:19 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,10 @@ int get_setting_for_lights(const char *line, t_scene *scene, t_identifier id)
 
 	if (parsing_double_num(line, &brightness_ratio, &idx) == FAILURE)
 		return (FAILURE);
-
-	if (parsing_color(line, &color, &idx) == FAILURE)
+	if (brightness_ratio < 0.0f || 1.0f < brightness_ratio)
 		return (FAILURE);
 
-	if (brightness_ratio < 0.0f || 1.0f < brightness_ratio)
+	if (parsing_color(line, &color, &idx) == FAILURE)
 		return (FAILURE);
 
 	if (!is_color_in_range(color))
@@ -62,7 +61,9 @@ int get_setting_for_lights(const char *line, t_scene *scene, t_identifier id)
 	if (line[idx])
 		return (FAILURE);
 
+	color = get_color_k1c1(1.0f / 255.0f, color);
 	light->illuminance = get_color_k1c1(brightness_ratio, color);
+
 	new_list = ft_lstnew(light);
 	if (!new_list)
 		return (FAILURE);

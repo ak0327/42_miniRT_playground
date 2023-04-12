@@ -205,6 +205,7 @@ typedef struct	s_material
 	float			shininess;		// alpha 光沢度
 
 	t_material_type	type;			// default or 完全鏡面反射
+
 	t_colorf		reflect_ref;	// kf 完全鏡面反射光/屈折光係数RGB
 	float			refraction_index;	// 絶対屈折率
 

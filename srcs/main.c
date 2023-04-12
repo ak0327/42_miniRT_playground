@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 14:01:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:06:08 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,9 @@ void	draw_screen(t_data data, t_camera camera, t_scene scene)
 			r = (int)(255 * CLAMP(color.r, 0, 1));
 			g = (int)(255 * CLAMP(color.g, 0, 1));
 			b = (int)(255 * CLAMP(color.b, 0, 1));
+//			r = (int)(CLAMP(color.r, 0, 255));
+//			g = (int)(CLAMP(color.g, 0, 255));
+//			b = (int)(CLAMP(color.b, 0, 255));
 
 			my_mlx_pixel_put(&data, i, j, r << 16 | g << 8 | b);
 

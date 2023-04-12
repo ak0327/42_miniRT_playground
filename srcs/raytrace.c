@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 17:26:30 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 19:03:17 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 14:33:49 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	recursive_raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
-	ambient_reflect_color = calc_ambient_reflection(shape->material.ambient_ref, scene->ambient_illuminance);
+	ambient_reflect_color = scene->ambient_illuminance;
 	diffuse_reflect_color = calc_diffuse_reflection(scene, intp, *eye_ray, shape);
 	specular_reflect_color = calc_specular_reflection(scene, eye_ray, intp, shape);
 	perfect_reflect_color = calc_perfect_reflection(scene, eye_ray, out_col, recursion_level, intp, shape);
