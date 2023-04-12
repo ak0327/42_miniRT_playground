@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:28:37 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 21:52:10 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:49:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	get_img(t_img *img, const char *img_path)
 	if (fd < 0)
 		return (FAILURE);
 
+	printf("get_img 1\n");
 	img->data = NULL;
 	col = 0;
 	idx = 0;
@@ -66,6 +67,8 @@ int	get_img(t_img *img, const char *img_path)
 			img->data = NULL;
 			if (close(fd) < 0)
 				printf("error\n");
+
+			printf("get_img 2\n");
 			return (FAILURE);
 		}
 		if (col == 2)
@@ -74,6 +77,13 @@ int	get_img(t_img *img, const char *img_path)
 			img->width = ft_atoi(split[0], &is_atoi_success);
 			img->height = ft_atoi(split[1], &is_atoi_success);
 			img->data = (int *)ft_calloc(sizeof(int), img->width * 3 * img->height);
+			if (!img->data)
+			{
+				perror("malloc");
+				if (close(fd) < 0)
+					printf("error\n");
+				return (FAILURE);
+			}
 		}
 		else if (col >= 4)
 		{
@@ -92,6 +102,8 @@ int	get_img(t_img *img, const char *img_path)
 
 	if (close(fd) < 0)
 		printf("error\n");
+
+	printf("get_img 3\n");
 	return (SUCCESS);
 }
 
