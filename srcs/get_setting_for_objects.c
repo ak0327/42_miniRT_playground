@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:32 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 15:22:29 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:37:52 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ static int get_setting_for_plane(const char *line, t_shape *shape)
 
 	if (!is_vec_in_normal_range(shape->data.plane.normal))
 		return (FAILURE);
+	normalize(&shape->data.plane.normal);
 
 	if (parsing_color(line, &color, &idx) == FAILURE)
 		return (FAILURE);
@@ -171,6 +172,7 @@ static int get_setting_for_cylinder(const char *line, t_shape *shape)
 		return (FAILURE);
 	if (!is_vec_in_normal_range(shape->data.cylinder.normal))
 		return (FAILURE);
+	normalize(&shape->data.cylinder.normal);
 
 	if (parsing_double_num(line, &diameter, &idx) == FAILURE)
 		return (FAILURE);
@@ -216,6 +218,9 @@ static int get_setting_for_corn(const char *line, t_shape *shape)
 		return (FAILURE);
 	if (!is_vec_in_normal_range(shape->data.corn.normal))
 		return (FAILURE);
+	normalize(&shape->data.corn.normal);
+
+
 	if (parsing_double_num(line, &diameter, &idx) == FAILURE)
 		return (FAILURE);
 	if (diameter <= 0.0f)
