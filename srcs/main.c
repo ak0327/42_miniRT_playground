@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 15:06:08 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 17:55:28 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,18 @@ void	free_scene(t_scene *scene)
 
 }
 
+t_colorf	get_gradation_background_color(float height_ratio)
+{
+	t_colorf	color;
+	float		r, g, b;
+
+	r = 1.0f - height_ratio + height_ratio * 0.5f;
+	g = 1.0f - height_ratio + height_ratio * 0.7f;
+	b = 1.0f - height_ratio + height_ratio * 1.0f;
+	SET_COLOR(color, r, g, b);
+	return (color);
+}
+
 /* **********************
 
  Coordinates : Left hand
@@ -95,8 +107,7 @@ void	draw_screen(t_data data, t_camera camera, t_scene scene)
 	t_colorf	color;
 	int			i, j;
 	int			r, g, b;
-	/* draw */
-	float bg_ratio = 1.0f;
+	float		height_ratio = 1.0f;
 
 	eye_ray.start = camera.pos;
 
@@ -106,24 +117,20 @@ void	draw_screen(t_data data, t_camera camera, t_scene scene)
 		i = 0;
 		while (i < data.win_width)
 		{
-			SET_COLOR(color, (1.0f - bg_ratio) + bg_ratio * 0.5f, (1.0f - bg_ratio) + bg_ratio * 0.7f, (1.0f - bg_ratio) + bg_ratio * 1.0f)
-//			color = init_color((float)(100.0f/255.0f), (float)(149.0f/255.0f), (float)(237.0f/255.0f));
-
+			color = get_gradation_background_color(height_ratio);
 			eye_ray.direction = ray_dir(i, j, camera);
 			raytrace(&scene, &eye_ray, &color);
+
 			r = (int)(255 * CLAMP(color.r, 0, 1));
 			g = (int)(255 * CLAMP(color.g, 0, 1));
 			b = (int)(255 * CLAMP(color.b, 0, 1));
-//			r = (int)(CLAMP(color.r, 0, 255));
-//			g = (int)(CLAMP(color.g, 0, 255));
-//			b = (int)(CLAMP(color.b, 0, 255));
 
 			my_mlx_pixel_put(&data, i, j, r << 16 | g << 8 | b);
 
 			i++;
 		}
 		j++;
-		bg_ratio = 1.0f - (float)j / (float)data.win_height;
+		height_ratio = 1.0f - (float)j / (float)data.win_height;
 	}
 }
 
