@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:32 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 12:35:34 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 13:42:47 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,10 +270,6 @@ static int get_setting_for_corn(const char *line, t_shape *shape)
 
 	shape->data.corn.origin = vec_calc(1.0f, &shape->data.corn.position, shape->data.corn.height, &shape->data.corn.normal);
 
-	shape->material.is_checker = false;
-	shape->material.texture.data = NULL;
-	shape->material.bump.data = NULL;
-
 	if (!line[idx])
 		return (SUCCESS);
 	if (get_bonus_option(line, shape, &idx) == FAILURE)
@@ -290,23 +286,27 @@ static int get_setting_for_corn(const char *line, t_shape *shape)
 int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id)
 {
 	int		ret_value;
-	t_shape	shape;
+	t_shape	*shape;
 	t_list	*new_list;
+
+	shape = (t_shape *) ft_calloc(sizeof(t_shape), 1);
+	if (!shape)
+		return (FAILURE);
 
 	ret_value = FAILURE;
 	if (id == id_sphere)
-		ret_value = get_setting_for_sphere(line, &shape);
+		ret_value = get_setting_for_sphere(line, shape);
 	else if (id == id_plane)
-		ret_value = get_setting_for_plane(line, &shape);
+		ret_value = get_setting_for_plane(line, shape);
 	else if (id == id_cylinder)
-		ret_value = get_setting_for_cylinder(line, &shape);
+		ret_value = get_setting_for_cylinder(line, shape);
 	else if (id == id_corn)
-		ret_value = get_setting_for_corn(line, &shape);
+		ret_value = get_setting_for_corn(line, shape);
 
 	if (ret_value == FAILURE)
 		return (FAILURE);
 
-	new_list = ft_lstnew(&shape);
+	new_list = ft_lstnew(shape);
 	if (!new_list)
 		return (FAILURE);
 	ft_lstadd_back(&scene->shape_list, new_list);

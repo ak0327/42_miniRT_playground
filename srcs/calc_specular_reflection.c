@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 19:14:11 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 13:48:36 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ t_colorf calc_specular_reflection(const t_scene *scene, const t_ray *eye_ray,
 								  t_intersection_point intp, t_shape *shape)
 {
 	t_colorf	color;
-	size_t		idx;
 	t_light		light;
 	t_vector	dir_pos2light, normal;
 	float		nl_dot;
@@ -27,17 +26,18 @@ t_colorf calc_specular_reflection(const t_scene *scene, const t_ray *eye_ray,
 	t_vector	light_to_pos;
 	float		alpha;
 
+	t_list		*light_node;
+
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
 	normal = intp.normal;
 	if (shape->material.bump.data)
 		normal = get_bump_normal(intp, shape);
 
-	idx = 0;
-	while (idx < scene->num_lights)
+	light_node = scene->light_list;
+	while (light_node)
 	{
-		light = scene->lights[idx];
-		idx++;
+		light_node = light_node->next;
 
 		dir_pos2light = get_dir_pos2light(light, intp.position);
 		nl_dot = CLAMP(dot(&normal, &dir_pos2light), 0.0f, 1.0f);

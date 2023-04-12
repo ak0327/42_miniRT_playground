@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 20:10:07 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 12:42:12 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 14:10:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,8 @@ static int parse_config_line(t_scene *scene, t_camera *camera, const char *line)
 		printf(" Error: get_params_for_identifier (parse_config_line)\n");
 		return (FAILURE);
 	}
-	printf(" OK: parse_config_line\n");
+
+	printf(" OK :: PARSING OK :) parse_config_line\n");
 
 	return (SUCCESS);
 }
@@ -135,6 +136,7 @@ static int	parsing_config_line_by_line(t_scene *scene, t_camera *camera, int fd)
 {
 	char	*line;
 	int		ret_value;
+	int 	ret_parse;
 
 	ret_value = SUCCESS;
 	printf("## gnl START ##\n");
@@ -143,10 +145,13 @@ static int	parsing_config_line_by_line(t_scene *scene, t_camera *camera, int fd)
 		line = get_next_line(fd, false);
 		if (!line)
 			break ;
-		ret_value *= parse_config_line(scene, camera, line);
+		ret_parse = parse_config_line(scene, camera, line);
+		if (ret_parse == FAILURE)
+			printf("parse FAILURE\n");
+		ret_value &= ret_parse;
 		free(line);
 	}
-	printf("## gnl END ##\n");
+	printf("## gnl END ## ret:%d\n", ret_value);
 	return (ret_value);
 }
 

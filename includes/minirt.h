@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 18:58:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 13:46:48 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,12 +234,12 @@ typedef struct	s_light
 
 typedef struct	s_scene
 {
-	t_shape		*shapes;				// 物体リストへのポインタ
-	size_t		num_shapes_capacity;	// 物体リストの最大格納数
-	size_t		num_shapes;				// 物体リストに格納されている数
-	t_light		*lights;				// 光源リストへのポインタ
-	size_t		num_lights_capacity;	// 光源リストの最大格納数
-	size_t		num_lights;				// 光源リストに格納されている数
+//	t_shape		*shapes;				// 物体リストへのポインタ
+//	size_t		num_shapes_capacity;	// 物体リストの最大格納数
+//	size_t		num_shapes;				// 物体リストに格納されている数
+//	t_light		*lights;				// 光源リストへのポインタ
+//	size_t		num_lights_capacity;	// 光源リストの最大格納数
+//	size_t		num_lights;				// 光源リストに格納されている数
 
 
 	t_colorf	ambient_illuminance;	// 環境光の強さIa RGB
@@ -389,23 +389,23 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col);
 
 
 /********** init **********/
-void		scene_setting(t_scene *scene);
-void		init_shape(t_shape *shape, t_shape_type st, ...);
-void		init_material(t_material *mat,
-				   float ambR, float ambG, float ambB,
-				   float difR, float difG, float difB,
-				   float speR, float speG, float speB,
-				   float shns,
-				   t_material_type type,
-				   float refR, float refG, float refB,
-				   float refraction_index,
-				   char *texture_path, char *bump_path, bool is_checker);
-
-void init_light(t_light *light, t_light_type lt,
-				float px, float py, float pz,
-				float dirx, float diry, float dirz,
-				float illR, float illG, float illB,
-				float angle);
+//void		scene_setting(t_scene *scene);
+//void		init_shape(t_shape *shape, t_shape_type st, ...);
+//void		init_material(t_material *mat,
+//				   float ambR, float ambG, float ambB,
+//				   float difR, float difG, float difB,
+//				   float speR, float speG, float speB,
+//				   float shns,
+//				   t_material_type type,
+//				   float refR, float refG, float refB,
+//				   float refraction_index,
+//				   char *texture_path, char *bump_path, bool is_checker);
+//
+//void init_light(t_light *light, t_light_type lt,
+//				float px, float py, float pz,
+//				float dirx, float diry, float dirz,
+//				float illR, float illG, float illB,
+//				float angle);
 
 
 
