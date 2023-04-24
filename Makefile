@@ -19,17 +19,14 @@ VPATH			= $(SRC_DIR) $(INCLUDE_DIR)
 
 SRC_DIR			= srcs
 SRC				= main.c \
-				  vector.c \
 				  screen.c \
 				  sphere.c \
 				  color.c \
 				  reflection.c \
 				  intersection.c \
-				  mlx_keyhooks.c \
 				  raytrace.c \
 				  scene.c \
 				  camera.c \
-				  matrix.c \
 				  calc_ambient_reflection.c \
 				  calc_diffuse_reflection.c \
 				  calc_specular_reflection.c \
@@ -49,6 +46,12 @@ SRC				= main.c \
 				  init_setting/init.c \
 				  init_setting/parsing_config.c \
 				  init_setting/validate_config.c \
+				  vactor_matrix/matrix.c \
+				  vactor_matrix/vector.c \
+				  mlx_helper/mlx_keyhooks.c \
+
+
+
 
 
 SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))

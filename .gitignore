@@ -7,6 +7,9 @@
 !minilibx-linux
 
 !srcs/init_setting/
+!srcs/mlx_helper/
+!srcs/vector_matrix/
+!srcs/raytracing/
 
 !*.c
 !*.h
