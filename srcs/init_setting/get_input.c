@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 20:10:07 by takira            #+#    #+#             */
-/*   Updated: 2023/04/24 17:07:35 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 20:13:55 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int		get_identifier_no(const char *id_str)
 	return (INVALID_ID);
 }
 
-static int getd_and_validate_params_controller(int id_no, const char *line, t_scene *scene, t_camera *camera)
+static int get_and_validate_params_controller(int id_no, const char *line, t_scene *scene, t_camera *camera)
 {
 	int ret_value;
 
@@ -96,10 +96,10 @@ static int parse_and_validate_config_line(t_scene *scene, t_camera *camera, cons
 		return (FAILURE);
 	}
 
-	// getd_and_validate_params_controller
-	if (getd_and_validate_params_controller(id_no, &line[idx], scene, camera) == FAILURE)
+	// get_and_validate_params_controller
+	if (get_and_validate_params_controller(id_no, &line[idx], scene, camera) == FAILURE)
 	{
-		printf(" Error: getd_and_validate_params_controller (parse_and_validate_config_line)\n");
+		printf(" Error: get_and_validate_params_controller (parse_and_validate_config_line)\n");
 		return (FAILURE);
 	}
 

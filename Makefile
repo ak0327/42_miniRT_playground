@@ -33,7 +33,6 @@ SRC				= main.c \
 				  init_setting/setting_for_lights.c \
 				  init_setting/setting_for_objects.c \
 				  init_setting/get_texture_uv_map.c \
-				  init_setting/init.c \
 				  init_setting/parsing_config.c \
 				  init_setting/validate_config.c \
 				  vector_matrix/matrix.c \

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/24 16:43:44 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 20:10:10 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,13 +153,17 @@ int	main(int argc, char **argv)
 	{
 		//todo:error mgs, free_params
 		ft_dprintf(STDERR_FILENO, "Error\n");
+		free_scene(&scene);
 		return (1);
 	}
 
 	init_camera(&camera);
 
 	if (init_data(&data) == FAILURE)
+	{
+		free_scene(&scene);
 		return (EXIT_FAILURE);
+	}
 
 	draw_screen(data, camera, scene);
 
