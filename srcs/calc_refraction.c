@@ -6,11 +6,13 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:34:26 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 13:14:09 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 13:50:50 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+// ##### バグとりきれず保留 #####
 
 t_colorf	calc_inflection_refraction(
 		const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col, int recursion_level,

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:32 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 16:03:37 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/20 15:26:47 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,12 +266,16 @@ int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id)
 
 	shape->material.type = MT_DEFAULT;
 	shape->material.shininess = 8.0f;
-	SET_COLOR(shape->material.specular_ref, 0.3f, 0.3f, 0.3f);
+	SET_COLOR(shape->material.specular_ref, 0.3f, 0.3f, 0.3f)
+	SET_COLOR(shape->material.reflect_ref, 1.0f, 1.0f, 1.0f);
 	shape->material.refraction_index = 1.51f;
 
 	ret_value = FAILURE;
 	if (id == id_sphere)
+	{
 		ret_value = get_setting_for_sphere(line, shape);
+//		shape->material.type = MT_PERFECT_REFLECTION;
+	}
 	else if (id == id_plane)
 		ret_value = get_setting_for_plane(line, shape);
 	else if (id == id_cylinder)

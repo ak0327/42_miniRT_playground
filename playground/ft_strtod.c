@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 16:35:25 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/12 17:57:29 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,15 @@
 #include <math.h>
 #include <ctype.h>
 
-double	ft_strtod(const char *str, bool *is_success)
+double	ft_strtod(const char *str, size_t *err_idx)
 {
-	size_t	idx;
 	double	ret_num;
 	int 	sign;
+	size_t	idx;
 
 	ret_num = 0;
 	idx = 0;
 	sign = 1;
-	*is_success = false;
 
 	if (!str)
 		return (0);
