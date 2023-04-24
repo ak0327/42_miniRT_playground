@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:14:24 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 17:55:28 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 16:38:07 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,11 +143,12 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_dprintf(STDERR_FILENO, "[Error]Invalid argument.\n       $> ./miniRT <scene filepath>\n");
+		ft_dprintf(STDERR_FILENO, "[Error]Invalid argument.\n"
+								  "       $> ./miniRT <scene filepath>\n");
 		return (1);
 	}
 
-	ret_val = get_scene_config(&scene, &camera, argv[1]);
+	ret_val = get_and_validate_scene_config(&scene, &camera, argv[1]);
 	if (ret_val != SUCCESS)
 	{
 		//todo:error mgs, free_params

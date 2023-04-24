@@ -6,6 +6,8 @@
 !includes
 !minilibx-linux
 
+!srcs/init_setting/
+
 !*.c
 !*.h
 !Makefile

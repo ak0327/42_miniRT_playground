@@ -29,31 +29,26 @@ SRC				= main.c \
 				  raytrace.c \
 				  scene.c \
 				  camera.c \
-				  init.c \
 				  matrix.c \
-				  get_ppm.c \
-				  get_checker_texture.c \
-				  get_texture_uv_map.c \
-				  get_bump_normal.c \
-				  get_img_color.c \
 				  calc_ambient_reflection.c \
 				  calc_diffuse_reflection.c \
 				  calc_specular_reflection.c \
 				  calc_perfect_reflection.c \
 				  calc_refraction.c \
-				  get_input.c \
-				  set_input.c \
-				  get_setting_for_camera.c \
-				  get_setting_for_ambient.c \
-				  get_setting_for_lights.c \
-				  get_setting_for_objects.c \
-				  parsing_config.c \
 				  ft_strtod.c \
-
-
-
-
-
+				  init_setting/get_bump_normal.c \
+				  init_setting/get_checker_texture.c \
+				  init_setting/get_img_color.c \
+				  init_setting/get_input.c \
+				  init_setting/get_ppm.c \
+				  init_setting/setting_for_ambient.c \
+				  init_setting/setting_for_camera.c \
+				  init_setting/setting_for_lights.c \
+				  init_setting/setting_for_objects.c \
+				  init_setting/get_texture_uv_map.c \
+				  init_setting/init.c \
+				  init_setting/parsing_config.c \
+				  init_setting/validate_config.c \
 
 
 SRCS			= $(addprefix $(SRC_DIR)/, $(SRC))

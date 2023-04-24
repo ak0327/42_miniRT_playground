@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_setting_for_ambient.c                          :+:      :+:    :+:   */
+/*   setting_for_ambient.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/11 18:40:05 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 14:25:12 by takira           ###   ########.fr       */
+/*   Created: 2023/04/12 16:11:48 by takira            #+#    #+#             */
+/*   Updated: 2023/04/24 17:14:16 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 // A   lightning_ratio[0,1]   RGB[0,255]
-int	get_setting_for_ambient(const char *line, t_scene *scene)
+int	get_and_validate_setting_for_ambient(const char *line, t_scene *scene)
 {
 	size_t		idx;
 	float		lightning_ratio;

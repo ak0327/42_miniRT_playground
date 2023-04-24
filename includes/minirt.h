@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 13:46:48 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 17:16:03 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,9 @@
 #define EPSILON			(1.0f / 32.0f)
 
 #define MAX_RECURSION	8
+#define OP_CHECKER_TEXTURE	"checker"
+#define OP_PERFECT_REF		"perfect_ref"
+#define OP_IMAGE_TEXTURE	"image"
 
 
 /********** enum **********/
@@ -411,13 +414,16 @@ int	raytrace(const t_scene *scene, const t_ray *eye_ray, t_colorf *out_col);
 
 
 /********** get_input **********/
-int get_scene_config(t_scene *scene, t_camera *camera, const char *path);
+int get_and_validate_scene_config(t_scene *scene, t_camera *camera, const char *path);
 
 
 /********** setting **********/
 int get_setting_for_camera(const char *line, t_camera *camera);
-int	get_setting_for_ambient(const char *line, t_scene *scene);
+
+int	get_and_validate_setting_for_ambient(const char *line, t_scene *scene);
+
 int get_setting_for_lights(const char *line, t_scene *scene, t_identifier id);
+
 int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id);
 
 /********** parsing_config **********/
@@ -429,11 +435,18 @@ int		parsing_double_num(const char *line, float *double_num, size_t *idx);
 
 int 	parsing_vec(const char *line, t_vector *vec, size_t *idx);
 int 	parsing_color(const char *line, t_colorf *color, size_t *idx);
-char	*parsing_img_path(const char *line, size_t *idx);
 
 int 	is_color_in_range(t_colorf color);
 int 	is_vec_in_normal_range(t_vector vec);
 void	skip_delimiter(const char *line, size_t *idx);
+void	skip_spece(const char *line, size_t *idx);
+
+
+char	*get_identifier_str(const char *line, size_t idx);
+void	increment_idx_to_next_format(const char *line, size_t *idx, char *prev_str);
+int		increment_idx_to_next_char(const char *line, size_t *idx);
+
+
 
 /********** main **********/
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);

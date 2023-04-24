@@ -6,51 +6,41 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 13:10:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 12:38:46 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 17:25:14 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-// todo:float -> int, 今回は変更面倒なのでfloatで進める
-int	parsing_int_num(const char *line, float *int_num, size_t *idx)
+void	increment_idx_to_next_format(const char *line, size_t *idx, char *prev_str)
 {
-	size_t	len;
-	char	*num_str;
-	bool	is_success;
-
-	while (ft_isspace(line[*idx]))
-		*idx += 1;
-	len = 0;
-	while (line[*idx + len] && !ft_isspace(line[*idx + len]))
-		len++;
-	if (!line[*idx + len])
-		return (FAILURE);
-
-	num_str = ft_substr(line, *idx, len);
-	if (!num_str)
-	{
-		perror("malloc");
-		return (FAILURE);
-	}
-	*idx += len;
-	*int_num = (float)ft_atoi(num_str, &is_success);
-	free(num_str);
-
-	if (!is_success)
-		return (FAILURE);
-	return (SUCCESS);
+	*idx += ft_strlen_ns(prev_str);
+	skip_spece(line, idx);
 }
 
+char	*get_identifier_str(const char *line, size_t idx)
+{
+	char		*id_str;
+	size_t 		str_len;
 
+	str_len = 0;
+	while (line[idx + str_len] && !ft_isspace(line[idx + str_len]))
+		str_len++;
+	id_str = ft_substr(line, idx, str_len);
+	if (!id_str)
+		return (NULL);
+	return (id_str);
+}
+
+//todo: 本実装時にはparsing_int_numも
 int	parsing_double_num(const char *line, float *double_num, size_t *idx)
 {
 	size_t	len;
 	char	*num_str;
 	bool	is_success;
 
-	while (ft_isspace(line[*idx]))
-		*idx += 1;
+	skip_spece(line, idx);
+
 	len = 0;
 	while (line[*idx + len] && !ft_isspace(line[*idx + len]) && line[*idx + len] != ',')
 		len++;
@@ -70,40 +60,24 @@ int	parsing_double_num(const char *line, float *double_num, size_t *idx)
 	return (SUCCESS);
 }
 
+void	skip_spece(const char *line, size_t *idx)
+{
+	while (line[*idx] && ft_isspace(line[*idx]))
+		*idx += 1;
+}
+
 void	skip_delimiter(const char *line, size_t *idx)
 {
-	while (line[*idx] && ft_isspace(line[*idx]))
-		*idx += 1;
+	skip_spece(line, idx);
 	if (line[*idx] == ',')
 		*idx += 1;
-	while (line[*idx] && ft_isspace(line[*idx]))
-		*idx += 1;
-}
-
-int is_vec_in_normal_range(t_vector vec)
-{
-	const float x = vec.x;
-	const float y = vec.y;
-	const float z = vec.z;
-
-	return ((-1.0f <= x && x <= 1.0f) && (-1.0f <= y && y <= 1.0f) && (-1.0f <= z && z <= 1.0f));
-}
-
-int is_color_in_range(t_colorf color)
-{
-	const float	r = color.r;
-	const float	g = color.g;
-	const float	b = color.b;
-
-	return ((0.0f <= r && r <= 255.0f) && (0.0f <= g && g <= 255.0f) && (0.0f <= b && b <= 255.0f));
+	skip_spece(line, idx);
 }
 
 // double_num1, double_num2, double_num3
 int parsing_vec(const char *line, t_vector *vec, size_t *idx)
 {
-	while (line[*idx] && ft_isspace(line[*idx]))
-		*idx += 1;
-
+	skip_spece(line, idx);
 	if (parsing_double_num(line, &vec->x, idx) == FAILURE)
 	{
 		printf("    parsing_vec NG :: parsing_double_num 1\n");
@@ -126,8 +100,8 @@ int parsing_vec(const char *line, t_vector *vec, size_t *idx)
 		return (FAILURE);
 	}
 
-	while (line[*idx] && ft_isspace(line[*idx]))
-		*idx += 1;
+	skip_spece(line, idx);
+
 
 	printf("    parsing_vec :: SUCCESS, (x,y,z)=(%f,%f,%f)\n", vec->x, vec->y, vec->z);
 
@@ -137,8 +111,7 @@ int parsing_vec(const char *line, t_vector *vec, size_t *idx)
 // int_num1, int_num2, int_num3
 int parsing_color(const char *line, t_colorf *color, size_t *idx)
 {
-	while (line[*idx] && ft_isspace(line[*idx]))
-		*idx += 1;
+	skip_spece(line, idx);
 
 	if (parsing_double_num(line, &color->r, idx) == FAILURE)
 	{
@@ -165,18 +138,8 @@ int parsing_color(const char *line, t_colorf *color, size_t *idx)
 	}
 //	printf("    parsing_color :: b:%f\n", color->b);
 
-	while (line[*idx] && ft_isspace(line[*idx]))
-		*idx += 1;
+	skip_spece(line, idx);
 
 	printf("    parsing_color :: SUCCESS, (r,g,b)=(%f,%f,%f)\n", color->r, color->g, color->b);
 	return (SUCCESS);
-}
-
-// str1, str2
-char	*parsing_img_path(const char *line, size_t *idx)
-{
-	char	*path;
-
-	path = get_identifier(line, idx);
-	return (path);
 }

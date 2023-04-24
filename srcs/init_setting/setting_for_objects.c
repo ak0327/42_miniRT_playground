@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:32 by takira            #+#    #+#             */
-/*   Updated: 2023/04/20 15:26:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 16:59:55 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,39 @@ char	*get_path(const char *line, size_t *idx)
 	return (path);
 }
 
-static int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
+static int get_checker_format(const char *line, t_shape *shape, size_t *idx)
 {
-	char		*path;
 	t_colorf	checker_color;
 
-	if (ft_isdigit(line[*idx]))
-	{
-		shape->material.is_checker = true;
-		if (parsing_color(line, &checker_color, idx) == FAILURE)
-			return (FAILURE);
-		if (!is_color_in_range(checker_color))
-			return (FAILURE);
-		shape->material.checker_color = get_color_k1c1(1.0f / 255.0f, checker_color);
+	if (!ft_isdigit(line[*idx]))
+		return (FAILURE);
+	shape->material.is_checker = true;
+	if (parsing_color(line, &checker_color, idx) == FAILURE)
+		return (FAILURE);
+	if (!is_color_in_range(checker_color))
+		return (FAILURE);
+	shape->material.checker_color = get_color_k1c1(1.0f / 255.0f, checker_color);
 //		shape->material.diffuse_ref = get_color_k1c1(1.0f / 255.0f, shape->material.diffuse_ref);
 
-		if (!line[*idx])
-			return (SUCCESS);
-	}
+	skip_spece(line, idx);
+
+	return (SUCCESS);
+}
+
+static int get_perfect_ref_format(const char *line, t_shape *shape, size_t *idx)
+{
+	SET_COLOR(shape->material.reflect_ref, 1.0f, 1.0f, 1.0f);
+	shape->material.type = MT_PERFECT_REFLECTION;
+
+	skip_spece(line, idx);
+
+	return (SUCCESS);
+}
+
+static int get_image_texture_format(const char *line, t_shape *shape, size_t *idx)
+{
+	char		*path;
+
 	path = get_path(line, idx);
 	if (!path)
 		return (FAILURE);
@@ -71,7 +86,7 @@ static int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
 
 	path = get_path(line, idx);
 	if (!path)
-		return (FAILURE);
+		return (PROCESS_ERROR);
 	printf("bump_path:[%s]\n", path);
 	if (ft_strlen_ns(path) > 0)
 	{
@@ -82,8 +97,40 @@ static int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
 		}
 	}
 	free(path);
-	printf("get_bonus_op SUCCESS\n");
+	skip_spece(line, idx);
+
 	return (SUCCESS);
+}
+
+static int get_bonus_option(const char *line, t_shape *shape, size_t *idx)
+{
+	char		*op_str;
+	int 		ret_value;
+
+	op_str = get_identifier_str(line, *idx);
+	increment_idx_to_next_format(line, idx, op_str);
+	if (!op_str)
+		return (PROCESS_ERROR);
+	ret_value = FAILURE;
+	if (is_same_str(op_str, OP_CHECKER_TEXTURE))
+	{
+		ret_value = get_checker_format(line, shape, idx);
+	}
+	else if (is_same_str(op_str, OP_PERFECT_REF))
+	{
+		ret_value = get_perfect_ref_format(line, shape, idx);
+	}
+	else if (is_same_str(op_str, OP_IMAGE_TEXTURE))
+	{
+		ret_value = get_image_texture_format(line, shape, idx);
+	}
+	else
+		printf("invalid bonus option:[%s]\n", op_str);
+	free(op_str);
+	if (line[*idx])
+		return (FAILURE);
+	printf("get_bonus_op SUCCESS\n");
+	return (ret_value);
 }
 
 // sp   XYZ                    diameter            RGB[0,255]   <OPTION:RGB[0,255]   image_paths>
@@ -115,6 +162,7 @@ static int get_setting_for_sphere(const char *line, t_shape *shape)
 
 	if (!line[idx])
 		return (SUCCESS);
+
 	if (get_bonus_option(line, shape, &idx) == FAILURE)
 		return (FAILURE);
 	if (line[idx])
@@ -267,15 +315,11 @@ int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id)
 	shape->material.type = MT_DEFAULT;
 	shape->material.shininess = 8.0f;
 	SET_COLOR(shape->material.specular_ref, 0.3f, 0.3f, 0.3f)
-	SET_COLOR(shape->material.reflect_ref, 1.0f, 1.0f, 1.0f);
 	shape->material.refraction_index = 1.51f;
 
 	ret_value = FAILURE;
 	if (id == id_sphere)
-	{
 		ret_value = get_setting_for_sphere(line, shape);
-//		shape->material.type = MT_PERFECT_REFLECTION;
-	}
 	else if (id == id_plane)
 		ret_value = get_setting_for_plane(line, shape);
 	else if (id == id_cylinder)
