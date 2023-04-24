@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 12:20:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/11 19:03:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 17:42:56 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,41 +15,6 @@
 void	init_camera(t_camera *camera)
 {
 	float		fov_radians;
-
-//	SET_VECTOR(camera.pos, 0.0f, 5.0f, -10.0f)
-//	SET_VECTOR(camera.dir, 0.0f, -0.2f, 1.0f)
-
-//	SET_VECTOR(camera.pos, 0.0f, 0.0f, 0.0f)
-//	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
-
-/* corn */
-//	SET_VECTOR(camera.pos, 5.0f, 25.0f, -50.0f)
-//	SET_VECTOR(camera.dir, 0.0f, -0.3f, 1.0f)
-
-/* spot */
-//	SET_VECTOR(camera.pos, 0.0f, 25.0f, -60.0f)
-//	SET_VECTOR(camera.dir, 0.0f, -0.3f, 1.0f)
-
-/* bump */
-//	sphere
-//	SET_VECTOR(camera.pos, 0.0f, 100.0f, -600.0f)
-//	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
-
-//	cylinder
-
-//	SET_VECTOR(camera.pos, -5.0f, 200.0f, -600.0f)
-//	SET_VECTOR(camera.dir, 0.0f, -0.2f, 1.0f)
-
-
-//	SET_VECTOR(camera.pos, 0.0f, 0.0f, -300.0f)
-//	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
-
-
-//	SET_VECTOR(camera.pos, 1000.0f, 0.0f, -1000.0f)
-//	SET_VECTOR(camera.dir, 0.0f, 0.0f, 1.0f)
-//	SET_VECTOR(camera.pos, 1000.0f, 0.0f, 1000.0f)
-//	SET_VECTOR(camera.dir, -1.0f, 0.0f, -1.0f)
-
 
 	normalize(&camera->dir);
 

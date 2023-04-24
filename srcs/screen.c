@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 17:30:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/08 10:42:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 17:42:38 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
  world_y: screen_y * v
  */
 
-// ray_dir : camera_pos(x,y,z) -> screen(x,y,z)
-t_vector	ray_dir(int i, int j, t_camera camera)
+// calc_ray_dir : camera_pos(x,y,z) -> screen(x,y,z)
+t_vector	calc_ray_dir(int i, int j, t_camera camera)
 {
 	t_vector	ray_dir;
 	t_vector	screen_local;

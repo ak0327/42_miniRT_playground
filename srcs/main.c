@@ -118,7 +118,7 @@ void	draw_screen(t_data data, t_camera camera, t_scene scene)
 		while (i < data.win_width)
 		{
 			color = get_gradation_background_color(height_ratio);
-			eye_ray.direction = ray_dir(i, j, camera);
+			eye_ray.direction = calc_ray_dir(i, j, camera);
 			raytrace(&scene, &eye_ray, &color);
 
 			r = (int)(255 * CLAMP(color.r, 0, 1));

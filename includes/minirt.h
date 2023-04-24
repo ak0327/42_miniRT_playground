@@ -298,7 +298,7 @@ t_vector	normalize_vec_inv(const t_vector *a);
 
 
 /********** screen **********/
-t_vector	ray_dir(int x, int y, t_camera camera);
+t_vector	calc_ray_dir(int i, int j, t_camera camera);
 
 
 /********** camera **********/

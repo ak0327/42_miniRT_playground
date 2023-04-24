@@ -22,17 +22,9 @@ SRC				= main.c \
 				  screen.c \
 				  sphere.c \
 				  color.c \
-				  reflection.c \
-				  intersection.c \
-				  raytrace.c \
 				  scene.c \
-				  camera.c \
-				  calc_ambient_reflection.c \
-				  calc_diffuse_reflection.c \
-				  calc_specular_reflection.c \
-				  calc_perfect_reflection.c \
-				  calc_refraction.c \
 				  ft_strtod.c \
+				  init_setting/camera.c \
 				  init_setting/get_bump_normal.c \
 				  init_setting/get_checker_texture.c \
 				  init_setting/get_img_color.c \
@@ -49,7 +41,13 @@ SRC				= main.c \
 				  vactor_matrix/matrix.c \
 				  vactor_matrix/vector.c \
 				  mlx_helper/mlx_keyhooks.c \
-
+				  raytracing/raytrace.c \
+				  raytracing/calc_ambient_reflection.c \
+				  raytracing/calc_diffuse_reflection.c \
+				  raytracing/calc_specular_reflection.c \
+				  raytracing/calc_perfect_reflection.c \
+				  raytracing/calc_refraction.c \
+				  raytracing/intersection.c \
 
 
 
