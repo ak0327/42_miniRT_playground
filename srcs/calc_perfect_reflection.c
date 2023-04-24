@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:34:10 by takira            #+#    #+#             */
-/*   Updated: 2023/04/10 20:03:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 14:06:07 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ t_colorf	calc_perfect_reflection(
 	t_vector	ref_dir;
 	t_vector	inv_eye_dir;
 
-	t_ray		re_ray;		// 反射ray,
-	t_colorf	re_color;	// 反射光の輝度
+	t_ray		perfect_reflection_ray;		// 反射ray,
+	t_colorf	perfect_reflection_color;	// 反射光の輝度
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
 
@@ -50,13 +50,14 @@ t_colorf	calc_perfect_reflection(
 	normalize(&ref_dir);
 
 	/* 正反射方向のrayを計算 */
-	re_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &ref_dir);
-	re_ray.direction = ref_dir;
+	perfect_reflection_ray.start = vec_calc(1.0f, &intp.position, EPSILON, &ref_dir);
+	perfect_reflection_ray.direction = ref_dir;
 
-	re_color = *out_col;
-	recursive_raytrace(scene, &re_ray, &re_color, recursion_level + 1);
+	/* raytrace */
+	perfect_reflection_color = *out_col;
+	recursive_raytrace(scene, &perfect_reflection_ray, &perfect_reflection_color, recursion_level + 1);
 
 	/* 完全鏡面反射を計算 */
-	color = get_color_k1c1k2c2(1.0f, &shape->material.reflect_ref,1.0f, &re_color);
+	color = get_color_k1c1k2c2(1.0f, &shape->material.reflect_ref,1.0f, &perfect_reflection_color);
 	return (color);
 }

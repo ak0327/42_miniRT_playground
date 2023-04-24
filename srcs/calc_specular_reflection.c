@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 15:26:08 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 14:04:02 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ t_colorf calc_specular_reflection(const t_scene *scene, const t_ray *eye_ray,
 	t_list		*light_node;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
+
+	if (shape->material.type == MT_PERFECT_REFLECTION)
+		return (color);
 
 	normal = intp.normal;
 	if (shape->material.bump.data)

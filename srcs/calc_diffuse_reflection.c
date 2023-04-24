@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 11:12:18 by takira            #+#    #+#             */
-/*   Updated: 2023/04/12 14:31:16 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 14:03:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ t_colorf calc_diffuse_reflection(const t_scene *scene, t_intersection_point intp
 	t_list 		*light_node;
 
 	SET_COLOR(color, 0.0f, 0.0f, 0.0f);
+	if (shape->material.type == MT_PERFECT_REFLECTION)
+		return (color);
 
 	normal = intp.normal;
 	if (shape->material.bump.data)
