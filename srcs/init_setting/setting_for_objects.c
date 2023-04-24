@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 18:40:32 by takira            #+#    #+#             */
-/*   Updated: 2023/04/24 16:59:55 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 20:24:48 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,11 +328,17 @@ int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id)
 		ret_value = get_setting_for_corn(line, shape);
 
 	if (ret_value == FAILURE)
+	{
+		free(shape);
 		return (FAILURE);
+	}
 
 	new_list = ft_lstnew(shape);
 	if (!new_list)
+	{
+		free(shape);
 		return (FAILURE);
+	}
 	ft_lstadd_back(&scene->shape_list, new_list);
 
 	printf("objs(id:%d) OK :)\n", id);
