@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:25:59 by takira            #+#    #+#             */
-/*   Updated: 2023/03/07 12:44:34 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 19:53:35 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,23 @@ static int	key_hook(int keycode, void *mlx)
 //		printf("ESC pressed\n");
 		return (close_window(mlx));
 	}
+	if (keycode == 'w')
+	{
+		printf("up\n");
+	}
+	if (keycode == 'a')
+	{
+		printf("left\n");
+	}
+	if (keycode == 's')
+	{
+		printf("down\n");
+	}
+	if (keycode == 'd')
+	{
+		printf("right\n");
+	}
+
 	return (0);
 }
 

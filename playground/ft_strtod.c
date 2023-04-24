@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/24 18:51:27 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/24 19:42:26 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,24 @@ int test(const char *str, int no)
 	bool	ft_is_success;
 	char	*lib_err = NULL;
 	bool	ok;
+	char	*color_start = "\x1b[31m";
+	char	*color_end = "\x1b[0m";
 
 	ft_ret = ft_strtod(str, &ft_is_success);
 	lib_ret = strtod(str, &lib_err);
 
 	ok = false;
 	if (ft_ret == lib_ret)
-//	if (ft_is_success && !lib_err)
+	{
 		ok = true;
+		color_start = "\x1b[32m";
+	}
 
-	printf("[%02d] s=%55s,  ft=% e,  lib=% e,  ret=%s\n", no, str, ft_ret, lib_ret, ok ? "\x1b[32mAC\x1b[0m" : "\x1b[31mWA\x1b[0m");
-	if (ok)
-		return (1);
-	return (0);
+	printf("%s"
+		   "[%03d:%s] input  = %s\n"
+		   "         ft_ret = %f"
+		   "%s\n\n", color_start, no, ok ? "OK" : "WA", str, ft_ret, color_end);
+	return (ok);
 }
 
 int main(void)

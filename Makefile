@@ -20,9 +20,7 @@ VPATH			= $(SRC_DIR) $(INCLUDE_DIR)
 SRC_DIR			= srcs
 SRC				= main.c \
 				  screen.c \
-				  sphere.c \
 				  color.c \
-				  scene.c \
 				  ft_strtod.c \
 				  init_setting/camera.c \
 				  init_setting/get_bump_normal.c \
@@ -38,8 +36,8 @@ SRC				= main.c \
 				  init_setting/init.c \
 				  init_setting/parsing_config.c \
 				  init_setting/validate_config.c \
-				  vactor_matrix/matrix.c \
-				  vactor_matrix/vector.c \
+				  vector_matrix/matrix.c \
+				  vector_matrix/vector.c \
 				  mlx_helper/mlx_keyhooks.c \
 				  raytracing/raytrace.c \
 				  raytracing/calc_ambient_reflection.c \
