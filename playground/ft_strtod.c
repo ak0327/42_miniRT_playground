@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/25 12:00:59 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/25 12:10:06 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,13 +168,16 @@ int test(const char *str, int no, int *res_ret, int *res_err, int *res_flg)
 	bool	test_ret, test_flg, test_err;
 	char	*OK = "\x1b[32mOK\x1b[0m";
 	char	*NG = "\x1b[31mNG\x1b[0m";
+	double 	epsilon = 1e-12;
 
 	ft_ret = ft_strtod(str, &ft_is_success, &ft_err);
 	lib_ret = strtod(str, &lib_err);
 
 	res_ok = false;
 
-	test_ret = (ft_ret == lib_ret) ? true : false;
+	test_ret = fabs(ft_ret - lib_ret) < epsilon ? true : false;
+	if (ft_ret == INFINITY && lib_ret == INFINITY)
+		test_ret = true;
 	test_err = (strcmp(ft_err, lib_err) == 0) ? true : false;
 	test_flg = ((ft_is_success && strlen(lib_err) == 0) || (!ft_is_success && strlen(lib_err) != 0)) ? true : false;
 
@@ -186,12 +189,14 @@ int test(const char *str, int no, int *res_ret, int *res_err, int *res_flg)
 	printf("%s"
 		   "[%03d:%s] input   = %s\n"
 		   "         ft_ret  = %%e[%e],  %%f[%f],     err[%s],     is_success[%s]\n"
-		   "         lib_ret = %%e[%e],  %%f[%f],     err[%s]"
+		   "         lib_ret = %%e[%e],  %%f[%f],     err[%s]\n"
+		   "         d_ret   = %%e[%e],  %%f[%f]"
 		   "%s\n"
 		   "         return value:ft==lib:%s,  err char:ft==lib:%s,  ft_is_success:%s\n\n",
 		   color_start, no, res_ok ? "OK" : "WA", str,
 		   ft_ret, ft_ret, ft_err, ft_is_success ? "true" : "false",
 		   lib_ret, lib_ret, lib_err,
+		   ft_ret - lib_ret, ft_ret - lib_ret,
 		   color_end,
 		   test_ret ? OK : NG, test_err ? OK : NG, test_flg ? OK : NG);
 
