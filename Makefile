@@ -7,6 +7,9 @@ ifdef WITH_TEST
 	CFLAGS 		+= -D LEAKS
 endif
 
+ifdef WITH_SANITIZE
+	CFLAGS 		+= -g -fsanitize=address
+endif
 
 #####################################################
 # PROGRAM NAME
@@ -63,17 +66,16 @@ DEPS			= $(SRCS:%.c=%:d)
 #####################################################
 # INCLUDE and LIBRARY FILE
 INCLUDE_DIR		= includes
+X11_INCLUDE		= /usr/X11/include
+INCLUDE_DIRS	= $(INCLUDE_DIR) $(X11_INCLUDE)
+INCLUDES		= $(addprefix -I, $(INCLUDE_DIRS))
 
 LIBFT_DIR		= libs
 MLX_DIR			= minilibx-linux
 X11_DIR			= /usr/X11
-X11_INCLUDE		= /usr/X11/include
 X11_LIB			= /usr/X11/lib
 
-INCLUDE_DIRS	= $(INCLUDE_DIR) $(X11_INCLUDE)
 LIBS_DIR 		= $(LIBFT_DIR) $(MLX_DIR) $(X11_DIR) $(X11_LIB)
-
-INCLUDES		= $(addprefix -I, $(INCLUDE_DIRS))
 LFLAGS			= $(addprefix -L, $(LIBS_DIR))
 LIBS 			= -lft -lmlx -lX11 -lXext
 
@@ -96,12 +98,11 @@ all				: $(NAME)
 $(NAME)			: $(OBJS)
 	@make -C $(LIBFT_DIR)
 	@make -C $(MLX_DIR)
-	$(CC) $(CFLAGS) $(LFLAGS) $(LIBS) $^ -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $^ -o $@ $(LFLAGS) $(LIBS)
 
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $$(dirname $@)
 	$(CC) $(INCLUDES) -c $< -o $@
-
 
 clean			:
 	rm -rf $(OBJ_DIR)
@@ -119,6 +120,9 @@ bonus			:
 
 test			:
 	make all WITH_TEST=1
+
+sani			:
+	make all WITH_SANITIZE=1
 
 norm			:
 	@norminette --version

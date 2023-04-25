@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 13:10:39 by takira            #+#    #+#             */
-/*   Updated: 2023/04/24 17:25:14 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/25 12:13:46 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	parsing_double_num(const char *line, float *double_num, size_t *idx)
 		return (FAILURE);
 	}
 	*idx += len;
-	*double_num = (float)ft_strtod(num_str, &is_success);
+	*double_num = (float)ft_strtod(num_str, &is_success, NULL);
 	free(num_str);
 
 	if (!is_success)

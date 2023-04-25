@@ -25,12 +25,10 @@ sl   -40,50,00       0.6                         10, 0, 255
  #Cylinder  center(xyz)          normalized vec[-1,1]              diameter    height       RGB[0,255]
  #Corn      center(xyz)          normalized vec[-1,1]              diameter    height       RGB[0,255]
 
- color options
-  normal color    : RGB
-  checker texture : RGB  RGB
-  image texture   : RGB  image_filepath, bumpmap_filepath
-       only image : RGB  image_filepath, null
-       only bump  : RGB  null          , bumpmap_filepath
+ bonus options
+    perfect_ref
+    chacker         RGB
+    image           "image_texture_path",   "bumpmap_path"
 
 ##################################################################
 # Rule

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 22:42:42 by takira            #+#    #+#             */
-/*   Updated: 2023/04/24 17:16:03 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/25 12:11:39 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,7 +428,7 @@ int get_setting_for_objects(const char *line, t_scene *scene, t_identifier id);
 
 /********** parsing_config **********/
 char	*get_identifier(const char *line, size_t *idx);
-double	ft_strtod(const char *str, bool *is_success);
+double	ft_strtod(const char *str, bool *is_success, char **err);
 
 int		parsing_int_num(const char *line, float *int_num, size_t *idx);
 int		parsing_double_num(const char *line, float *double_num, size_t *idx);
