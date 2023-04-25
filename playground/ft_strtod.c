@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/24 19:42:26 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/25 11:38:45 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,70 +17,181 @@
 #include <stdbool.h>
 #include <math.h>
 #include <ctype.h>
+#include <string.h>
 
-double	ft_strtod(const char *str, bool *is_success)
+//double	ft_strtod(const char *str, bool *is_success)
+//{
+//	double	ret_num;
+//	double 	scale;
+//	double 	sign;
+//	size_t	idx;
+//
+//	idx = 0;
+//	sign = 1;
+//	*is_success = false;
+//	if (!str)
+//		return (0);
+//
+//	ret_num = 0.0;
+//	while (isspace(str[idx]))
+//		idx++;
+//	if (str[idx] == '-')
+//			sign = -1;
+//	if (str[idx] == '-' || str[idx] == '+')
+//		idx++;
+//	while ('0' <= str[idx] && str[idx] <= '9')
+//	{
+//		ret_num = ret_num * 10 + str[idx] - '0';
+//		idx++;
+//	}
+//	if (str[idx] == '.')
+//		idx++;
+//	scale = 10.0;
+//	while ('0' <= str[idx] && str[idx] <= '9')
+//	{
+//		ret_num += (double)(str[idx] - '0') / scale;
+//		scale *= 10.0;
+//		idx++;
+//	}
+//	if (!str[idx])
+//		*is_success = true;
+//	return (sign * ret_num);
+//}
+
+#define SUCCESS	0
+#define FAILURE	1
+
+static int get_num_part(const char *str, double *num, double *sign, size_t *idx)
 {
-	double	ret_num;
-	double 	scale;
-	double 	sign;
+	double	scale;
+
+	while (isspace(str[*idx]))
+		*idx += 1;
+	if (str[*idx] == '-')
+		*sign = -1.0;
+	if (str[*idx] == '-' || str[*idx] == '+')
+		*idx += 1;
+	if (!str[*idx] || !isdigit(str[*idx]))
+		return (FAILURE);
+	while ('0' <= str[*idx] && str[*idx] <= '9')
+	{
+		*num = *num * 10 + str[*idx] - '0';
+		*idx += 1;
+	}
+	if (str[*idx] == '.')
+	{
+		*idx += 1;
+		scale = 0.1;
+		while ('0' <= str[*idx] && str[*idx] <= '9')
+		{
+			*num += (double)(str[*idx] - '0') * scale;
+			scale *= 0.1;
+			*idx += 1;
+		}
+	}
+	return (SUCCESS);
+}
+
+static int	get_exp_part(const char *str, double *num, size_t *idx)
+{
+	double 	exp;
+	double 	exp_sign;
+	size_t 	i;
+
+	exp = 0.0;
+	exp_sign = 1.0;
+	if (!str[*idx] || !(str[*idx] == 'e' || str[*idx] == 'E'))
+		return (SUCCESS);
+	i = 1;
+	if (!str[*idx + i])
+		return (FAILURE);
+	if (str[*idx + 1] == '-')
+		exp_sign = -1.0;
+	if (str[*idx + i] == '-' || str[*idx + i] == '+')
+		i++;
+	if (!str[*idx + i] || !isdigit(str[*idx + i]))
+		return (FAILURE);
+	while ('0' <= str[*idx + i] && str[*idx + i] <= '9')
+	{
+		exp = exp * 10 + str[*idx + i] - '0';
+		i++;
+	}
+	*num *= pow(10, exp * exp_sign);
+	*idx += i;
+	return (SUCCESS);
+}
+
+double	ft_strtod(const char *str, bool *is_success, char **err)
+{
+	double	num;
+	double 	num_sign;
 	size_t	idx;
 
 	idx = 0;
-	sign = 1;
+	num = 0.0;
+	num_sign = 1.0;
 	*is_success = false;
 	if (!str)
-		return (0);
-
-	ret_num = 0.0;
-	while (isspace(str[idx]))
-		idx++;
-	if (str[idx] == '-')
-			sign = -1;
-	if (str[idx] == '-' || str[idx] == '+')
-		idx++;
-	while ('0' <= str[idx] && str[idx] <= '9')
 	{
-		ret_num = ret_num * 10 + str[idx] - '0';
-		idx++;
+		*err = (char *)&str[idx];
+		return (num);
 	}
-	if (str[idx] == '.')
-		idx++;
-	scale = 10.0;
-	while ('0' <= str[idx] && str[idx] <= '9')
+	if (get_num_part(str, &num, &num_sign, &idx) == FAILURE)
 	{
-		ret_num += (double)(str[idx] - '0') / scale;
-		scale *= 10.0;
-		idx++;
+		*err = (char *)&str[idx];
+		return (num);
+	}
+	if (get_exp_part(str, &num, &idx) == FAILURE)
+	{
+		*err = (char *)&str[idx];
+		return (num_sign * num);
 	}
 	if (!str[idx])
 		*is_success = true;
-	return (sign * ret_num);
+	*err = (char *)&str[idx];
+	return (num_sign * num);
 }
 
 int test(const char *str, int no)
 {
 	double	ft_ret, lib_ret;
 	bool	ft_is_success;
+	char	*ft_err = NULL;
 	char	*lib_err = NULL;
-	bool	ok;
+	bool	res_ok;
 	char	*color_start = "\x1b[31m";
 	char	*color_end = "\x1b[0m";
+	bool	test_ret, test_flg, test_err;
+	char	*OK = "\x1b[32mOK\x1b[0m";
+	char	*NG = "\x1b[31mNG\x1b[0m";
 
-	ft_ret = ft_strtod(str, &ft_is_success);
+	ft_ret = ft_strtod(str, &ft_is_success, &ft_err);
 	lib_ret = strtod(str, &lib_err);
 
-	ok = false;
-	if (ft_ret == lib_ret)
+	res_ok = false;
+
+	test_ret = (ft_ret == lib_ret) ? true : false;
+	test_err = (strcmp(ft_err, lib_err) == 0) ? true : false;
+	test_flg = ((ft_is_success && strlen(lib_err) == 0) || (!ft_is_success && strlen(lib_err) != 0)) ? true : false;
+
+	if (test_ret && test_err && test_flg)
 	{
-		ok = true;
+		res_ok = true;
 		color_start = "\x1b[32m";
 	}
-
 	printf("%s"
-		   "[%03d:%s] input  = %s\n"
-		   "         ft_ret = %f"
-		   "%s\n\n", color_start, no, ok ? "OK" : "WA", str, ft_ret, color_end);
-	return (ok);
+		   "[%03d:%s] input   = %s\n"
+		   "         ft_ret  = %%e[%e],  %%f[%f],  err[%s], success[%s]\n"
+		   "         lib_ret = %%e[%e],  %%f[%f],  err[%s]"
+		   "%s\n"
+		   "         test_ret:%s,                              test_err:%s, test_flg:%s\n\n",
+		   color_start, no, res_ok ? "OK" : "WA", str,
+		   ft_ret, ft_ret, ft_err, ft_is_success ? "true" : "false",
+		   lib_ret, lib_ret, lib_err,
+		   color_end,
+		   test_ret ? OK : NG, test_err ? OK : NG, test_flg ? OK : NG);
+
+	return (res_ok);
 }
 
 int main(void)
@@ -199,20 +310,42 @@ int main(void)
 	ok += test("3.1415926535897932384626433832795028841971693993", ++test_no);
 	ok += test("3.14159265358979323846264338327950288419716939937", ++test_no);
 	ok += test("3.141592653589793238462643383279502884197169399375", ++test_no);
+
+
 	ok += test(".1415", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
-	ok += test("", ++test_no);
+	ok += test("--1.0", ++test_no);
+	ok += test("1..0", ++test_no);
+	ok += test("-.5", ++test_no);
+	ok += test(".", ++test_no);
+	ok += test("-", ++test_no);
+	ok += test("--", ++test_no);
+	ok += test("+", ++test_no);
+	ok += test("++", ++test_no);
+	ok += test("-.", ++test_no);
+
+	ok += test("..", ++test_no);
+	ok += test(".E", ++test_no);
+	ok += test(".e-", ++test_no);
+	ok += test(".e.", ++test_no);
+
+	ok += test("10.", ++test_no);
+	ok += test(".0005", ++test_no);
+	ok += test(".10.10", ++test_no);
+
+	ok += test("12.3E+45", ++test_no);
+	ok += test("12.3E-45", ++test_no);
+	ok += test("12.3E-4.5", ++test_no);
+	ok += test("12.3E--45", ++test_no);
+	ok += test("12.3E-45E-5", ++test_no);
+
+	ok += test("123.456E6", ++test_no);
+	ok += test("123.45e-6", ++test_no);
+	ok += test("123.45e-5", ++test_no);
+	ok += test("123.45e-4", ++test_no);
+	ok += test("123.45e-3", ++test_no);
+	ok += test("123.45e-2", ++test_no);
+	ok += test("123.45e-1", ++test_no);
+
 
 	printf(" ## RESULT ##\n");
 	printf("     OK: %d, NG: %d\n\n", ok, test_no - ok);
