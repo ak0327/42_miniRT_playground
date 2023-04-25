@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/25 11:51:57 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/25 12:00:59 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,10 +185,10 @@ int test(const char *str, int no, int *res_ret, int *res_err, int *res_flg)
 	}
 	printf("%s"
 		   "[%03d:%s] input   = %s\n"
-		   "         ft_ret  = %%e[%e],  %%f[%f],  err[%s], success[%s]\n"
-		   "         lib_ret = %%e[%e],  %%f[%f],  err[%s]"
+		   "         ft_ret  = %%e[%e],  %%f[%f],     err[%s],     is_success[%s]\n"
+		   "         lib_ret = %%e[%e],  %%f[%f],     err[%s]"
 		   "%s\n"
-		   "         test_ret:%s,                              test_err:%s, test_flg:%s\n\n",
+		   "         return value:ft==lib:%s,  err char:ft==lib:%s,  ft_is_success:%s\n\n",
 		   color_start, no, res_ok ? "OK" : "WA", str,
 		   ft_ret, ft_ret, ft_err, ft_is_success ? "true" : "false",
 		   lib_ret, lib_ret, lib_err,
@@ -355,6 +355,18 @@ int main(void)
 	ok += test("123.45e-3", ++test_no, &res_ret, &res_err, &res_flg);
 	ok += test("123.45e-2", ++test_no, &res_ret, &res_err, &res_flg);
 	ok += test("123.45e-1", ++test_no, &res_ret, &res_err, &res_flg);
+
+	ok += test("123.45e1", ++test_no, &res_ret, &res_err, &res_flg);
+	ok += test("123.45e12", ++test_no, &res_ret, &res_err, &res_flg);
+	ok += test("123.45e123", ++test_no, &res_ret, &res_err, &res_flg);
+	ok += test("123.45e1234", ++test_no, &res_ret, &res_err, &res_flg);
+	ok += test("123.45e12345", ++test_no, &res_ret, &res_err, &res_flg);
+	ok += test("123.45e-1", ++test_no, &res_ret, &res_err, &res_flg);
+	ok += test("123.45e-12", ++test_no, &res_ret, &res_err, &res_flg);
+	ok += test("123.45e-123", ++test_no, &res_ret, &res_err, &res_flg);
+	ok += test("123.45e-1234", ++test_no, &res_ret, &res_err, &res_flg);
+	ok += test("123.45e-12345", ++test_no, &res_ret, &res_err, &res_flg);
+
 
 
 	printf(" ## RESULT ##\n");
