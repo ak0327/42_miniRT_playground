@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/27 19:05:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/27 19:11:53 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,28 +383,28 @@ void	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 
 	s = str;
 	parse_sign_part(s, flt, &end);
-	printf("[str_to_floatbin]\n");
-	printf("  sign    :%d\n", flt->sign);
-	printf("  exponent:%d\n", flt->exponent);
-	printf("  mantissa:%llu\n\n", flt->mantissa);
+//	printf("[str_to_floatbin]\n");
+//	printf("  sign    :%d\n", flt->sign);
+//	printf("  exponent:%d\n", flt->exponent);
+//	printf("  mantissa:%llu\n\n", flt->mantissa);
 	s = end;
 	parse_integer_part(s, flt, &end);
-	printf("[str_to_floatbin]\n");
-	printf("  sign    :%d\n", flt->sign);
-	printf("  exponent:%d\n", flt->exponent);
-	printf("  mantissa:%llu\n\n", flt->mantissa);
+//	printf("[str_to_floatbin]\n");
+//	printf("  sign    :%d\n", flt->sign);
+//	printf("  exponent:%d\n", flt->exponent);
+//	printf("  mantissa:%llu\n\n", flt->mantissa);
 	s = end;
 	parse_decimal_part(s, flt, &end);
-	printf("[str_to_floatbin]\n");
-	printf("  sign    :%d\n", flt->sign);
-	printf("  exponent:%d\n", flt->exponent);
-	printf("  mantissa:%llu\n\n", flt->mantissa);
+//	printf("[str_to_floatbin]\n");
+//	printf("  sign    :%d\n", flt->sign);
+//	printf("  exponent:%d\n", flt->exponent);
+//	printf("  mantissa:%llu\n\n", flt->mantissa);
 	s = end;
 	parse_exponent_part(s, flt, &end);
-	printf("[str_to_floatbin]\n");
-	printf("  sign    :%d\n", flt->sign);
-	printf("  exponent:%d\n", flt->exponent);
-	printf("  mantissa:%llu\n\n", flt->mantissa);
+//	printf("[str_to_floatbin]\n");
+//	printf("  sign    :%d\n", flt->sign);
+//	printf("  exponent:%d\n", flt->exponent);
+//	printf("  mantissa:%llu\n\n", flt->mantissa);
 	*endptr = end;
 }
 
@@ -416,6 +416,7 @@ void	float_bin_to_double(t_float_info *flt)
 void	init_flt(t_float_info *flt)
 {
 	flt->fp_num = 0.0;
+	memset(&flt->fp_num, 0, sizeof(double));
 	flt->sign = 0;
 	flt->exponent = 0;
 	flt->mantissa = 0;
@@ -433,7 +434,7 @@ double	ft_strtod(const char *str, char **endptr)
 	init_flt(&flt);
 	str_to_floatbin(str, &flt, &end);
 	float_bin_to_double(&flt);
-	flt.fp_num = pow(-1.0, flt.sign) * flt.mantissa * pow(10, flt.exponent);
+	flt.fp_num = pow(-1.0, flt.sign) * flt.mantissa * pow(10.0, flt.exponent);
 //	printf("%f\n", flt.fp_num);
 	if (endptr)
 		*endptr = end;

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/27 19:06:08 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/27 19:10:03 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,15 +320,15 @@ int main(void)
 	ok += test("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", ++test_no, &res_ret, &res_end);
 	ok += test("12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", ++test_no, &res_ret, &res_end);
 	ok += test("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", ++test_no, &res_ret, &res_end);
-//	ok += test("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890E+10000", ++test_no, &res_ret, &res_end);
+	ok += test("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890E+10000", ++test_no, &res_ret, &res_end);
 
-//	ok += test("1.0E+10", ++test_no, &res_ret, &res_end);
-//	ok += test("1.0E+50", ++test_no, &res_ret, &res_end);
-//	ok += test("1.0E+100", ++test_no, &res_ret, &res_end);
-//	ok += test("1.0E+150", ++test_no, &res_ret, &res_end);
-//	ok += test("1.0E+200", ++test_no, &res_ret, &res_end);
-//	ok += test("1.0E+250", ++test_no, &res_ret, &res_end);
-//	ok += test("1.0E+300", ++test_no, &res_ret, &res_end);
+	ok += test("1.0E+10", ++test_no, &res_ret, &res_end);
+	ok += test("1.0E+50", ++test_no, &res_ret, &res_end);
+	ok += test("1.0E+100", ++test_no, &res_ret, &res_end);
+	ok += test("1.0E+150", ++test_no, &res_ret, &res_end);
+	ok += test("1.0E+200", ++test_no, &res_ret, &res_end);
+	ok += test("1.0E+250", ++test_no, &res_ret, &res_end);
+	ok += test("1.0E+300", ++test_no, &res_ret, &res_end);
 
 
 	printf(" ## RESULT ##\n");
