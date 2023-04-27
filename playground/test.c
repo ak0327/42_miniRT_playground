@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 18:56:00 by takira            #+#    #+#             */
-/*   Updated: 2023/04/27 14:36:13 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/27 15:35:46 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int main(void)
 
 	printf("-(LONG_MIN%%10): % ld\n", -(LONG_MIN % 10));
 	printf("-LONG_MIN%%10  : % ld\n", -LONG_MIN % 10);
+
 
 	return (0);
 }
