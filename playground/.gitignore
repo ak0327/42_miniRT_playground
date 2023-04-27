@@ -1,7 +1,0 @@
-a.out
-strtod_apple.c
-strtod_gcc.c
-strtod_gnu.c
-strtod_gnulib.c
-sample_strtod_ktakami-san.c
-copy_gnulib_strtod.c

@@ -11,6 +11,8 @@
 !srcs/vector_matrix/
 !srcs/raytracing/
 
+
+
 !*.c
 !*.h
 !Makefile
@@ -19,6 +21,8 @@
 !Makefile.gen
 
 !playground
+playground/a.out
+playground/*strtod_*
 
 !img
 !*.ppm
