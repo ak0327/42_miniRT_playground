@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/27 19:36:12 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/27 19:56:20 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,15 +339,9 @@ int main(void)
 	ok += test("1.0E+300", ++test_no, &res_ret, &res_end);
 	printf("\n\n");
 
+	// testcase from https://note.com/sukesan1984/n/ncd78a5d6251c
 	ok += test("18014398509482008", ++test_no, &res_ret, &res_end);
 	ok += test("18014398509482009", ++test_no, &res_ret, &res_end);
-	ok += test("", ++test_no, &res_ret, &res_end);
-	ok += test("", ++test_no, &res_ret, &res_end);
-	ok += test("", ++test_no, &res_ret, &res_end);
-	ok += test("", ++test_no, &res_ret, &res_end);
-	ok += test("", ++test_no, &res_ret, &res_end);
-	ok += test("", ++test_no, &res_ret, &res_end);
-	ok += test("", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248.1", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248.2", ++test_no, &res_ret, &res_end);
@@ -390,7 +384,6 @@ int main(void)
 	ok += test("1e+18446744073709551616", ++test_no, &res_ret, &res_end);
 
 
-
 	// zeros
 	ok += test("0", ++test_no, &res_ret, &res_end);
 	ok += test("0e0", ++test_no, &res_ret, &res_end);
@@ -403,7 +396,6 @@ int main(void)
 	ok += test("-0e+0", ++test_no, &res_ret, &res_end);
 	ok += test("+0e+0", ++test_no, &res_ret, &res_end);
 
-	ok += test("", ++test_no, &res_ret, &res_end);
 
 	printf("\n\n");
 
@@ -411,23 +403,6 @@ int main(void)
 	printf(" ## RESULT ##\n");
 	printf("     OK: %d, NG: %d\n", ok, test_no - ok);
 	printf("     retNG:%d, errNG:%d\n\n", test_no - res_ret, test_no - res_end);
-
-
-
-//	test("123456789012345678901", ++test_no, &res_ret, &res_end);
-//	test("9223372036854775807", ++test_no, &res_ret, &res_end);
-//	test("9223372036854775808", ++test_no, &res_ret, &res_end);
-
-//	print_float_bit(2147483647.9999995, "2147483647.9999995");
-//	print_float_bit(2147483647.9999996, "2147483647.9999996");
-//	print_float_bit(2147483647.9999997, "2147483647.9999997");
-//	print_float_bit(2147483647.9999998, "2147483647.9999998");
-//	print_float_bit(2147483647.9999999, "2147483647.9999999");
-//	print_float_bit(2147483648.0000000, "2147483648.0000000");
-//	print_float_bit(2147483648.0,       "2147483648.0");
-//
-//	ok += test("123.45e-12", ++test_no, &res_ret, &res_end);
-
 
 	return (0);
 }
@@ -463,17 +438,3 @@ void	print_float_bit(double double_num, char *str)
 //4294967295
 //9223372036854775807
 //18446744073709551615
-
-
-
-// 1234567890123456789012345678901234567890 input
-//  vv 桁数はOK
-// 1234567890123456800000000000000000000000 sim
-// 1234567890123456846996462118072609669120.000000 lib
-// 1234567890123456846996462118072609669120.000000 lib memset(0)
-
-
-
-
-
-
