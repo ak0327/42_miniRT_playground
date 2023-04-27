@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/27 19:11:53 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/27 19:18:37 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,7 +251,7 @@ void	parse_integer_part(const char *str, t_float_info *flt, char **endptr)
 	bool		overflow;
 
 	overflow = false;
-	printf("=== parse_integer_part %s ===\n", str);
+//	printf("=== parse_integer_part %s ===\n", str);
 	s = str;
 	while (*s == '0')
 		s++;
@@ -280,7 +280,7 @@ void	parse_decimal_part(const char *str, t_float_info *flt, char **endptr)
 	int 		digit;
 	bool		overflow;
 
-	printf("=== parse_decimal_part %s ===\n", str);
+//	printf("=== parse_decimal_part %s ===\n", str);
 	s = str;
 	overflow = false;
 	if (*s != '.')
@@ -332,7 +332,7 @@ void	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 	int32_t		exp;
 	bool		negative;
 
-	printf("=== parse_exponent_part %s ===\n", str);
+//	printf("=== parse_exponent_part %s ===\n", str);
 	s = str;
 	negative = false;
 	exp = 0;

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/27 19:10:03 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/27 19:36:12 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,8 @@ int main(void)
 	printf("\n\n");
 
 	ok += test(".1415", ++test_no, &res_ret, &res_end);
+
+	// parse error
 	ok += test("--1.0", ++test_no, &res_ret, &res_end);
 	ok += test("1..0", ++test_no, &res_ret, &res_end);
 	ok += test("-.5", ++test_no, &res_ret, &res_end);
@@ -228,6 +230,10 @@ int main(void)
 	ok += test(".E", ++test_no, &res_ret, &res_end);
 	ok += test(".e-", ++test_no, &res_ret, &res_end);
 	ok += test(".e.", ++test_no, &res_ret, &res_end);
+	ok += test("1e", ++test_no, &res_ret, &res_end);
+	ok += test("1e-", ++test_no, &res_ret, &res_end);
+	ok += test("1e+", ++test_no, &res_ret, &res_end);
+	ok += test(".e-", ++test_no, &res_ret, &res_end);
 
 	ok += test("10.", ++test_no, &res_ret, &res_end);
 	ok += test(".0005", ++test_no, &res_ret, &res_end);
@@ -322,6 +328,8 @@ int main(void)
 	ok += test("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", ++test_no, &res_ret, &res_end);
 	ok += test("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890E+10000", ++test_no, &res_ret, &res_end);
 
+	printf("\n\n");
+
 	ok += test("1.0E+10", ++test_no, &res_ret, &res_end);
 	ok += test("1.0E+50", ++test_no, &res_ret, &res_end);
 	ok += test("1.0E+100", ++test_no, &res_ret, &res_end);
@@ -329,6 +337,75 @@ int main(void)
 	ok += test("1.0E+200", ++test_no, &res_ret, &res_end);
 	ok += test("1.0E+250", ++test_no, &res_ret, &res_end);
 	ok += test("1.0E+300", ++test_no, &res_ret, &res_end);
+	printf("\n\n");
+
+	ok += test("18014398509482008", ++test_no, &res_ret, &res_end);
+	ok += test("18014398509482009", ++test_no, &res_ret, &res_end);
+	ok += test("", ++test_no, &res_ret, &res_end);
+	ok += test("", ++test_no, &res_ret, &res_end);
+	ok += test("", ++test_no, &res_ret, &res_end);
+	ok += test("", ++test_no, &res_ret, &res_end);
+	ok += test("", ++test_no, &res_ret, &res_end);
+	ok += test("", ++test_no, &res_ret, &res_end);
+	ok += test("", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.1", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.2", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.21", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.22", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.23", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.24", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.25", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.26", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.27", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.28", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.29", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.3", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.4", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.5", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.6", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.7", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.74", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.76", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.76", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.8", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.9", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685249", ++test_no, &res_ret, &res_end);
+
+	ok += test("0.00000123456e-123", ++test_no, &res_ret, &res_end);
+	ok += test("1.7976931348623157e308", ++test_no, &res_ret, &res_end);
+	ok += test("1.7976931348623157e308", ++test_no, &res_ret, &res_end);
+	ok += test("2.2250738585072014e-308", ++test_no, &res_ret, &res_end);
+	ok += test("2.2250738585072001e-308", ++test_no, &res_ret, &res_end);
+	ok += test("2.2250738585072008e-308", ++test_no, &res_ret, &res_end);
+	ok += test("9.8813129168249308e-324", ++test_no, &res_ret, &res_end);
+	ok += test("4.9406564584124654e-324", ++test_no, &res_ret, &res_end);
+	ok += test("4.9406564584124655e-324", ++test_no, &res_ret, &res_end);
+
+
+	// try to overflow exponent
+	ok += test("1e-4294967296", ++test_no, &res_ret, &res_end);
+	ok += test("1e+4294967296", ++test_no, &res_ret, &res_end);
+	ok += test("1e-18446744073709551616", ++test_no, &res_ret, &res_end);
+	ok += test("1e+18446744073709551616", ++test_no, &res_ret, &res_end);
+
+
+
+	// zeros
+	ok += test("0", ++test_no, &res_ret, &res_end);
+	ok += test("0e0", ++test_no, &res_ret, &res_end);
+	ok += test("-0e0", ++test_no, &res_ret, &res_end);
+	ok += test("+0e0", ++test_no, &res_ret, &res_end);
+	ok += test("0e-0", ++test_no, &res_ret, &res_end);
+	ok += test("-0e-0", ++test_no, &res_ret, &res_end);
+	ok += test("+0e-0", ++test_no, &res_ret, &res_end);
+	ok += test("0e+0", ++test_no, &res_ret, &res_end);
+	ok += test("-0e+0", ++test_no, &res_ret, &res_end);
+	ok += test("+0e+0", ++test_no, &res_ret, &res_end);
+
+	ok += test("", ++test_no, &res_ret, &res_end);
+
+	printf("\n\n");
 
 
 	printf(" ## RESULT ##\n");
@@ -338,6 +415,8 @@ int main(void)
 
 
 //	test("123456789012345678901", ++test_no, &res_ret, &res_end);
+//	test("9223372036854775807", ++test_no, &res_ret, &res_end);
+//	test("9223372036854775808", ++test_no, &res_ret, &res_end);
 
 //	print_float_bit(2147483647.9999995, "2147483647.9999995");
 //	print_float_bit(2147483647.9999996, "2147483647.9999996");
@@ -348,8 +427,6 @@ int main(void)
 //	print_float_bit(2147483648.0,       "2147483648.0");
 //
 //	ok += test("123.45e-12", ++test_no, &res_ret, &res_end);
-
-
 
 
 	return (0);
