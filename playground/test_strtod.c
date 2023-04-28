@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/28 14:23:03 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/28 14:33:15 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef union s_bin
 void	print_float_bit(double double_num, char *str);
 t_bin	calc_xor(double a, double b);
 void	print_diff_bit(double a, double b, char *str);
+int		get_diff_bit(double a, double b);
 
 int test(const char *str, int no, int *res_ret, int *res_end)
 {
@@ -43,6 +44,8 @@ int test(const char *str, int no, int *res_ret, int *res_end)
 	char	*NG = "\x1b[31mNG\x1b[0m";
 	char	*lib_of;
 
+	int 	bit_diff;
+
 	memset(&ft_ret, 0, sizeof(double));
 	memset(&lib_ret, 0, sizeof(double));
 
@@ -52,6 +55,8 @@ int test(const char *str, int no, int *res_ret, int *res_end)
 	lib_ret = strtod(str, &lib_end);
 	if (errno == ERANGE)
 		is_lib_of = true;
+
+	bit_diff = get_diff_bit(ft_ret, lib_ret);
 
 	lib_of = is_lib_of ? "OF" : "-";
 
@@ -73,20 +78,20 @@ int test(const char *str, int no, int *res_ret, int *res_end)
 		   "[%03d:%s] input    =    %s\n"
 		   "         ft_ret   = %%f[%f],     endptr[%s]\n"
 		   "         lib_ret  = %%f[%f],     endptr[%s],     ERANGE:%s\n"
-		   "         diff_ret = %%f[%f],     %%e[%e]"
+		   "         diff_ret = %%f[%f],     %%e[%e],      bit_diff:%d"
 		   "%s\n"
 		   "   RESULT : return value=%s,  endptr=%s\n",
 		   color_start,
 		   no, res_ok ? "OK" : "WA", str,
 		   ft_ret, ft_end,
 		   lib_ret, lib_end, lib_of,
-		   ft_ret - lib_ret, ft_ret - lib_ret,
+		   ft_ret - lib_ret, ft_ret - lib_ret, bit_diff,
 		   color_end,
 		   test_ret ? OK : NG,
 		   test_endptr ? OK : NG);
 	print_float_bit(ft_ret,  "   bit:ft   = ");
 	print_float_bit(lib_ret, "   bit:lib  = ");
-	print_diff_bit(ft_ret, lib_ret,        "   bif:diff = ");
+	print_diff_bit(ft_ret, lib_ret,        "   bit:diff = ");
 	printf("\n");
 
 	*res_ret += test_ret;
@@ -467,6 +472,15 @@ int main(void)
 	printf("strtod('100000000000000000000.0')                     :%f\n", strtod("100000000000000000000.0", NULL));
 	printf("strtod('1000000000000000000000.0')                    :%f\n", strtod("1000000000000000000000.0", NULL));
 
+
+	ok += test("1.7976931348623157e308", ++test_no, &res_ret, &res_end);
+	ok += test("1.7976931348623157e308", ++test_no, &res_ret, &res_end);
+	ok += test("2.2250738585072014e-308", ++test_no, &res_ret, &res_end);
+	ok += test("2.2250738585072001e-308", ++test_no, &res_ret, &res_end);
+	ok += test("2.2250738585072008e-308", ++test_no, &res_ret, &res_end);
+	ok += test("9.8813129168249308e-324", ++test_no, &res_ret, &res_end);
+	ok += test("4.9406564584124654e-324", ++test_no, &res_ret, &res_end);
+	ok += test("4.9406564584124655e-324", ++test_no, &res_ret, &res_end);
 	return (0);
 }
 
@@ -514,6 +528,21 @@ void	print_diff_bit(double a, double b, char *str)
 	if (cnt > 0)
 		printf(" diff:%d", cnt);
 	printf("\n");
+}
+
+int	get_diff_bit(double a, double b)
+{
+	t_bin	diff = calc_xor(a, b);
+	int 	cnt = 0;
+
+	int shift = 63;
+	while (shift >= 0)
+	{
+		if ((diff.ll >> shift) & 1)
+			cnt++;
+		shift--;
+	}
+	return (cnt);
 }
 
 t_bin	calc_xor(double a, double b)
