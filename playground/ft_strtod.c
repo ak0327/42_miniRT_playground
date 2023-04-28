@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/28 13:38:52 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/28 22:04:15 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ static bool	is_under_int16(const int32_t num, int digit, bool negative)
 #define PARSER_PLUS_INF		5
 
 // (-1)^sign * 1.mantissa * 2^exponent
+// b2b2b0
 typedef struct	s_bit96
 {
 	uint32_t	b2;
@@ -244,6 +245,26 @@ t_bit96	left_shift_bit96(t_bit96 a)
 	shift.b1 = (a.b1 << 1) | ((a.b0 & 0x80000000) >> 31);
 	shift.b2 = (a.b2 << 1) | ((a.b1 & 0x80000000) >> 31);
 	return (shift);
+}
+
+t_bit96 right_shift_n_times(t_bit96 b, int n)
+{
+	while (n > 0)
+	{
+		b = right_shift_bit96(b);
+		n--;
+	}
+	return (b);
+}
+
+t_bit96 left_shift_n_times(t_bit96 b, int n)
+{
+	while (n > 0)
+	{
+		b = left_shift_bit96(b);
+		n--;
+	}
+	return (b);
 }
 
 
@@ -507,9 +528,279 @@ int	parse_float_str(const char *str, t_float_info *flt, char **endptr)
 	return (parse_result);
 }
 
-void	float_bin_to_double(t_float_info *flt)
+// b2b1b0
+t_bit96	set_bit96(int64_t mantissa)
 {
+	t_bit96	f;
 
+	f.b2 = 0;
+	f.b1 = mantissa >> 32;
+	f.b0 = mantissa;
+	return (f);
+}
+
+void	print_bit32(int32_t b)
+{
+	int i;
+
+	i = 31;
+	while (i >= 0)
+	{
+		printf("%d", (b >> i) & 1);
+		i--;
+	}
+}
+
+void	print_bit64(int64_t b)
+{
+	int64_t i;
+
+	i = 63;
+	for (int j=0; j<33; j++)
+		printf(" ");
+
+	while (i >= 0)
+	{
+		printf("%lld", (b >> i) & 1);
+		if (i == 32)
+			printf(" ");
+		i--;
+	}
+	printf("\n");
+}
+
+void	print_bit96(t_bit96 f)
+{
+	print_bit32(f.b2);
+	printf(" ");
+	print_bit32(f.b1);
+	printf(" ");
+	print_bit32(f.b0);
+	printf("\n");
+}
+
+// todo: ここむずい
+t_bit96	dev_by_ten(t_bit96 s)
+{
+	t_bit96 q, r;
+
+	q.b2 = s.b2 / 10;
+	r.b1 = s.b2 % 10;
+	r.b2 = (r.b1 << 24) | (s.b1 >> 8);
+	q.b1 = r.b2 / 10;
+	r.b1 = r.b2 % 10;
+	r.b2 = (r.b1 << 24) | ((s.b1 & 0xFF) << 16) | (s.b0 >> 16);
+	r.b0 = r.b2 / 10;
+	r.b1 = r.b2 % 10;
+	q.b0 = ((r.b1 << 16)| (s.b0 & 0xFFFF)) / 10 | (r.b0 << 16);
+	q.b1 = ((r.b0 & 0x00FF0000) >> 16) | (q.b1 << 8);
+	s.b2 = q.b2;
+	s.b1 = q.b1;
+	s.b0 = q.b0;
+	return (s);
+}
+
+t_bit96 keep_upper4_is0(t_bit96 m, int *e)
+{
+	int i = 0;
+
+	while (i < 4)
+	{
+		if (m.b2 & (1 << (32 - i)))
+		{
+			m = right_shift_n_times(m, 4 - i);
+			*e += 4 - 1;
+			break ;
+		}
+		i++;
+	}
+	return (m);
+}
+
+t_bit96	round_ties_even(t_bit96 s, int bit)
+{
+	uint32_t	even;
+	uint32_t	mask;
+	uint32_t	min_bit;
+	t_bit96		add;
+
+	if (bit > 4 && bit <= 32)
+	{
+		even = 1 << (32 - bit);
+		min_bit = even << 1;
+		mask = min_bit - 1;
+		add.b0 = 0;
+		add.b1 = 0;
+		add.b2 = min_bit;
+		if (((s.b2 & mask) == even) && !s.b1 && !s.b0)
+		{
+			if (s.b2 & min_bit)
+			{
+				s.b2 &= ~mask;
+				s = add_bit96(s, add);
+			}
+			else
+			{
+				s.b2 &= ~mask;
+				s.b1 = 0;
+				s.b0 = 0;
+			}
+		}
+		else if (s.b2 & even)
+		{
+			s.b2 &= ~mask;
+			s = add_bit96(s, add);
+		}
+		else
+		{
+			s.b2 &= ~mask;
+			s.b1 = 0;
+			s.b0 = 0;
+		}
+	}
+	else
+	{
+		// 該当するビット
+		even = 1 << (32 - (bit - 32));
+		min_bit = even << 1;
+		mask = min_bit - 1;
+		add.b0 = 0;
+		add.b1 = min_bit;
+		add.b2 = 0;
+		if (((s.b1 & mask) == even)  && !s.b0)
+		{
+			if (s.b1 & min_bit)
+			{
+				s.b1 &= ~mask;
+				s = add_bit96(s, add);
+			}
+			else
+			{
+				s.b1 &= ~mask;
+				s.b0 = 0;
+			}
+		}
+		else if (s.b1 & even) // 大きいとき
+		{
+			s.b1 &= ~mask;
+			s = add_bit96(s, add);
+		}
+		else
+		{
+			s.b1 &= ~mask;
+			s.b0 = 0;
+		}
+	}
+	return (s);
+}
+
+void	convert_float_bin_to_double(t_float_info *flt)
+{
+	t_bit96		m = set_bit96(flt->mantissa);
+	int32_t		bin_exp = 0;
+	uint64_t	bin = 0;
+	uint32_t	mask28 = 0xF << 28;
+	uint32_t	mask20 = 0xFFF << 20;
+
+//	printf("m    : ");
+//	print_bit96(m);
+//
+//	printf("flt.m: ");
+//	print_bit64(flt->mantissa);
+
+	// m' * 10^bin_exp' -> m * 2^bin_exp
+	if (flt->exponent > 0)
+	{
+		while (flt->exponent > 0)
+		{
+			// 4回 << 相当？
+			m = add_bit96(left_shift_n_times(m, 1), left_shift_n_times(m, 3));
+
+			//上位4ビットは0を維持
+			m = keep_upper4_is0(m, &bin_exp);
+			flt->exponent--;
+		}
+	}
+	else if (flt->exponent < 0)
+	{
+		while (flt->exponent < 0)
+		{
+			while ((m.b2 & (1 << 31)) == 0)
+			{
+				m = left_shift_bit96(m);
+				bin_exp--;
+			}
+			m = dev_by_ten(m);
+			flt->exponent++;
+		}
+	}
+
+	// bitshift for m
+	// ここはeをいじっていいのか？
+	if (m.b2 || m.b1 || m.b0)
+	{
+		while (m.b2 & (1 << 28))
+		{
+			m = left_shift_bit96(m);
+			bin_exp--;
+		}
+	}
+	// validate ?
+	if (bin_exp < -1074)
+	{
+		if (flt->negative)
+			flt->fp_num = -0.0;
+		else
+			flt->fp_num = 0.0;
+		return ;
+	}
+	if (bin_exp > 1023)
+	{
+		if (flt->negative)
+			flt->fp_num = -INFINITY;
+		else
+			flt->fp_num = INFINITY;
+		return ;
+	}
+
+
+	// convert to (B 1.M E)
+	// b
+	if (flt->negative)
+		bin |= (1ULL << 63);
+
+	int			bit;
+	uint64_t	t;
+
+	if (bin_exp >= -52 && bin_exp < 1)
+	{
+		bit = bin_exp + 56;
+		m = round_ties_even(m, bit);
+		m = left_shift_n_times(m, 62 - bit + 1);
+		bin = (uint64_t)m.b1 | ((uint64_t)(m.b2 & ~mask20) << 32);
+	}
+	else if (m.b2)
+	{
+		uint64_t binexs2 = (uint64_t)bin_exp;
+		// 完全に等しい時
+		bit = 7;
+		if (m.b1 & (1 << bit) && (!(m.b1 & ((1 << bit) - 1)) && !(m.b0)))
+		{
+			if ((m.b1 >> (bit + 1)) & 1)
+				t = (m.b1 >> (bit + 1)) + 1; // 偶数方向に1足す
+			else
+				t = (m.b1 >> (bit + 1)); // すでに最下位ビットが0
+		}
+		else if (!(m.b1 & (1 << bit))) // 0x10000000のビットが立ってない時は切り捨てればよい
+			t = (m.b1 >> (bit + 1));
+			// 下位40ビットが0x10000000 00000000000000000000000000000000より大きい場合s1のビットを一つ大きくする
+		else
+			t = (m.b1 >> (bit + 1)) + 1;
+		bin = (binexs2 << 52) | ((uint64_t)(m.b2 & ~mask28) << 24) | t;
+	}
+
+	// return
+	flt->fp_num = bin;
 }
 
 double	convert_str2flt(t_float_info flt, int parse_result)
@@ -527,8 +818,8 @@ double	convert_str2flt(t_float_info flt, int parse_result)
 
 	ret = pow(-1.0, flt.negative) * flt.mantissa * pow(10.0, flt.exponent);
 
-	float_bin_to_double(&flt);
-
+	convert_float_bin_to_double(&flt);
+	ret = flt.fp_num;
 	return (ret);
 }
 
