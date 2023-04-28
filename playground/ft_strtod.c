@@ -6,12 +6,12 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/27 21:57:38 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/28 11:56:44 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "test.h"
-/*
+
 static bool	is_under_long(const long num, int digit, bool negative)
 {
 	long of_div = LONG_MAX / 10;
@@ -57,6 +57,24 @@ static bool	is_under_int32(const int32_t num, int digit, bool negative)
 		return (false);
 	return (true);
 }
+
+static bool	is_under_int16(const int32_t num, int digit, bool negative)
+{
+	long of_div = INT16_MAX / 10;
+	long of_mod = INT16_MAX % 10;
+	if (negative)
+	{
+		of_div = -(INT16_MIN / 10);
+		of_mod = -(INT16_MIN % 10);
+	}
+
+	if (num > of_div)
+		return (false);
+	if (num == of_div && digit >= of_mod)
+		return (false);
+	return (true);
+}
+
 //static int get_num_part(const char *str, double *num, double *sign, size_t *idx)
 //{
 //	double	scale;
@@ -152,6 +170,11 @@ static bool	is_under_int32(const int32_t num, int digit, bool negative)
 
 // ##############################################################################
 
+#define	PARSER_MINUS_ZERO	2
+#define PARSER_PLUS_ZERO	3
+#define PARSER_MINUS_INF	4
+#define PARSER_PLUS_INF		5
+
 // (-1)^sign * 1.mantissa * 2^exponent
 typedef struct	s_bit96
 {
@@ -163,7 +186,7 @@ typedef struct	s_bit96
 typedef struct	s_float_info
 {
 	double		fp_num;
-	int8_t		sign;
+	bool		negative;
 	int32_t		exponent;
 	uint64_t	mantissa;
 	bool		int_exits;
@@ -234,7 +257,7 @@ void	parse_sign_part(const char *str, t_float_info *flt, char **endptr)
 	while (isspace(*s))
 		s++;
 	if (*s == '-')
-		flt->sign = 1;
+		flt->negative = true;
 	if ((*s == '-' || *s == '+'))
 	{
 		if (isdigit(s[1]) || (s[1] == '.' && isdigit(s[2])))
@@ -309,11 +332,9 @@ void	parse_decimal_part(const char *str, t_float_info *flt, char **endptr)
 	while (isdigit(*s))
 	{
 		digit = *s - '0';
-		if (overflow)
-			flt->exponent++;
-		if (is_under_uint64(flt->mantissa, digit))
+		if (!overflow && is_under_uint64(flt->mantissa, digit))
 			flt->mantissa = flt->mantissa * 10 + digit;
-		else if (!overflow)
+		else
 		{
 			overflow = true;
 			flt->exponent++;
@@ -325,7 +346,7 @@ void	parse_decimal_part(const char *str, t_float_info *flt, char **endptr)
 	*endptr = (char *)s;
 }
 
-void	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
+int	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 {
 	const char	*s;
 	int 		digit;
@@ -340,7 +361,7 @@ void	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 	if (tolower(*s) != 'e')
 	{
 		*endptr = (char *)s;
-		return ;
+		return (SUCCESS);
 	}
 	s++;
 	if (*s == '-')
@@ -351,48 +372,66 @@ void	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 	if (!isdigit(*s))
 	{
 		*endptr = (char *)str;
-		return ;
+		return (FAILURE);
 	}
 	while (*s == '0')
 		s++;
 	while (isdigit(*s))
 	{
 		digit = *s - '0';
-		if (is_under_int32(exp, digit, negative))	//todo:OF
+		if (!overflow && is_under_int16(exp, digit, negative))	//todo:OF
 			exp = exp * 10 + digit;
 		else
 		{
-			if (!overflow)
-			{
-				if (negative)
-					exp = INT32_MIN;
-				else
-					exp = INT32_MAX;
-				overflow = true;
-			}
+			if (negative)
+				exp = INT16_MIN;
+			else
+				exp = INT16_MAX;
+			overflow = true;
 			exp++;
 		}
 		s++;
 	}
-//	printf("exp:%d\n", exp);
+	printf("exp:%d\n", exp);
+	*endptr = (char *)s;
 
 	if (!overflow && negative)
 		exp = -exp;
-//	printf("exp:%d\n", exp);
+	printf("exp:%d, of:%s\n", exp, overflow ? "true" : "false");
 	flt->exponent += exp;
-	*endptr = (char *)s;
+
+	if (flt->mantissa == 0)
+	{
+		if (flt->negative)
+			return (PARSER_MINUS_ZERO);
+		return (PARSER_PLUS_ZERO);
+	}
+	if (flt->exponent > 309)
+	{
+		if (flt->negative)
+			return (PARSER_MINUS_INF);
+		return (PARSER_PLUS_INF);
+	}
+	if (flt->exponent < -340)
+	{
+		if (flt->negative)
+			return (PARSER_MINUS_ZERO);
+		return (PARSER_PLUS_ZERO);
+	}
+	return (SUCCESS);
 }
 
-void	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
+int	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 {
 	const char	*s;
 	char		*end;
+	int 		ret_val;
 
 	s = str;
 	parse_sign_part(s, flt, &end);
 #ifdef PRINT
 	printf("[str_to_floatbin]\n");
-	printf("  sign    :%d\n", flt->sign);
+	printf("  sign    :%s\n", flt->negative ? "-" : "+");
 	printf("  exponent:%d\n", flt->exponent);
 	printf("  mantissa:%llu\n\n", flt->mantissa);
 #endif
@@ -400,7 +439,7 @@ void	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 	parse_integer_part(s, flt, &end);
 #ifdef PRINT
 	printf("[str_to_floatbin]\n");
-	printf("  sign    :%d\n", flt->sign);
+	printf("  sign    :%s\n", flt->negative ? "-" : "+");
 	printf("  exponent:%d\n", flt->exponent);
 	printf("  mantissa:%llu\n\n", flt->mantissa);
 #endif
@@ -408,19 +447,22 @@ void	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 	parse_decimal_part(s, flt, &end);
 #ifdef PRINT
 	printf("[str_to_floatbin]\n");
-	printf("  sign    :%d\n", flt->sign);
+	printf("  sign    :%s\n", flt->negative ? "-" : "+");
 	printf("  exponent:%d\n", flt->exponent);
 	printf("  mantissa:%llu\n\n", flt->mantissa);
 #endif
 	s = end;
-	parse_exponent_part(s, flt, &end);
+	ret_val = parse_exponent_part(s, flt, &end);
+
+
 #ifdef PRINT
 	printf("[str_to_floatbin]\n");
-	printf("  sign    :%d\n", flt->sign);
+	printf("  sign    :%s\n", flt->negative ? "-" : "+");
 	printf("  exponent:%d\n", flt->exponent);
 	printf("  mantissa:%llu\n\n", flt->mantissa);
 #endif
 	*endptr = end;
+	return (ret_val);
 }
 
 void	float_bin_to_double(t_float_info *flt)
@@ -428,11 +470,24 @@ void	float_bin_to_double(t_float_info *flt)
 
 }
 
+double	convert_str2flt(t_float_info flt, int parse_result)
+{
+	if (parse_result == PARSER_MINUS_ZERO)
+		return (-0.0);
+	if (parse_result == PARSER_PLUS_ZERO)
+		return (+0.0);
+	if (parse_result == PARSER_MINUS_INF)
+		return (-INFINITY);
+	if (parse_result == PARSER_PLUS_INF)
+		return (INFINITY);
+	return (pow(-1.0, flt.negative) * flt.mantissa * pow(10.0, flt.exponent));
+}
+
 void	init_flt(t_float_info *flt)
 {
 	flt->fp_num = 0.0;
 	memset(&flt->fp_num, 0, sizeof(double));
-	flt->sign = 0;
+	flt->negative = false;
 	flt->exponent = 0;
 	flt->mantissa = 0;
 	flt->int_exits = false;
@@ -442,19 +497,22 @@ double	ft_strtod(const char *str, char **endptr)
 {
 	t_float_info	flt;
 	char			*end;
+	int 			parse_result;
 
 //	printf("\n\n");
 //	printf(" ========= strtod[%s] ========= \n", str);
 	init_flt(&flt);
-	str_to_floatbin(str, &flt, &end);
-	float_bin_to_double(&flt);
-	flt.fp_num = pow(-1.0, flt.sign) * flt.mantissa * pow(10.0, flt.exponent);
+	parse_result = str_to_floatbin(str, &flt, &end);
+//	float_bin_to_double(&flt);
+
+	flt.fp_num = convert_str2flt(flt, parse_result);
+
+//	flt.fp_num = pow(-1.0, flt.sign) * flt.mantissa * pow(10.0, flt.exponent);
 //	printf("%f\n", flt.fp_num);
 	if (endptr)
 		*endptr = end;
 	return (flt.fp_num);
 }
-*/
 
 //int main(void)
 //{
