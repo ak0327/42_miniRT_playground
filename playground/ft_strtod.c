@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/28 11:56:44 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/28 12:58:41 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,15 +297,19 @@ void	parse_integer_part(const char *str, t_float_info *flt, char **endptr)
 	*endptr = (char *)s;
 }
 
+// 10.00000 -> 10e0, != 1000000e-5
+// 10.1     -> 101e-1
 void	parse_decimal_part(const char *str, t_float_info *flt, char **endptr)
 {
 	const char	*s;
 	int 		digit;
 	bool		overflow;
+	int 		zeros;
 
 //	printf("=== parse_decimal_part %s ===\n", str);
 	s = str;
 	overflow = false;
+	zeros = 0;
 	if (*s != '.')
 	{
 		*endptr = (char *)str;
@@ -326,7 +330,33 @@ void	parse_decimal_part(const char *str, t_float_info *flt, char **endptr)
 		while (*s == '0')
 		{
 			s++;
+//			zeros++;
 			flt->exponent--;
+		}
+	}
+	if (flt->mantissa != 0 && *s == '0')
+	{
+		while (*s == '0')
+		{
+			s++;
+			zeros++;
+		}
+		if (isdigit(*s))
+		{
+			flt->exponent -= zeros;
+			while (zeros)
+			{
+				if (!overflow && is_under_uint64(flt->mantissa, 0))
+					flt->mantissa = flt->mantissa * 10 + 0;
+				else
+				{
+					overflow = true;
+					flt->exponent++;
+				}
+				zeros--;
+			}
+
+			flt->mantissa = flt->mantissa * pow(10, zeros);
 		}
 	}
 	while (isdigit(*s))
@@ -346,7 +376,7 @@ void	parse_decimal_part(const char *str, t_float_info *flt, char **endptr)
 	*endptr = (char *)s;
 }
 
-int	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
+void	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 {
 	const char	*s;
 	int 		digit;
@@ -361,7 +391,7 @@ int	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 	if (tolower(*s) != 'e')
 	{
 		*endptr = (char *)s;
-		return (SUCCESS);
+		return ;
 	}
 	s++;
 	if (*s == '-')
@@ -372,7 +402,7 @@ int	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 	if (!isdigit(*s))
 	{
 		*endptr = (char *)str;
-		return (FAILURE);
+		return ;
 	}
 	while (*s == '0')
 		s++;
@@ -392,40 +422,42 @@ int	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 		}
 		s++;
 	}
-	printf("exp:%d\n", exp);
+//	printf("exp:%d\n", exp);
 	*endptr = (char *)s;
 
 	if (!overflow && negative)
 		exp = -exp;
-	printf("exp:%d, of:%s\n", exp, overflow ? "true" : "false");
+//	printf("exp:%d, of:%s\n", exp, overflow ? "true" : "false");
 	flt->exponent += exp;
+}
 
-	if (flt->mantissa == 0)
+int	get_parse_result(t_float_info flt)
+{
+	if (flt.mantissa == 0)
 	{
-		if (flt->negative)
+		if (flt.negative)
 			return (PARSER_MINUS_ZERO);
 		return (PARSER_PLUS_ZERO);
 	}
-	if (flt->exponent > 309)
+	if (flt.exponent > 309)
 	{
-		if (flt->negative)
+		if (flt.negative)
 			return (PARSER_MINUS_INF);
 		return (PARSER_PLUS_INF);
 	}
-	if (flt->exponent < -340)
+	if (flt.exponent < -340)
 	{
-		if (flt->negative)
+		if (flt.negative)
 			return (PARSER_MINUS_ZERO);
 		return (PARSER_PLUS_ZERO);
 	}
 	return (SUCCESS);
 }
 
-int	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
+void	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 {
 	const char	*s;
 	char		*end;
-	int 		ret_val;
 
 	s = str;
 	parse_sign_part(s, flt, &end);
@@ -452,8 +484,7 @@ int	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 	printf("  mantissa:%llu\n\n", flt->mantissa);
 #endif
 	s = end;
-	ret_val = parse_exponent_part(s, flt, &end);
-
+	parse_exponent_part(s, flt, &end);
 
 #ifdef PRINT
 	printf("[str_to_floatbin]\n");
@@ -462,7 +493,6 @@ int	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 	printf("  mantissa:%llu\n\n", flt->mantissa);
 #endif
 	*endptr = end;
-	return (ret_val);
 }
 
 void	float_bin_to_double(t_float_info *flt)
@@ -501,9 +531,13 @@ double	ft_strtod(const char *str, char **endptr)
 
 //	printf("\n\n");
 //	printf(" ========= strtod[%s] ========= \n", str);
+
 	init_flt(&flt);
-	parse_result = str_to_floatbin(str, &flt, &end);
+	str_to_floatbin(str, &flt, &end);
+
 //	float_bin_to_double(&flt);
+
+	parse_result = get_parse_result(flt);
 
 	flt.fp_num = convert_str2flt(flt, parse_result);
 
@@ -513,20 +547,6 @@ double	ft_strtod(const char *str, char **endptr)
 		*endptr = end;
 	return (flt.fp_num);
 }
-
-//int main(void)
-//{
-//
-//	ft_strtod("123.456", NULL);
-//
-//	return (0);
-//}
-
-
-
-
-
-
 
 
 

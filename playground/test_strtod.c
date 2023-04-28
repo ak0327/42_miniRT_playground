@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/28 12:01:39 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/28 13:04:32 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int test(const char *str, int no, int *res_ret, int *res_end)
 	if (errno == ERANGE)
 		is_lib_of = true;
 
-	lib_of = is_lib_of ? "OF" : "";
+	lib_of = is_lib_of ? "OF" : "-";
 
 	/* return value */
 	test_ret = fabs(ft_ret - lib_ret) < epsilon ? true : false;
@@ -90,6 +90,8 @@ int main(void)
 	int test_no;
 	int	res_ret = 0;
 	int res_end = 0;
+
+	printf("\n\n############################################################################\n\n");
 
 	printf("############ TEST ############\n");
 
@@ -360,8 +362,9 @@ int main(void)
 	ok += test("2251799813685248.6", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248.7", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248.74", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.75", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248.76", ++test_no, &res_ret, &res_end);
-	ok += test("2251799813685248.76", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.77", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248.8", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248.9", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685249", ++test_no, &res_ret, &res_end);
@@ -404,6 +407,36 @@ int main(void)
 	printf("     OK: %d, NG: %d\n", ok, test_no - ok);
 	printf("     retNG:%d, errNG:%d\n\n", test_no - res_ret, test_no - res_end);
 
+	printf("\n############################################################################");
+	printf("\n############################################################################");
+	printf("\n############################################################################\n\n\n");
+
+	printf("1.0e+50\n");
+	printf("0.1 * pow(10.0, 51.0)  :%f\n", 0.1 * pow(10.0, 51.0));
+	printf("1.0 * pow(10.0, 50.0)  :%f\n", 1.0 * pow(10.0, 50.0));
+	printf("10.0 * pow(10.0, 49.0) :%f\n", 10.0 * pow(10.0, 49.0));
+	printf("100.0 * pow(10.0, 48.0):%f\n", 100.0 * pow(10.0, 48.0));
+	printf("strtod('1.0e+50')      :%f\n", strtod("1.0e+50", NULL));
+
+	ok += test("1.0E+50", ++test_no, &res_ret, &res_end);
+
+	printf("\n\n");
+
+	// NGケース一部
+	ok += test("100000000000000.0000000000000000000000000001", ++test_no, &res_ret, &res_end);
+	ok += test("123456789012345678901", ++test_no, &res_ret, &res_end);
+	ok += test("12345678901234567890123456789012345", ++test_no, &res_ret, &res_end);
+	ok += test("12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.21", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.22", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.23", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.24", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.25", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.6", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.7", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.75", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.76", ++test_no, &res_ret, &res_end);
+	ok += test("2251799813685248.77", ++test_no, &res_ret, &res_end);
 	return (0);
 }
 
