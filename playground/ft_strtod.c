@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "test.h"
-
+/*
 static bool	is_under_long(const long num, int digit, bool negative)
 {
 	long of_div = LONG_MAX / 10;
@@ -454,7 +454,7 @@ double	ft_strtod(const char *str, char **endptr)
 		*endptr = end;
 	return (flt.fp_num);
 }
-
+*/
 
 //int main(void)
 //{

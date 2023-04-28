@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/27 19:56:20 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/28 10:16:17 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,23 +409,20 @@ int main(void)
 
 void	print_float_bit(double double_num, char *str)
 {
-	union lld_union
+	union
 	{
+		double		d;
 		long long	ll;
-		double 		d;
-	};
+	}			num;
 
-	union lld_union	lld;
-	memset(&lld, 0, sizeof(union lld_union));
-
-	lld.d = double_num;
+	num.d = double_num;
 //	printf("%s double:%f -> [", str, lld.d);
 	printf("%s [", str);
 
 	int shift = 63;
 	while (shift >= 0)
 	{
-		printf("%lld", (lld.ll >> shift) & 1);
+		printf("%lld", (num.ll >> shift) & 1);
 		if (shift == 63 || shift == 52)
 			printf(" ");
 		shift--;
