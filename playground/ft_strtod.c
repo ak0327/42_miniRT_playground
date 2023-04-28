@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/28 13:23:03 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/28 13:38:52 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,9 @@ void	parse_integer_part(const char *str, t_float_info *flt, char **endptr)
 	bool		overflow;
 
 	overflow = false;
-//	printf("=== parse_integer_part %s ===\n", str);
+#ifdef PRINT
+	printf("=== parse_integer_part %s ===\n", str);
+#endif
 	s = str;
 	while (*s == '0')
 		s++;
@@ -306,7 +308,10 @@ void	parse_decimal_part(const char *str, t_float_info *flt, char **endptr)
 	bool		overflow;
 	int 		zeros;
 
-//	printf("=== parse_decimal_part %s ===\n", str);
+#ifdef PRINT
+	printf("=== parse_decimal_part %s ===\n", str);
+#endif
+
 	s = str;
 	overflow = false;
 	zeros = 0;
@@ -384,7 +389,10 @@ void	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 	bool		negative;
 	bool		overflow = false;
 
+#ifdef PRINT
 	printf("=== parse_exponent_part %s ===\n", str);
+#endif
+
 	s = str;
 	negative = false;
 	exp = 0;
@@ -422,12 +430,12 @@ void	parse_exponent_part(const char *str, t_float_info *flt, char **endptr)
 		}
 		s++;
 	}
-//	printf("exp:%d\n", exp);
+	printf("exp:%d\n", exp);
 	*endptr = (char *)s;
 
 	if (!overflow && negative)
 		exp = -exp;
-//	printf("exp:%d, of:%s\n", exp, overflow ? "true" : "false");
+	printf("exp:%d, of:%s\n", exp, overflow ? "true" : "false");
 	flt->exponent += exp;
 }
 
@@ -454,15 +462,16 @@ int	get_parse_result(t_float_info flt)
 	return (SUCCESS);
 }
 
-void	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
+int	parse_float_str(const char *str, t_float_info *flt, char **endptr)
 {
 	const char	*s;
 	char		*end;
+	int 		parse_result;
 
 	s = str;
 	parse_sign_part(s, flt, &end);
 #ifdef PRINT
-	printf("[str_to_floatbin]\n");
+	printf("[parse_float_str]\n");
 	printf("  sign    :%s\n", flt->negative ? "-" : "+");
 	printf("  exponent:%d\n", flt->exponent);
 	printf("  mantissa:%llu\n\n", flt->mantissa);
@@ -470,7 +479,7 @@ void	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 	s = end;
 	parse_integer_part(s, flt, &end);
 #ifdef PRINT
-	printf("[str_to_floatbin]\n");
+	printf("[parse_float_str]\n");
 	printf("  sign    :%s\n", flt->negative ? "-" : "+");
 	printf("  exponent:%d\n", flt->exponent);
 	printf("  mantissa:%llu\n\n", flt->mantissa);
@@ -478,7 +487,7 @@ void	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 	s = end;
 	parse_decimal_part(s, flt, &end);
 #ifdef PRINT
-	printf("[str_to_floatbin]\n");
+	printf("[parse_float_str]\n");
 	printf("  sign    :%s\n", flt->negative ? "-" : "+");
 	printf("  exponent:%d\n", flt->exponent);
 	printf("  mantissa:%llu\n\n", flt->mantissa);
@@ -487,12 +496,15 @@ void	str_to_floatbin(const char *str, t_float_info *flt, char **endptr)
 	parse_exponent_part(s, flt, &end);
 
 #ifdef PRINT
-	printf("[str_to_floatbin]\n");
+	printf("[parse_float_str]\n");
 	printf("  sign    :%s\n", flt->negative ? "-" : "+");
 	printf("  exponent:%d\n", flt->exponent);
 	printf("  mantissa:%llu\n\n", flt->mantissa);
 #endif
 	*endptr = end;
+
+	parse_result = get_parse_result(*flt);
+	return (parse_result);
 }
 
 void	float_bin_to_double(t_float_info *flt)
@@ -502,6 +514,8 @@ void	float_bin_to_double(t_float_info *flt)
 
 double	convert_str2flt(t_float_info flt, int parse_result)
 {
+	double	ret;
+
 	if (parse_result == PARSER_MINUS_ZERO)
 		return (-0.0);
 	if (parse_result == PARSER_PLUS_ZERO)
@@ -510,7 +524,12 @@ double	convert_str2flt(t_float_info flt, int parse_result)
 		return (-INFINITY);
 	if (parse_result == PARSER_PLUS_INF)
 		return (INFINITY);
-	return (pow(-1.0, flt.negative) * flt.mantissa * pow(10.0, flt.exponent));
+
+	ret = pow(-1.0, flt.negative) * flt.mantissa * pow(10.0, flt.exponent);
+
+	float_bin_to_double(&flt);
+
+	return (ret);
 }
 
 void	init_flt(t_float_info *flt)
@@ -533,15 +552,9 @@ double	ft_strtod(const char *str, char **endptr)
 //	printf(" ========= strtod[%s] ========= \n", str);
 
 	init_flt(&flt);
-	str_to_floatbin(str, &flt, &end);
-
-//	float_bin_to_double(&flt);
-
-	parse_result = get_parse_result(flt);
-
+	parse_result = parse_float_str(str, &flt, &end);
 	flt.fp_num = convert_str2flt(flt, parse_result);
 
-//	flt.fp_num = pow(-1.0, flt.sign) * flt.mantissa * pow(10.0, flt.exponent);
 //	printf("%f\n", flt.fp_num);
 	if (endptr)
 		*endptr = end;

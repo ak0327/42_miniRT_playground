@@ -6,12 +6,21 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/28 13:04:32 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/28 14:23:03 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "test.h"
+
+typedef union s_bin
+{
+	double		d;
+	long long	ll;
+}			t_bin;
+
 void	print_float_bit(double double_num, char *str);
+t_bin	calc_xor(double a, double b);
+void	print_diff_bit(double a, double b, char *str);
 
 int test(const char *str, int no, int *res_ret, int *res_end)
 {
@@ -75,8 +84,9 @@ int test(const char *str, int no, int *res_ret, int *res_end)
 		   color_end,
 		   test_ret ? OK : NG,
 		   test_endptr ? OK : NG);
-	print_float_bit(ft_ret,  "   bit:ft  = ");
-	print_float_bit(lib_ret, "   bit:lib = ");
+	print_float_bit(ft_ret,  "   bit:ft   = ");
+	print_float_bit(lib_ret, "   bit:lib  = ");
+	print_diff_bit(ft_ret, lib_ret,        "   bif:diff = ");
 	printf("\n");
 
 	*res_ret += test_ret;
@@ -423,7 +433,6 @@ int main(void)
 	printf("\n\n");
 
 	// NGケース一部
-	ok += test("100000000000000.0000000000000000000000000001", ++test_no, &res_ret, &res_end);
 	ok += test("123456789012345678901", ++test_no, &res_ret, &res_end);
 	ok += test("12345678901234567890123456789012345", ++test_no, &res_ret, &res_end);
 	ok += test("12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890", ++test_no, &res_ret, &res_end);
@@ -437,16 +446,33 @@ int main(void)
 	ok += test("2251799813685248.75", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248.76", ++test_no, &res_ret, &res_end);
 	ok += test("2251799813685248.77", ++test_no, &res_ret, &res_end);
+	ok += test("100000000000000.0000000000000000000000000001", ++test_no, &res_ret, &res_end);
+
+
+	printf("        100000000000000.0                             :%f\n", 100000000000000.0);
+	printf("        100000000000000.0 * pow(10.0, 0.0)            :%f\n", 100000000000000.0 * pow(10.0, 0.0));
+	printf("        1000000000000000.0 * pow(10.0, -1.0)          :%f\n", 1000000000000000.0 * pow(10.0, -1.0));
+	printf("        10000000000000000.0 * pow(10.0, -2.0)         :%f\n", 10000000000000000.0 * pow(10.0, -2.0));
+	printf("        100000000000000000.0 * pow(10.0, -3.0)        :%f\n", 100000000000000000.0 * pow(10.0, -3.0));
+	printf("        1000000000000000000.0 * pow(10.0, -4.0)       :%f\n", 1000000000000000000.0 * pow(10.0, -4.0));
+	printf("        10000000000000000000.0 * pow(10.0, -5.0)      :%f\n", 10000000000000000000.0 * pow(10.0, -5.0));
+	printf("        100000000000000000000.0 * pow(10.0, -6.0)     :%f\n", 100000000000000000000.0 * pow(10.0, -6.0));
+	printf("        1000000000000000000000.0 * pow(10.0, -7.0)    :%f\n", 1000000000000000000000.0 * pow(10.0, -7.0));
+	printf("        10000000000000000000000.0 * pow(10.0, -8.0)   :%f\n", 10000000000000000000000.0 * pow(10.0, -8.0));
+	printf("        100000000000000000000000.0 * pow(10.0, -9.0)  :%f\n", 100000000000000000000000.0 * pow(10.0, -9.0));
+	printf("        1000000000000000000000000.0 * pow(10.0, -10.0):%f\n", 1000000000000000000000000.0 * pow(10.0, -10.0));
+	printf("\n");
+	printf("strtod('100000000000000.0')                           :%f\n", strtod("100000000000000.0", NULL));
+	printf("strtod('10000000000000000000.0')                      :%f\n", strtod("10000000000000000000.0", NULL));
+	printf("strtod('100000000000000000000.0')                     :%f\n", strtod("100000000000000000000.0", NULL));
+	printf("strtod('1000000000000000000000.0')                    :%f\n", strtod("1000000000000000000000.0", NULL));
+
 	return (0);
 }
 
 void	print_float_bit(double double_num, char *str)
 {
-	union
-	{
-		double		d;
-		long long	ll;
-	}			num;
+	t_bin num;
 
 	num.d = double_num;
 //	printf("%s double:%f -> [", str, lld.d);
@@ -463,6 +489,42 @@ void	print_float_bit(double double_num, char *str)
 	printf("]\n");
 }
 
+void	print_diff_bit(double a, double b, char *str)
+{
+	t_bin	diff = calc_xor(a, b);
+	int 	cnt = 0;
+
+	printf("%s [", str);
+
+	int shift = 63;
+	while (shift >= 0)
+	{
+		if ((diff.ll >> shift) & 1)
+		{
+			printf("^");
+			cnt++;
+		}
+		else
+			printf(" ");
+		if (shift == 63 || shift == 52)
+			printf(" ");
+		shift--;
+	}
+	printf("]");
+	if (cnt > 0)
+		printf(" diff:%d", cnt);
+	printf("\n");
+}
+
+t_bin	calc_xor(double a, double b)
+{
+	t_bin	num_a, num_b;
+
+	num_a.d = a;
+	num_b.d = b;
+	num_a.ll ^= num_b.ll;
+	return (num_a);
+}
 
 //2147483647
 //4294967295
