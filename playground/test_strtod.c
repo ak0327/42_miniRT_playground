@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/28 10:16:17 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/28 12:01:39 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ int test(const char *str, int no, int *res_ret, int *res_end)
 	}
 
 	printf("%s"
-		   "[%03d:%s] input   =    %s\n"
-		   "         ft_ret  = %%f[%f],     endptr[%s]\n"
-		   "         lib_ret = %%f[%f],     endptr[%s],     ERANGE:%s\n"
-		   "         d_ret   = %%e[%e],  %%f[%f]"
+		   "[%03d:%s] input    =    %s\n"
+		   "         ft_ret   = %%f[%f],     endptr[%s]\n"
+		   "         lib_ret  = %%f[%f],     endptr[%s],     ERANGE:%s\n"
+		   "         diff_ret = %%f[%f],     %%e[%e]"
 		   "%s\n"
 		   "   RESULT : return value=%s,  endptr=%s\n",
 		   color_start,
