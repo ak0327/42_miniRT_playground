@@ -40,6 +40,12 @@ typedef struct s_parse_info
 	int			int_digit;
 }			t_parse_info;
 
+typedef struct s_parse_exponent
+{
+	bool		negative;
+	int32_t		exponent;
+	bool		overflow;
+}			t_parse_exponent;
 
 int		parse_float_str(const char *str, t_parse_info *flt, char **endptr);
 double	convert_to_double(t_parse_info p, int parse_res);

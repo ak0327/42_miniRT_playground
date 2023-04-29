@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 16:10:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 16:40:30 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 17:07:29 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,21 +122,50 @@ void	parse_decimal_part(const char *str, t_parse_info *p, char **endptr)
 	*endptr = (char *)s;
 }
 
+void	parse_exponent_integer(const char *s, t_parse_exponent *e, char **endptr)
+{
+	int	digit;
+
+	while (*s == '0')
+		s++;
+	while (isdigit(*s))
+	{
+		digit = *s - '0';
+		if (!e->overflow && is_under_int16(e->exponent, digit, e->negative))
+			e->exponent = e->exponent * 10 + digit;
+		else
+		{
+			if (e->negative)
+				e->exponent = INT16_MIN;
+			else
+				e->exponent = INT16_MAX;
+			e->overflow = true;
+			e->exponent++;
+		}
+		s++;
+	}
+	*endptr = (char *)s;
+}
+
+void	init_e(t_parse_exponent *e)
+{
+	e->exponent = 0;
+	e->overflow = false;
+	e->negative = false;
+}
+
 void	parse_exponent_part(const char *str, t_parse_info *p, char **endptr)
 {
-	const char	*s;
-	int 		digit;
-	int32_t		exp;
-	bool		negative;
-	bool		overflow = false;
+	const char			*s;
+	char				*end;
+	t_parse_exponent	e;
 
 #ifdef PRINT
 	printf("=== parse_exponent_part %s ===\n", str);
 #endif
 
 	s = str;
-	negative = false;
-	exp = 0;
+	init_e(&e);
 	if (tolower(*s) != 'e')
 	{
 		*endptr = (char *)s;
@@ -144,7 +173,7 @@ void	parse_exponent_part(const char *str, t_parse_info *p, char **endptr)
 	}
 	s++;
 	if (*s == '-')
-		negative = true;
+	e.	negative = true;
 	if (*s == '-' || *s == '+')
 		s++;
 	// e+0000123 -> e+123
@@ -153,31 +182,14 @@ void	parse_exponent_part(const char *str, t_parse_info *p, char **endptr)
 		*endptr = (char *)str;
 		return ;
 	}
-	while (*s == '0')
-		s++;
-	while (isdigit(*s))
-	{
-		digit = *s - '0';
-		if (!overflow && is_under_int16(exp, digit, negative))	//todo:OF
-			exp = exp * 10 + digit;
-		else
-		{
-			if (negative)
-				exp = INT16_MIN;
-			else
-				exp = INT16_MAX;
-			overflow = true;
-			exp++;
-		}
-		s++;
-	}
-	printf("exp:%d\n", exp);
-	*endptr = (char *)s;
+	parse_exponent_integer(s, &e, &end);
+	printf("e.exponent:%d\n", e.exponent);
+	*endptr = (char *)end;
 
-	if (!overflow && negative)
-		exp = -exp;
-	printf("exp:%d, of:%s\n", exp, overflow ? "true" : "false");
-	p->exponent += exp;
+	if (!e.overflow && e.negative)
+		e.exponent = -e.exponent;
+	printf("e.exponent:%d, of:%s\n", e.exponent, e.overflow ? "true" : "false");
+	p->exponent += e.exponent;
 }
 
 int	get_parse_result(t_parse_info p)
