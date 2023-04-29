@@ -6,13 +6,13 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 16:10:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 17:07:29 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 17:17:07 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_strtod.h"
 
-void	parse_digit(t_parse_info *p, int digit, bool *overflow)
+void	parse_int64_digit(t_parse_info *p, int digit, bool *overflow)
 {
 	if (!*overflow && is_under_uint64(p->mantissa, digit))
 		p->mantissa = p->mantissa * 10 + digit;
@@ -57,11 +57,38 @@ static void	parse_integer_part(const char *str, t_parse_info *p, char **endptr)
 	{
 		digit = *s - '0';
 		p->int_digit++;
-		parse_digit(p, digit, &overflow);
+		parse_int64_digit(p, digit, &overflow);
 		s++;
 	}
 //	printf("mantissa:%llu\n", p->mantissa);
 	*endptr = (char *)s;
+}
+
+
+void	parse_zero_after_dot(const char *s, t_parse_info *p, char **endptr, bool *overflow)
+{
+	int	zero_cnt;
+
+	zero_cnt = 0;
+	while (*s == '0')
+	{
+		s++;
+		zero_cnt++;
+	}
+	*endptr = (char *)s;
+	if (!isdigit(*s))
+		return ;
+
+	p->exponent -= zero_cnt;
+	if (p->mantissa != 0)
+	{
+		while (zero_cnt)
+		{
+			parse_int64_digit(p, 0, overflow);
+			zero_cnt--;
+		}
+		p->mantissa = p->mantissa * pow(10, zero_cnt);
+	}
 }
 
 // 10.00000 -> 10e0, != 1000000e-5
@@ -69,9 +96,9 @@ static void	parse_integer_part(const char *str, t_parse_info *p, char **endptr)
 void	parse_decimal_part(const char *str, t_parse_info *p, char **endptr)
 {
 	const char	*s;
+	char		*end;
 	int 		digit;
 	bool		overflow;
-	int 		zero_cnt;
 
 #ifdef PRINT
 	printf("=== parse_decimal_part %s ===\n", str);
@@ -87,34 +114,19 @@ void	parse_decimal_part(const char *str, t_parse_info *p, char **endptr)
 	if (p->int_digit == 0 && !isdigit(*s))
 		return ;
 
-	// 0.00123 -> 1.23e-2
-	zero_cnt = 0;
-	while (*s == '0')
-	{
-		s++;
-		zero_cnt++;
-	}
+	// 0.00123   -> 1.23e-2
+	parse_zero_after_dot(s, p, &end, &overflow);
+	s = end;
 	if (!isdigit(*s))
 	{
 		*endptr = (char *)s;
 		return ;
 	}
 
-	p->exponent -= zero_cnt;
-	if (p->mantissa != 0)
-	{
-		while (zero_cnt)
-		{
-			parse_digit(p, 0, &overflow);
-			zero_cnt--;
-		}
-		p->mantissa = p->mantissa * pow(10, zero_cnt);
-	}
-
 	while (isdigit(*s))
 	{
 		digit = *s - '0';
-		parse_digit(p, digit, &overflow);
+		parse_int64_digit(p, digit, &overflow);
 		p->exponent--;
 		s++;
 	}
