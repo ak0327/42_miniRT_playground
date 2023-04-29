@@ -17,6 +17,8 @@ SRCS	= test.c \
 		  convert.c \
 		  range_check.c \
 		  bit_operator.c \
+		  convert_old.c \
+		  print_bit.c \
 
 
 OBJ_DIR	= objs

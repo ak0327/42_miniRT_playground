@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:28 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 18:00:01 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 19:00:21 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ typedef	struct s_uint128
 
 typedef union u_tr_bit2double
 {
-	uint64_t	b;
-	double 		d;
+	uint64_t	bit_num;
+	double 		double_num;
 }			t_b2d;
 
 
@@ -74,11 +74,16 @@ bool		is_under_int32(const int32_t num, int digit, bool negative);
 bool		is_under_uint64(const uint64_t num, int digit);
 bool		is_under_long(const long num, int digit, bool negative);
 
+void		memset_uint128(t_uint128 *bit, unsigned char set);
 t_uint128	set_bit(int64_t b1, int64_t b0);
+t_uint128	right_n_shift_u128(t_uint128 bit, unsigned int n);
+t_uint128	left_n_shift_u128(t_uint128 bit, unsigned int n);
+t_uint128	add_u128(t_uint128 a, t_uint128 b);
+t_uint128	multiply_by_ten(t_uint128 bit);
+t_uint128	divide_by_ten(t_uint128 bit);
 
-
-
-
-
+void	print_bit_int32(int32_t b);
+void	print_bit_uint64(uint64_t b);
+void	print_bit_uint128(t_uint128 b);
 
 #endif //FT_STRTOD_H

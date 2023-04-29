@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 16:48:25 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 19:02:58 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,12 @@ int main(void)
 
 	// parse error
 	ok += test("--1.0", ++test_no, &res_ret, &res_end);
+	ok += test("- 1.0", ++test_no, &res_ret, &res_end);
+	ok += test("+-1.0", ++test_no, &res_ret, &res_end);
+	ok += test("1.0 ", ++test_no, &res_ret, &res_end);
+	ok += test("1.0.", ++test_no, &res_ret, &res_end);
+	ok += test("1.0-", ++test_no, &res_ret, &res_end);
+	ok += test("1.0+", ++test_no, &res_ret, &res_end);
 	ok += test("1..0", ++test_no, &res_ret, &res_end);
 	ok += test("-.5", ++test_no, &res_ret, &res_end);
 	ok += test(".", ++test_no, &res_ret, &res_end);
@@ -241,7 +247,6 @@ int main(void)
 	ok += test("+", ++test_no, &res_ret, &res_end);
 	ok += test("++", ++test_no, &res_ret, &res_end);
 	ok += test("-.", ++test_no, &res_ret, &res_end);
-
 	ok += test("..", ++test_no, &res_ret, &res_end);
 	ok += test(".E", ++test_no, &res_ret, &res_end);
 	ok += test(".e-", ++test_no, &res_ret, &res_end);
@@ -250,6 +255,12 @@ int main(void)
 	ok += test("1e-", ++test_no, &res_ret, &res_end);
 	ok += test("1e+", ++test_no, &res_ret, &res_end);
 	ok += test(".e-", ++test_no, &res_ret, &res_end);
+	ok += test("1.0e -1", ++test_no, &res_ret, &res_end);
+	ok += test("1.0e --1", ++test_no, &res_ret, &res_end);
+	ok += test("1.0e1-", ++test_no, &res_ret, &res_end);
+	ok += test("1.0e1 ", ++test_no, &res_ret, &res_end);
+	ok += test("1.0ee1 ", ++test_no, &res_ret, &res_end);
+	ok += test("1.0Ee1 ", ++test_no, &res_ret, &res_end);
 
 	ok += test("10.", ++test_no, &res_ret, &res_end);
 	ok += test(".0005", ++test_no, &res_ret, &res_end);

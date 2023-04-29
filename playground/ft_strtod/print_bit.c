@@ -1,37 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtod.c                                        :+:      :+:    :+:   */
+/*   print_bit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/29 15:24:56 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 18:56:42 by takira           ###   ########.fr       */
+/*   Created: 2023/04/29 18:59:45 by takira            #+#    #+#             */
+/*   Updated: 2023/04/29 19:00:00 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_strtod.h"
 
-static void	init_parse_info(t_parse_info *p)
+void	print_bit_int32(int32_t b)
 {
-	p->negative = false;
-	p->exponent = 0;
-	p->mantissa = 0;
-	p->int_digit = 0;
+	int i;
+
+	i = 31;
+	while (i >= 0)
+	{
+		printf("%d", (b >> i) & 1);
+		i--;
+	}
 }
 
-double	ft_strtod(const char *str, char **endptr)
+void	print_bit_uint64(uint64_t b)
 {
-	t_parse_info	parse_info;
-	char			*end;
-	int 			parse_result;
-	double 			dn;
+	int i;
 
-	init_parse_info(&parse_info);
-	parse_result = parse_float_str(str, &parse_info, &end);
-	dn = convert_to_double(parse_info, parse_result);
+	i = 63;
+	for (int j=0; j<33; j++)
+		printf(" ");
 
-	if (endptr)
-		*endptr = end;
-	return (dn);
+	while (i >= 0)
+	{
+		printf("%lld", (b >> i) & 1);
+		if (i == 32)
+			printf(" ");
+		i--;
+	}
+	printf("\n");
+}
+
+void	print_bit_uint128(t_uint128 b)
+{
+	print_bit_uint64(b.b1);
+	printf(" ");
+	print_bit_uint64(b.b0);
+	printf("\n");
 }
