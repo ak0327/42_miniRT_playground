@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 16:10:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 17:17:07 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 19:06:49 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,21 @@ void	parse_int64_digit(t_parse_info *p, int digit, bool *overflow)
 static void	parse_sign_part(const char *str, t_parse_info *p, char **endptr)
 {
 	const char	*s;
+	bool		negative;
 
 	s = str;
+	negative = false;
 	while (isspace(*s))
 		s++;
 	if (*s == '-')
-		p->negative = true;
+		negative = true;
 	if ((*s == '-' || *s == '+'))
 	{
 		if (isdigit(s[1]) || (s[1] == '.' && isdigit(s[2])))
+		{
 			s++;
+			p->negative = negative;
+		}
 	}
 	*endptr = (char *)s;
 }

@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 19:02:58 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 19:07:23 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int test(const char *str, int no, int *res_ret, int *res_end)
 	}
 
 	printf("%s"
-		   "[%03d:%s] input    =    %s\n"
+		   "[%03d:%s] input    =   [%s]\n"
 		   "         ft_ret   = %%f[%f],     endptr[%s]\n"
 		   "         lib_ret  = %%f[%f],     endptr[%s],     ERANGE:%s\n"
 		   "         diff_ret = %%f[%f],     %%e[%e],      bit_diff:%d"
