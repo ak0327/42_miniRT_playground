@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 16:14:00 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 16:47:51 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 17:37:11 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,6 @@ typedef struct	s_bit96
 	uint32_t	b1;
 	uint32_t	b0;
 }	t_bit96;
-
-typedef struct	s_float_info
-{
-	double		fp_num;
-	bool		negative;
-	int32_t		exponent;
-	uint64_t	mantissa;
-	bool		int_exits;
-}			t_float_info;
 
 t_bit96	add_bit96(t_bit96 a, t_bit96 b)
 {
@@ -181,19 +172,6 @@ t_bit96 keep_upper4_is0(t_bit96 m, int *e)
 		m = right_shift_bit96(m);
 		*e += 1;
 	}
-
-//	int i = 0;
-
-//	while (i < 4)
-//	{
-//		if (m.b2 & (1 << (32 - i)))
-//		{
-//			m = right_shift_n_times(m, 4 - i);
-//			*e += 4 - 1;
-//			break ;
-//		}
-//		i++;
-//	}
 	return (m);
 }
 
@@ -283,8 +261,6 @@ double convert_float_bin_to_double(t_parse_info *p)
 {
 	t_bit96			m = set_bit96(p->mantissa);
 	int32_t			bin_exp = 92;
-	uint32_t		mask28 = 0xF << 28;
-	uint32_t		mask20 = 0xFFF << 20;
 	t_hex_double	hd;
 	int				bit;
 	uint64_t		t;
@@ -314,7 +290,7 @@ double convert_float_bin_to_double(t_parse_info *p)
 	// ここはeをいじっていいのか？
 	if (m.b2 || m.b1 || m.b0)
 	{
-		while ((m.b2 & mask28) == 0)
+		while ((m.b2 & MASK28) == 0)
 		{
 			m = left_shift_bit96(m);
 			bin_exp--;
@@ -343,7 +319,7 @@ double convert_float_bin_to_double(t_parse_info *p)
 		bit = bin_exp + 56;
 		m = round_ties_even(m, bit);
 		m = left_shift_n_times(m, 62 - bit + 1);
-		hd.u = (uint64_t)m.b1 | ((uint64_t)(m.b2 & ~mask20) << 32);
+		hd.u = (uint64_t)m.b1 | ((uint64_t)(m.b2 & ~MASK20) << 32);
 		if (p->negative)
 			hd.u |= (1ULL << 63);
 	}
@@ -364,7 +340,7 @@ double convert_float_bin_to_double(t_parse_info *p)
 			// 下位40ビットが0x10000000 00000000000000000000000000000000より大きい場合s1のビットを一つ大きくする
 		else
 			t = (m.b1 >> (bit + 1)) + 1;
-		hd.u = (binexs2 << 52) | ((uint64_t)(m.b2 & ~mask28) << 24) | t;
+		hd.u = (binexs2 << 52) | ((uint64_t)(m.b2 & ~MASK28) << 24) | t;
 		if (p->negative)
 			hd.u |= (1ULL << 63);
 	}

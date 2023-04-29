@@ -15,19 +15,22 @@ SRCS	= test.c \
 		  ft_strtod.c \
 		  parse.c \
 		  convert.c \
-		  range_check.c
+		  range_check.c \
+		  bit_operator.c \
 
 
-OBJS	= $(SRCS:%.c=%.o)
-
+OBJ_DIR	= objs
+OBJ		= $(SRCS:%.c=%.o)
+OBJS	= $(addprefix $(OBJ_DIR)/, $(OBJ))
 
 all		: $(NAME)
 
 $(NAME)	: $(OBJS)
 	$(CC) $(CFLASG) $^ -o $@
 
-#$(OBJS)	: $(SRCS)
-#	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_DIR)/%.o	: %.c
+	@mkdir -p $$(dirname $(OBJ_DIR))
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean	:
 	$(RM) $(OBJS)
