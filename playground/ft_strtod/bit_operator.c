@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 17:26:02 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 18:34:11 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 18:50:08 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,16 @@ t_uint128	multiply_by_ten(t_uint128 bit)
 	return (result);
 }
 
+// todo: わからん
 t_uint128	divide_by_ten(t_uint128 bit)
 {
 	t_uint128	result;
+	uint64_t 	tmp1, tmp2, tmp3;
 
-
+	result.b0 = bit.b0 / 10;
+	tmp1 = ((bit.b0 % 10) << 32) | (bit.b1 >> 32);
+	tmp2 = tmp1 / 10;
+	tmp3 = ((tmp1 % 10) << 32) | (bit.b1 & 0xFFFFFFFF) / 10;
+	result.b1 = (tmp2 << 32) | tmp3;
 	return (result);
 }
