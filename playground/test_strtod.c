@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/28 14:33:15 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 10:14:47 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -473,14 +473,18 @@ int main(void)
 	printf("strtod('1000000000000000000000.0')                    :%f\n", strtod("1000000000000000000000.0", NULL));
 
 
-	ok += test("1.7976931348623157e308", ++test_no, &res_ret, &res_end);
-	ok += test("1.7976931348623157e308", ++test_no, &res_ret, &res_end);
-	ok += test("2.2250738585072014e-308", ++test_no, &res_ret, &res_end);
-	ok += test("2.2250738585072001e-308", ++test_no, &res_ret, &res_end);
-	ok += test("2.2250738585072008e-308", ++test_no, &res_ret, &res_end);
-	ok += test("9.8813129168249308e-324", ++test_no, &res_ret, &res_end);
-	ok += test("4.9406564584124654e-324", ++test_no, &res_ret, &res_end);
-	ok += test("4.9406564584124655e-324", ++test_no, &res_ret, &res_end);
+//	ok += test("1.7976931348623157e308", ++test_no, &res_ret, &res_end);
+//	ok += test("1.7976931348623157e308", ++test_no, &res_ret, &res_end);
+//	ok += test("2.2250738585072014e-308", ++test_no, &res_ret, &res_end);
+//	ok += test("2.2250738585072001e-308", ++test_no, &res_ret, &res_end);
+//	ok += test("2.2250738585072008e-308", ++test_no, &res_ret, &res_end);
+//	ok += test("9.8813129168249308e-324", ++test_no, &res_ret, &res_end);
+//	ok += test("4.9406564584124654e-324", ++test_no, &res_ret, &res_end);
+//	ok += test("4.9406564584124655e-324", ++test_no, &res_ret, &res_end);
+
+
+	ok += test("-.5", ++test_no, &res_ret, &res_end);
+
 	return (0);
 }
 

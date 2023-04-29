@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/28 22:04:15 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 10:41:29 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -534,8 +534,8 @@ t_bit96	set_bit96(int64_t mantissa)
 	t_bit96	f;
 
 	f.b2 = 0;
-	f.b1 = mantissa >> 32;
-	f.b0 = mantissa;
+	f.b1 = (uint32_t)(mantissa >> 32);
+	f.b0 = (uint32_t)(mantissa & 0xffffffff);
 	return (f);
 }
 
@@ -580,10 +580,11 @@ void	print_bit96(t_bit96 f)
 }
 
 // todo: ここむずい
-t_bit96	dev_by_ten(t_bit96 s)
+t_bit96	dev_by_ten(t_bit96 b)
 {
-	t_bit96 q, r;
+	t_bit96 q, r, s;
 
+	s = b;
 	q.b2 = s.b2 / 10;
 	r.b1 = s.b2 % 10;
 	r.b2 = (r.b1 << 24) | (s.b1 >> 8);
@@ -602,18 +603,26 @@ t_bit96	dev_by_ten(t_bit96 s)
 
 t_bit96 keep_upper4_is0(t_bit96 m, int *e)
 {
-	int i = 0;
+	uint32_t		mask28 = 0xF << 28;
 
-	while (i < 4)
+	while (m.b2 & mask28)
 	{
-		if (m.b2 & (1 << (32 - i)))
-		{
-			m = right_shift_n_times(m, 4 - i);
-			*e += 4 - 1;
-			break ;
-		}
-		i++;
+		m = right_shift_bit96(m);
+		*e += 1;
 	}
+
+//	int i = 0;
+
+//	while (i < 4)
+//	{
+//		if (m.b2 & (1 << (32 - i)))
+//		{
+//			m = right_shift_n_times(m, 4 - i);
+//			*e += 4 - 1;
+//			break ;
+//		}
+//		i++;
+//	}
 	return (m);
 }
 
@@ -693,91 +702,78 @@ t_bit96	round_ties_even(t_bit96 s, int bit)
 	}
 	return (s);
 }
-
+typedef union	u_hex_double {
+	double		d;
+	uint64_t	u;
+}				t_hex_double;
 void	convert_float_bin_to_double(t_float_info *flt)
 {
-	t_bit96		m = set_bit96(flt->mantissa);
-	int32_t		bin_exp = 0;
-	uint64_t	bin = 0;
-	uint32_t	mask28 = 0xF << 28;
-	uint32_t	mask20 = 0xFFF << 20;
-
-//	printf("m    : ");
-//	print_bit96(m);
-//
-//	printf("flt.m: ");
-//	print_bit64(flt->mantissa);
+	t_bit96			m = set_bit96(flt->mantissa);
+	int32_t			bin_exp = 92;
+	uint64_t		bin = 0x0000000000000000ULL;
+	uint32_t		mask28 = 0xF << 28;
+	uint32_t		mask20 = 0xFFF << 20;
+	t_hex_double	hd;
+	int				bit;
+	uint64_t		t;
 
 	// m' * 10^bin_exp' -> m * 2^bin_exp
-	if (flt->exponent > 0)
+	while (flt->exponent > 0)
 	{
-		while (flt->exponent > 0)
-		{
-			// 4回 << 相当？
-			m = add_bit96(left_shift_n_times(m, 1), left_shift_n_times(m, 3));
+		// 4回 << 相当？
+		m = add_bit96(left_shift_n_times(m, 1), left_shift_n_times(m, 3));
+		flt->exponent--;
 
-			//上位4ビットは0を維持
-			m = keep_upper4_is0(m, &bin_exp);
-			flt->exponent--;
-		}
+		//上位4ビットは0を維持
+		m = keep_upper4_is0(m, &bin_exp);
+//		flt->exponent--;
 	}
-	else if (flt->exponent < 0)
+	while (flt->exponent < 0)
 	{
-		while (flt->exponent < 0)
+		while ((m.b2 & (1 << 31)) == 0)
 		{
-			while ((m.b2 & (1 << 31)) == 0)
-			{
-				m = left_shift_bit96(m);
-				bin_exp--;
-			}
-			m = dev_by_ten(m);
-			flt->exponent++;
+			m = left_shift_bit96(m);
+			bin_exp--;
 		}
+		m = dev_by_ten(m);
+		flt->exponent++;
 	}
-
 	// bitshift for m
 	// ここはeをいじっていいのか？
 	if (m.b2 || m.b1 || m.b0)
 	{
-		while (m.b2 & (1 << 28))
+		while ((m.b2 & mask28) == 0)
 		{
 			m = left_shift_bit96(m);
 			bin_exp--;
 		}
 	}
+
+	bin_exp += 1023;
+
+	hd.u = 0x0000000000000000ULL;
+
 	// validate ?
-	if (bin_exp < -1074)
+	if (bin_exp < -52)
 	{
 		if (flt->negative)
-			flt->fp_num = -0.0;
-		else
-			flt->fp_num = 0.0;
-		return ;
+			hd.u = 0.0;
 	}
-	if (bin_exp > 1023)
+	else if (bin_exp > 2046)
 	{
 		if (flt->negative)
-			flt->fp_num = -INFINITY;
+			hd.u = -INFINITY;
 		else
-			flt->fp_num = INFINITY;
-		return ;
+			hd.u = INFINITY;
 	}
-
-
-	// convert to (B 1.M E)
-	// b
-	if (flt->negative)
-		bin |= (1ULL << 63);
-
-	int			bit;
-	uint64_t	t;
-
-	if (bin_exp >= -52 && bin_exp < 1)
+	else if (bin_exp >= -52 && bin_exp < 1)
 	{
 		bit = bin_exp + 56;
 		m = round_ties_even(m, bit);
 		m = left_shift_n_times(m, 62 - bit + 1);
-		bin = (uint64_t)m.b1 | ((uint64_t)(m.b2 & ~mask20) << 32);
+		hd.u = (uint64_t)m.b1 | ((uint64_t)(m.b2 & ~mask20) << 32);
+		if (flt->negative)
+			hd.u |= (1ULL << 63);
 	}
 	else if (m.b2)
 	{
@@ -796,12 +792,15 @@ void	convert_float_bin_to_double(t_float_info *flt)
 			// 下位40ビットが0x10000000 00000000000000000000000000000000より大きい場合s1のビットを一つ大きくする
 		else
 			t = (m.b1 >> (bit + 1)) + 1;
-		bin = (binexs2 << 52) | ((uint64_t)(m.b2 & ~mask28) << 24) | t;
+		hd.u = (binexs2 << 52) | ((uint64_t)(m.b2 & ~mask28) << 24) | t;
+		if (flt->negative)
+			hd.u |= (1ULL << 63);
 	}
-
 	// return
-	flt->fp_num = bin;
+	flt->fp_num = hd.d;
 }
+
+
 
 double	convert_str2flt(t_float_info flt, int parse_result)
 {
@@ -816,7 +815,7 @@ double	convert_str2flt(t_float_info flt, int parse_result)
 	if (parse_result == PARSER_PLUS_INF)
 		return (INFINITY);
 
-	ret = pow(-1.0, flt.negative) * flt.mantissa * pow(10.0, flt.exponent);
+//	ret = pow(-1.0, flt.negative) * flt.mantissa * pow(10.0, flt.exponent);
 
 	convert_float_bin_to_double(&flt);
 	ret = flt.fp_num;
