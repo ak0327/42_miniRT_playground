@@ -23,6 +23,7 @@
 !playground
 playground/a.out
 playground/*strtod_*
+!playground/ft_strtod/
 
 !img
 !*.ppm
