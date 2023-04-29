@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:28 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 19:00:21 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 20:55:36 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,22 @@
 #define SUCCESS	0
 #define FAILURE	1
 
-#define	PARSER_MINUS_ZERO	2
-#define PARSER_PLUS_ZERO	3
-#define PARSER_MINUS_INF	4
-#define PARSER_PLUS_INF		5
+#define	MINUS_ZERO	2
+#define PLUS_ZERO	3
+#define MINUS_INF	4
+#define PLUS_INF		5
 
 #define MASK20	(0xFFF << 20)
 #define MASK28	(0xF << 28)
+#define MASK60	0xF000000000000000
+#define MASK63	(1ULL << 63)
 
+
+typedef union u_mem2num
+{
+	uint64_t	mem;
+	double 		num;
+}			t_mem2num;
 
 typedef struct s_parse_info
 {
@@ -51,19 +59,19 @@ typedef struct s_parse_exponent
 	bool		overflow;
 }				t_parse_exponent;
 
+typedef struct s_float_fmt
+{
+	bool		negative;
+	int32_t		exponent;
+	uint64_t	mantissa;
+}				t_fmt;
+
 // b1 b0
 typedef	struct s_uint128
 {
 	uint64_t	b1;
 	uint64_t	b0;
 }			t_uint128;
-
-typedef union u_tr_bit2double
-{
-	uint64_t	bit_num;
-	double 		double_num;
-}			t_b2d;
-
 
 int			parse_float_str(const char *str, t_parse_info *flt, char **endptr);
 double		convert_to_double(t_parse_info p, int parse_res);

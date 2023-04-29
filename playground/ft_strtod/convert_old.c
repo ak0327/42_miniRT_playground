@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 18:52:05 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 18:57:54 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 20:53:34 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ typedef union	u_hex_double {
 static double convert_float_bin_to_double(t_parse_info *p)
 {
 	t_bit96			m = set_bit96(p->mantissa);
-	int32_t			bin_exp = 92;
+	int32_t			bin_exp = 92; // これは？
 	t_hex_double	hd;
 	int				bit;
 	uint64_t		t;
@@ -352,13 +352,13 @@ double	convert_to_double(t_parse_info p, int parse_result)
 {
 	double	ret;
 
-	if (parse_result == PARSER_MINUS_ZERO)
+	if (parse_result == MINUS_ZERO)
 		return (-0.0);
-	if (parse_result == PARSER_PLUS_ZERO)
+	if (parse_result == PLUS_ZERO)
 		return (+0.0);
-	if (parse_result == PARSER_MINUS_INF)
+	if (parse_result == MINUS_INF)
 		return (-INFINITY);
-	if (parse_result == PARSER_PLUS_INF)
+	if (parse_result == PLUS_INF)
 		return (INFINITY);
 
 	ret = convert_float_bin_to_double(&p);

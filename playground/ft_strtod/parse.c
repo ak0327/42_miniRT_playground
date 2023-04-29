@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 16:10:47 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 19:06:49 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 19:40:48 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,20 +214,20 @@ int	get_parse_result(t_parse_info p)
 	if (p.mantissa == 0)
 	{
 		if (p.negative)
-			return (PARSER_MINUS_ZERO);
-		return (PARSER_PLUS_ZERO);
+			return (MINUS_ZERO);
+		return (PLUS_ZERO);
 	}
 	if (p.exponent > 309)
 	{
 		if (p.negative)
-			return (PARSER_MINUS_INF);
-		return (PARSER_PLUS_INF);
+			return (MINUS_INF);
+		return (PLUS_INF);
 	}
 	if (p.exponent < -340)
 	{
 		if (p.negative)
-			return (PARSER_MINUS_ZERO);
-		return (PARSER_PLUS_ZERO);
+			return (MINUS_ZERO);
+		return (PLUS_ZERO);
 	}
 	return (SUCCESS);
 }

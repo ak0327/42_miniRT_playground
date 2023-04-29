@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 17:26:02 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 18:50:08 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 19:28:15 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,15 @@ t_uint128	left_n_shift_u128(t_uint128 bit, unsigned int n)
 t_uint128	add_u128(t_uint128 a, t_uint128 b)
 {
 	t_uint128	result;
+	uint64_t	increase;
 
 	result.b0 = a.b0 + b.b0;
 	result.b1 = a.b1 + b.b1;
+	increase = (a.b0 >> 1) + (b.b0 >> 1);
+	if ((a.b0 & 1) && (b.b0 & 1))
+		increase++;
+	if (increase | (1ULL << 63))
+		result.b1++;
 	return (result);
 }
 
@@ -84,10 +90,10 @@ t_uint128	divide_by_ten(t_uint128 bit)
 	t_uint128	result;
 	uint64_t 	tmp1, tmp2, tmp3;
 
-	result.b0 = bit.b0 / 10;
-	tmp1 = ((bit.b0 % 10) << 32) | (bit.b1 >> 32);
+	result.b1 = bit.b1 / 10;
+	tmp1 = ((bit.b1 % 10) << 32) | (bit.b0 >> 32);
 	tmp2 = tmp1 / 10;
-	tmp3 = ((tmp1 % 10) << 32) | (bit.b1 & 0xFFFFFFFF) / 10;
-	result.b1 = (tmp2 << 32) | tmp3;
+	tmp3 = ((tmp1 % 10) << 32) | (bit.b0 & 0xFFFFFFFF) / 10;
+	result.b0 = (tmp2 << 32) | tmp3;
 	return (result);
 }
