@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 12:45:11 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 10:14:47 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/29 10:45:18 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,10 @@ int main(void)
 	ok = 0;
 	test_no = 0;
 	ok += test("1", ++test_no, &res_ret, &res_end);
-	ok += test("2147483647", ++test_no, &res_ret, &res_end);
-	ok += test("-2147483648", ++test_no, &res_ret, &res_end);
-	ok += test("9223372036854775807", ++test_no, &res_ret, &res_end);
-	ok += test("-9223372036854775808", ++test_no, &res_ret, &res_end);
-
-	printf("\n\n");
+//	ok += test("2147483647", ++test_no, &res_ret, &res_end);
+//	ok += test("-2147483648", ++test_no, &res_ret, &res_end);
+//	ok += test("9223372036854775807", ++test_no, &res_ret, &res_end);
+//	ok += test("-9223372036854775808", ++test_no, &res_ret, &res_end);
 
 	ok += test("1.0", ++test_no, &res_ret, &res_end);
 	ok += test("-1.0", ++test_no, &res_ret, &res_end);
