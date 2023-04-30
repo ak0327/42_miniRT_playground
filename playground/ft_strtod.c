@@ -6,7 +6,7 @@
 /*   By: takira <takira@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 16:12:48 by takira            #+#    #+#             */
-/*   Updated: 2023/04/29 10:41:29 by takira           ###   ########.fr       */
+/*   Updated: 2023/04/30 20:57:29 by takira           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,7 @@ typedef struct	s_float_info
 
 // ##############################################################################
 
+/*
 t_bit96	add_bit96(t_bit96 a, t_bit96 b)
 {
 	uint64_t	c;
@@ -266,7 +267,7 @@ t_bit96 left_shift_n_times(t_bit96 b, int n)
 	}
 	return (b);
 }
-
+*/
 
 // ##############################################################################
 
@@ -528,6 +529,7 @@ int	parse_float_str(const char *str, t_float_info *flt, char **endptr)
 	return (parse_result);
 }
 
+/*
 // b2b1b0
 t_bit96	set_bit96(int64_t mantissa)
 {
@@ -799,6 +801,7 @@ void	convert_float_bin_to_double(t_float_info *flt)
 	// return
 	flt->fp_num = hd.d;
 }
+*/
 
 
 
@@ -815,10 +818,10 @@ double	convert_str2flt(t_float_info flt, int parse_result)
 	if (parse_result == PARSER_PLUS_INF)
 		return (INFINITY);
 
-//	ret = pow(-1.0, flt.negative) * flt.mantissa * pow(10.0, flt.exponent);
+	ret = pow(-1.0, flt.negative) * flt.mantissa * pow(10.0, flt.exponent);
 
-	convert_float_bin_to_double(&flt);
-	ret = flt.fp_num;
+//	convert_float_bin_to_double(&flt);
+//	ret = flt.fp_num;
 	return (ret);
 }
 
